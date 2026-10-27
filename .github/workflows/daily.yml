@@ -33,6 +33,7 @@ jobs:
         run: |
           mkdir site
           cp index.html journal.html site/
+          if [ -d data/stocks ]; then cp -r data/stocks site/stocks; fi   # 종목 상세 팝업이 읽는 파일
 
       - uses: actions/configure-pages@v5
 
