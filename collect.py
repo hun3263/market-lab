@@ -195,7 +195,8 @@ class KiwoomSource:
     - 환경변수: KIWOOM_APPKEY, KIWOOM_SECRETKEY (필수) / KIWOOM_BASE(기본 https://api.kiwoom.com)
                 KIWOOM_EXCHANGE(KRX|ALL, 기본: nxt 회차만 ALL=KRX+NXT 통합) / INCLUDE_ETF=1(ETF도 순위에 포함)
     - 허용 IP로 등록된 서버에서만 인증됩니다(키움 정책). 주문 API는 호출하지 않습니다.
-    - 단위(확인): 순위·지수 거래대금=백만원, 업종별 순매수=억원 → 내부에서 원 단위로 환산합니다.
+    - 단위(확인): 순위·지수·일봉 거래대금=백만원(2026-10-27 실측: 삼성전자 ka10032·ka10081 모두 2,981,743),
+                  업종별 순매수=억원 → 내부에서 원 단위로 환산합니다.
     """
     partial_universe = True  # 전종목이 아니라 순위 상위만 받으므로, 합계·상승하락은 지수 API 값을 씁니다
 
@@ -321,9 +322,10 @@ class KiwoomSource:
             rows = self._rows(self._call("/api/dostk/rkinfo", "ka10027", dict(base, sort_tp="1", trde_prica_cnd="5000")),
                               "pred_pre_flu_rt_upper")
             gain_rows += [dict(r, _mk=label) for r in rows]
-            # 하락 TOP5: 거래대금 조건은 DOWN_AMOUNT_CND(기본 0=조건 없음). ETF·ETN 은 stk_cnd=16 으로 제외
+            # 하락 순위는 우선주·관리종목이 상위를 채워(실측: 우선주 -69.97%) stk_cnd=4(우선주+관리주 제외), ETF 는 이름으로 거름
             rows = self._rows(self._call("/api/dostk/rkinfo", "ka10027",
-                                         dict(base, sort_tp="3", trde_prica_cnd=DOWN_AMOUNT_CND)), "pred_pre_flu_rt_upper")
+                                         dict(base, sort_tp="3", stk_cnd="4", trde_prica_cnd=DOWN_AMOUNT_CND)),
+                              "pred_pre_flu_rt_upper")
             down_rows += [dict(r, _mk=label) for r in rows]
 
         def cd(x):
@@ -405,7 +407,8 @@ class KiwoomSource:
         rows = self._rows(self._call("/api/dostk/slb", "ka10068", {
             "all_tp": "1", "strt_dt": (d - dt.timedelta(days=14)).strftime("%Y%m%d"),
             "end_dt": d.strftime("%Y%m%d")}), "dbrt_trde_trnsn")
-        rows = sorted((r for r in rows if r.get("dt")), key=lambda r: r["dt"], reverse=True)
+        # 당일 행은 공표 전이라 0 으로 옵니다(2026-10-27 16:40 실측) → 잔고가 0 인 행은 건너뜀
+        rows = sorted((r for r in rows if r.get("dt") and _num(r.get("rmnd")) > 0), key=lambda r: r["dt"], reverse=True)
         if not rows:
             return None
         r = rows[0]
