@@ -447,7 +447,7 @@ def build_snapshot(src, d, session, use_news=True, api_key=None):
         out = []
         for s in rows:
             s["name"] = s.get("name") or src.name(s["code"])
-            if "스팩" not in s["name"]:
+            if "스팩" not in s["name"] and "기업인수목적" not in s["name"]:  # SPAC 은 이름 표기가 두 가지
                 out.append(s)
         return out
 
