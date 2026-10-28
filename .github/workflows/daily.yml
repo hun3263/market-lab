@@ -33,7 +33,10 @@ jobs:
         run: |
           mkdir site
           cp index.html journal.html site/
-          if [ -d data/stocks ]; then cp -r data/stocks site/stocks; fi   # 종목 상세 팝업이 읽는 파일
+          mkdir -p site/days && cp data/*.json site/days/              # 날짜별 시황(화면이 필요할 때 불러옴)
+          for d in stocks market heat news; do                          # 종목 상세·시계열·히트맵·뉴스
+            if [ -d "data/$d" ]; then cp -r "data/$d" "site/$d"; fi
+          done
 
       - uses: actions/configure-pages@v5
 
