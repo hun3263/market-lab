@@ -441,7 +441,7 @@ function newsHtml(N) {
   const e = N.editions[UI.news];
   const tabs = eds.length > 1 ? `<div class="seg" style="margin-bottom:8px">${eds.map(k => `<button class="${k === UI.news ? 'on' : ''}" onclick="UI.news='${k}';render()">${k === 'am' ? '월 08:00 주말·휴일' : '20:00 오늘'}</button>`).join('')}</div>` : '';
   return tabs + `<p class="mut" style="margin-top:0">${esc(e.label)} · 수집 범위 ${esc(e.from)} ~ ${esc(e.to)} · 출처 ${esc(e.source)} · 정리 규칙: ${esc(e.rule)}</p>
-    <div class="grid2">${L(e.categories).map(c => `<div class="ncat"><h4>${esc(c.name)} <small class="mut">(${c.pool}건 중)</small></h4>${c.items.length ? `<ol>${c.items.map(it => `<li><a href="${esc(it.u)}" target="_blank" rel="noopener">${esc(it.t)}</a>
+    <div class="grid2">${L(e.categories).map(c => `<div class="ncat"${c.lang === 'en' ? ' style="grid-column:1/-1;background:#fafaf9"' : ''}><h4>${esc(c.name)} <small class="mut">(${c.pool}건 중${c.lang === 'en' ? ' · 미국판 구글 뉴스' + (c.items.some(i => i.ko) ? ', 제목 번역' : ', 영어 원문') : ''})</small></h4>${c.items.length ? `<ol>${c.items.map(it => `<li><a href="${esc(it.u)}" target="_blank" rel="noopener">${esc(it.ko || it.t)}</a>${c.lang === 'en' && it.ko ? `<br><small class="mut">원문: ${esc(it.t)}</small>` : ''}
       <span class="nb ${it.n >= 4 ? 'hot' : ''}" data-tip="보도한 언론사: ${esc(L(it.sources).join(', '))}">언론 ${it.n}곳</span> <small class="mut">${esc(it.s)} ${esc(it.time)}</small>
       ${L(it.more).length ? `<details><summary>같은 사건 기사 ${it.more.length}건</summary><ul class="news" style="margin-top:4px">${it.more.map(m => `<li><a href="${esc(m.u)}" target="_blank" rel="noopener">${esc(m.t)}</a> <small>${esc(m.s)}</small></li>`).join('')}</ul></details>` : ''}</li>`).join('')}</ol>` : '<p class="mut">해당 기사 없음</p>'}</div>`).join('')}</div>`;
 }

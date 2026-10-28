@@ -518,13 +518,12 @@ def _rss(query):
 
 
 def news(name, direction="up", days=2, limit=3):
-    """구글 뉴스 RSS 에서 종목 관련 최근 기사 최대 3건 [{t 제목, u 링크, s 언론사, d 날짜}].
+    """구글 뉴스 RSS(한국판)에서 종목 관련 최근 기사 최대 3건 [{t 제목, u 링크, s 언론사, d 날짜}].
     - 검색어: "종목명" (따옴표로 정확히 일치) + 최근 2일
     - 정렬: 제목에 종목명이 있고, 방향(상승/하락)에 맞는 단어가 많을수록 위로 → '변동 이유'에 가까운 기사 우선
     - 한계: 제목 단어로 고르는 것이라 '진짜 이유'인지는 사람이 확인해야 합니다. 실패하면 빈 목록."""
-    import newsdigest
-    items = newsdigest.naver_search(name, display=40)  # 네이버 키가 있으면 네이버(국내 커버리지 넓음)
-    if items is None:
+    items = None
+    if items is None:  # 구글 뉴스 RSS(한국판)
         try:
             root = _rss(f'"{name}" when:{days}d')
         except Exception:
