@@ -1,0 +1,3605 @@
+{
+ "date": "2026-10-28",
+ "sessions": {
+  "noon": {
+   "session": "noon",
+   "label": "1차 · 12:00 장중",
+   "basis": "KRX",
+   "asof": "2026-10-28 12:05",
+   "headline": "코스피 +5.73% · 외국인 +5,924억",
+   "indices": [
+    {
+     "name": "코스피",
+     "close": "5,961.27",
+     "change": "+5.73%",
+     "value": "11조 2,854억",
+     "flow": "개인 -1조 5,081억 / 외인 +5,924억 / 기관 +9,250억",
+     "pctv": 5.7274
+    },
+    {
+     "name": "코스닥",
+     "close": "765.98",
+     "change": "+2.98%",
+     "value": "4조 3,984억",
+     "flow": "개인 +271억 / 외인 -1,245억 / 기관 +1,045억",
+     "pctv": 2.9778
+    }
+   ],
+   "flows": {
+    "코스피": {
+     "개인": -1508100000000,
+     "외국인": 592400000000,
+     "기관": 925000000000
+    },
+    "코스닥": {
+     "개인": 27100000000,
+     "외국인": -124500000000,
+     "기관": 104500000000
+    }
+   },
+   "breadth": {
+    "코스피": {
+     "up": 602,
+     "down": 267,
+     "flat": 45,
+     "upper": 0,
+     "lower": 0
+    },
+    "코스닥": {
+     "up": 1044,
+     "down": 624,
+     "flat": 67,
+     "upper": 6,
+     "lower": 0
+    }
+   },
+   "indicators": {
+    "newHigh": {
+     "count": 14,
+     "prev": null,
+     "prevDate": "2026-10-27",
+     "top": [
+      {
+       "code": "263860",
+       "name": "지니언스",
+       "pct": 30.0
+      },
+      {
+       "code": "079940",
+       "name": "가비아",
+       "pct": 25.94
+      },
+      {
+       "code": "053800",
+       "name": "안랩",
+       "pct": 24.16
+      },
+      {
+       "code": "092870",
+       "name": "엑시콘",
+       "pct": 14.14
+      },
+      {
+       "code": "080580",
+       "name": "오킨스전자",
+       "pct": 12.83
+      },
+      {
+       "code": "105740",
+       "name": "디케이락",
+       "pct": 11.02
+      },
+      {
+       "code": "254120",
+       "name": "자비스",
+       "pct": 7.43
+      },
+      {
+       "code": "064290",
+       "name": "인텍플러스",
+       "pct": 7.28
+      },
+      {
+       "code": "012280",
+       "name": "영화금속",
+       "pct": 6.82
+      },
+      {
+       "code": "419050",
+       "name": "삼기에너지솔루션즈",
+       "pct": 5.71
+      },
+      {
+       "code": "144960",
+       "name": "뉴파워프라즈마",
+       "pct": 5.28
+      },
+      {
+       "code": "425420",
+       "name": "티에프이",
+       "pct": 4.86
+      }
+     ]
+    },
+    "newLow": {
+     "count": 32,
+     "prev": null,
+     "prevDate": "2026-10-27",
+     "top": [
+      {
+       "code": "950210",
+       "name": "프레스티지바이오파마",
+       "pct": -19.11
+      },
+      {
+       "code": "144510",
+       "name": "지씨셀",
+       "pct": -15.91
+      },
+      {
+       "code": "475660",
+       "name": "에스켐",
+       "pct": -15.36
+      },
+      {
+       "code": "334970",
+       "name": "프레스티지바이오로직스",
+       "pct": -11.37
+      },
+      {
+       "code": "396690",
+       "name": "미래에셋글로벌리츠",
+       "pct": -7.56
+      },
+      {
+       "code": "099520",
+       "name": "DGI",
+       "pct": -6.67
+      },
+      {
+       "code": "109740",
+       "name": "디에스케이",
+       "pct": -3.19
+      },
+      {
+       "code": "010770",
+       "name": "평화홀딩스",
+       "pct": -2.93
+      },
+      {
+       "code": "388610",
+       "name": "지에프씨생명과학",
+       "pct": -2.64
+      },
+      {
+       "code": "260660",
+       "name": "알리코제약",
+       "pct": -1.96
+      },
+      {
+       "code": "334890",
+       "name": "이지스밸류플러스리츠",
+       "pct": -1.93
+      },
+      {
+       "code": "237690",
+       "name": "에스티팜",
+       "pct": -1.74
+      }
+     ]
+    },
+    "lending": {
+     "date": "2026-10-27",
+     "net": "+30,697,331주",
+     "shares": "32.50억주",
+     "amount": "142조 9,094억",
+     "delta": "+5조 4,702억",
+     "unitNote": "잔고금액 단위는 백만원으로 추정(검증 전)"
+    },
+    "unsupported": "시장 전체 공매도 거래대금·신용융자잔고는 키움 API에 없어 아직 표시하지 않습니다."
+   },
+   "summary": [
+    "코스피 5,961.27 (+5.73%), 거래대금 11조 2,854억 / 코스닥 765.98 (+2.98%), 거래대금 4조 3,984억",
+    "코스피 수급: 외국인 +5,924억, 개인 -1조 5,081억, 기관 +9,250억",
+    "삼성전자+SK하이닉스 거래대금 5조 5,456억, 코스피 거래대금의 49.1%",
+    "코스피 상승 602 : 하락 267 (보합 45)",
+    "코스닥 상승 1044 : 하락 624 (보합 67)",
+    "52주 신고가 14종목"
+   ],
+   "top500": [
+    {
+     "code": "069540",
+     "name": "빛과전자",
+     "market": "코스닥",
+     "close": "4,195",
+     "price": "+29.88%",
+     "chg": "+965원",
+     "amount": "1,495억",
+     "avg7": "270억",
+     "avg20": "497억",
+     "r7": 5.52,
+     "r20": 3.0,
+     "reason": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+     "news": [
+      {
+       "t": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBObEE3UGs3ZmxaZ3BQeU5wclZQaVpGYVpGTFd2VGhYaGxPMG1MSVFia3BKeDNMUEhVa3ZzSlQ3aWRHdDBZQWc0MWZ5emxJa2hzYjk1MkxGcDFYRG5ZcVM0ZVdOMURZM0lt0gFuQVVfeXFMTzBKNjluMGRPTUFLcjNvTFFTQzJ2aXlxeUNBcEhkUnJ1TmVMV24tdjl2VHQwUUtPeXdOeUFsNUVRZzdieC1uSWtaS3dISEpHZXBCTXo0UUV3TDZSV0lubWFtYUlRcDVOYnE5cFdvS3c?oc=5",
+       "s": "머니투데이",
+       "d": "10/28 09:33"
+      },
+      {
+       "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 수주 소식에 급등",
+       "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1FT2JpTFNXalU2R0FoLUFWeDYwcVJiQ3l3NG5OcVozVU1CdlBSdnZjWGpPazNRUm1MMXY3VTZ0UmVzbEpiTXdmOVp3SklJYmpyRENsYmRCalpWODFTZ1h2a1h1UjJEWGdRT2RMTQ?oc=5",
+       "s": "와이드경제",
+       "d": "10/28 10:45"
+      },
+      {
+       "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 물량 수주.. '급등'",
+       "u": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMlI0QlRwNjkzbjlSVktHUEhlMU53RVhoaFZNd3Q1S1RhdWFUWGl1TTdvcUVDSEJFbjNoNE95bzd2QVBfVDN4UllVVHlXS3BLQ2xHczA5cmZ5NkxVVFk3Y2M2dndZWFU0THo2blhQSnRNQlY5bW5ldVlKdWNkbFpmdHhDRHlXaGNK?oc=5",
+       "s": "글로벌이코노믹",
+       "d": "10/28 10:08"
+      }
+     ],
+     "pctv": 29.88,
+     "chgv": 965,
+     "amtv": 149547000000
+    },
+    {
+     "code": "053800",
+     "name": "안랩",
+     "market": "코스닥",
+     "close": "115,100",
+     "price": "+24.16%",
+     "chg": "+22,400원",
+     "amount": "898억",
+     "avg7": "219억",
+     "avg20": "216억",
+     "r7": 4.09,
+     "r20": 4.15,
+     "reason": "안랩 15.59% 상승, 9만2700원 마감…사이버보안 투자 기대에 15.59% 상승",
+     "news": [
+      {
+       "t": "안랩 15.59% 상승, 9만2700원 마감…사이버보안 투자 기대에 15.59% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE8wZklZcVd4c2doR1VSNVEwWWh6VmdOWFU0bDRKMS1WaEVKeHYwYzBOZjVIQ2xWc1NDNi1Qc0c1S1hYTnRRS0ZGWERDUHB0UHVfUjB2T3R1TTU2OXNsaElWNUstTFYzUnFsdldPUnl0R05xQdIBckFVX3lxTE8wZklZcVd4c2doR1VSNVEwWWh6VmdOWFU0bDRKMS1WaEVKeHYwYzBOZjVIQ2xWc1NDNi1Qc0c1S1hYTnRRS0ZGWERDUHB0UHVfUjB2T3R1TTU2OXNsaElWNUstTFYzUnFsdldPUnl0R05xQQ?oc=5",
+       "s": "잡포스트",
+       "d": "10/27 15:50"
+      },
+      {
+       "t": "안랩, 3분기 누적 매출 2098억원…연간 최대치 경신 청신호",
+       "u": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1WVlVnQmVsYnoydEc2WDhjbWFBNU5iel9pVTdvSVVBRUZuTmpjSkw0OUhQczA0MEpTTElLRHFUS3NnYkU3Vm5zYXdDdEZHdw?oc=5",
+       "s": "전자신문",
+       "d": "10/28 10:44"
+      },
+      {
+       "t": "안랩, 3분기 매출 795억원·영업이익 109억원 기록…누적 2000억원 돌파",
+       "u": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1ocWVVRnZ5T0pzZlFnNVdzT0laTWtYLWN2SVVjOE43c2JPY1pJdXExNHpuS3JrbmIwLVhvaWU0OHVDcXJnT1h5eUJ2cTFVQTZVcDVndzV1dTNuRjRHcks2aW0wSGhpbXpILWw4?oc=5",
+       "s": "보안뉴스",
+       "d": "10/28 10:00"
+      }
+     ],
+     "pctv": 24.16,
+     "chgv": 22400,
+     "amtv": 89865000000
+    },
+    {
+     "code": "030530",
+     "name": "원익홀딩스",
+     "market": "코스닥",
+     "close": "28,450",
+     "price": "+19.79%",
+     "chg": "+4,700원",
+     "amount": "1,472억",
+     "avg7": "212억",
+     "avg20": "258억",
+     "r7": 6.94,
+     "r20": 5.7,
+     "reason": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+     "news": [
+      {
+       "t": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQdIBckFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQQ?oc=5",
+       "s": "잡포스트",
+       "d": "10/26 15:00"
+      },
+      {
+       "t": "[속보] 원익홀딩스 주가, 장초반부터 VI 발동하며 급등…2만9900원 터치에 '3만원 고지' 밟나?",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1oUFNFWGRrLVFmRU5aR1g5V2lwcWdEbDlyLU1jVmlhUUVhWVBFelNJcFhkdGdDLS03QlVpQVFGaGxldVZyVkloYlNVbm1IMEpWdWdXYjJYX1dQZ0gtQm9qVWd0cmNvalZZ?oc=5",
+       "s": "CBC뉴스",
+       "d": "10/28 09:55"
+      },
+      {
+       "t": "특징주, 원익홀딩스-반도체 장비 테마 상승세에 7.58% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1NeF9abTh3OEZRZTZESXNpLUNHcVYxOU0ydllaLV9QMThjcWhVUXBsd1Vxc1dDaVB0VEdtbGNzZlpVODlfYXpvYnlpVXZBTTlxMXc?oc=5",
+       "s": "매일경제 마켓",
+       "d": "10/28 09:44"
+      }
+     ],
+     "pctv": 19.79,
+     "chgv": 4700,
+     "amtv": 147246000000
+    },
+    {
+     "code": "072950",
+     "name": "빛샘전자",
+     "market": "코스닥",
+     "close": "15,620",
+     "price": "+18.87%",
+     "chg": "+2,480원",
+     "amount": "725억",
+     "avg7": "149억",
+     "avg20": "391억",
+     "r7": 4.85,
+     "r20": 1.85,
+     "reason": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+     "news": [
+      {
+       "t": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4tenZ0YmF5QWwzdlk1cGRQc1hNZWRaQWdLTjk5QmY2TFEydWJDdFdTd1d2S2wyLWRaTVdYclk4WmJ3Sk14Q29lSXU2UWxJU3lOLWwwWGRHMTc4LXRkcm1WS1pWcEUzZDhh?oc=5",
+       "s": "CBC뉴스",
+       "d": "10/27 09:09"
+      },
+      {
+       "t": "특징주, 빛샘전자-광통신(광케이블/광섬유 등) 테마 상승세에 7.61% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE5fVTJRMHRMY3p3THF6NENXcy02a3pFWWYyazFya0s5UzRUSDNWYzA2ak9pMUJ1NVh1MVpQNjFKVUotd3BEOGc?oc=5",
+       "s": "매일경제",
+       "d": "10/28 09:06"
+      },
+      {
+       "t": "빛샘전자 주가, 10월 27일 장중 13,170원 3.21% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE54YkhRUzFwS2xjX3dKRDhZZnRCUndMZ1hPVGRpRVdYcHBSaDMycnVwZXN0MXlEMDBjazMxOVVvV1dWS0RFTDRpN3BhVnk1c3E3Xzc3Nk43ZG5KeE42YlJhdlNhVGM2WjlwZ3FkVlkwTG9MUQ?oc=5",
+       "s": "중앙이코노미뉴스",
+       "d": "10/27 14:51"
+      }
+     ],
+     "pctv": 18.87,
+     "chgv": 2480,
+     "amtv": 72508000000
+    },
+    {
+     "code": "179880",
+     "name": "멜콘",
+     "market": "코스닥",
+     "close": "18,280",
+     "price": "+15.48%",
+     "chg": "+2,450원",
+     "amount": "2,167억",
+     "avg7": "572억",
+     "avg20": "1,344억",
+     "r7": 3.79,
+     "r20": 1.61,
+     "reason": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+     "news": [
+      {
+       "t": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+       "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54YVpyMXpmNWNlZGNxeHBvSnhRdkZwVUdlTmpFaDNyWlBqa3M4TEVrWnY0ZXRabk11MGVGY0hQNWJCX0ZucE4yYVhTQ0pvT3Y0aXZrZktWYXlXeUpRUUFwVV9Fa0MyT1pFckE?oc=5",
+       "s": "https://www.moneystorm.kr/",
+       "d": "10/27 16:47"
+      },
+      {
+       "t": "[특징주] 멜콘, 앤트로픽 發 투심 회복에 반도체 수요 확대 기대… 상한가 직행",
+       "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1taGRnRjJTYUJIS0h2dnQzSVJrR0hUMTBUVFRjYndWbzVUdnRxd0k5WmZhTl9yVmJsenl5elJtUWhlalQ5WDhrMmlZbUd2RnRoMjc3QkZWc1ZRRWYzMUNTN3p6VkFmQnZhRjBtcA?oc=5",
+       "s": "와이드경제",
+       "d": "10/27 15:15"
+      },
+      {
+       "t": "멜콘 1만5830원 상한가…신규 상장주 수급과 장비 수주 확인",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUdIBckFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUQ?oc=5",
+       "s": "잡포스트",
+       "d": "10/27 14:55"
+      }
+     ],
+     "pctv": 15.48,
+     "chgv": 2450,
+     "amtv": 216705000000
+    },
+    {
+     "code": "411080",
+     "name": "샌즈랩",
+     "market": "코스닥",
+     "close": "9,460",
+     "price": "+15.37%",
+     "chg": "+1,260원",
+     "amount": "981억",
+     "avg7": "241억",
+     "avg20": "190억",
+     "r7": 4.07,
+     "r20": 5.14,
+     "reason": "샌즈랩 23.87% 상승, 8200원 마감…AI 보안 수요 기대에 23.87% 상승…수주 매출 전환 확인",
+     "news": [
+      {
+       "t": "샌즈랩 23.87% 상승, 8200원 마감…AI 보안 수요 기대에 23.87% 상승…수주 매출 전환 확인",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE54R1VHOHhna2x4b0R6d2tsLW8tb1ZTYmRwTVk4Mi1kajZYZmdWZUVHLTNWSEMtT19qdFg4ZkdPNlozUmc3aHlQdHR3bmFPSEFpSTAxbEtnV0NkVFIzYm1tSy11amIwZ1JRUkhHQndBOF9JZ9IBckFVX3lxTE54R1VHOHhna2x4b0R6d2tsLW8tb1ZTYmRwTVk4Mi1kajZYZmdWZUVHLTNWSEMtT19qdFg4ZkdPNlozUmc3aHlQdHR3bmFPSEFpSTAxbEtnV0NkVFIzYm1tSy11amIwZ1JRUkhHQndBOF9JZw?oc=5",
+       "s": "잡포스트",
+       "d": "10/27 15:46"
+      },
+      {
+       "t": "[마감분석] 샌즈랩 23.87% 급등 마감하며 8200원 기록 : 기업주식정보",
+       "u": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE92d0gxd0k2NElrWTI1SUxDbXJfeXZYZUpHa2MyQXdiVElsdG5EcDBicm1iSkZ3SzlCSFdOVlJhLTNqRWo5WkhzNV9YVQ?oc=5",
+       "s": "재경일보",
+       "d": "10/27 15:49"
+      },
+      {
+       "t": "10/27일 공략주 Review _ 샌즈랩",
+       "u": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPZk9PM3Rza1RDWTZTNHVOODMtTHN0MUhFdUZWQjYtTVVuTXV4TnJ2OXoydHUzLTNMbGZyakZaUFN3VGoyRHhDMFlQSHlFMTlLMHpYU29MeGQxT3l5UjdlcTRXSTJxN3FZcmxESzdQTjhYSTFZOGh2WTExMXJyVkNiMTBUVmd0Uk9UNnlF?oc=5",
+       "s": "네이버 프리미엄콘텐츠",
+       "d": "10/27 15:33"
+      }
+     ],
+     "pctv": 15.37,
+     "chgv": 1260,
+     "amtv": 98162000000
+    },
+    {
+     "code": "356680",
+     "name": "엑스게이트",
+     "market": "코스닥",
+     "close": "17,070",
+     "price": "+12.45%",
+     "chg": "+1,890원",
+     "amount": "712억",
+     "avg7": "201억",
+     "avg20": "433억",
+     "r7": 3.54,
+     "r20": 1.64,
+     "reason": "[종목상담 주식민원처리반] 미국 임상 결과 따른 신약 개발 기대감 고조 '퓨쳐켐' - 머니투데이",
+     "news": [
+      {
+       "t": "[종목상담 주식민원처리반] 미국 임상 결과 따른 신약 개발 기대감 고조 '퓨쳐켐' - 머니투데이",
+       "u": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1ZZGhnNHFfZWhkMFJ1RzVuNVhHcG5sVEZCamY5OU5JMEZRVmh6ZEFOZUF0Zlh1S2JpSUsyQ2JDWnlBUnczYWM3QWxRTlJUOUhpZmdMak1vemFNd2NUUGZSeUhBYWRveUF4U3dLdnRBdDRTOWt4OUHSAXtBVV95cUxPUDdOdGpFeHc3ZUhJTldmNUJ0YnNQMVdjTmU4V29KNkY1QjdaWkVwcE5IbFdNQnVhU3lCVjBNZDctQ0ZJRzVDcENtbThlVTg1d3RWOVFQbzQ4VDk3VVc3bFZlMkdhMWVUYXVURzJqWU5LdmtILVczUzhmVkU?oc=5",
+       "s": "머니투데이",
+       "d": "10/26 19:07"
+      },
+      {
+       "t": "\"증권사·운용사·코인거래소 다 뚫렸다\"…보안주 동반 상승 - 머니투데이",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9mWmlBaGJhekJVdlkwYmhMcjF0MlFfdFRCZy04ZGNUNU9wSXNWc2JvSV9GTUJ5dGN6T0doT1Q5QjNaenJTTUdRejB5dURMZ2d1UW5mZ29xdUc4NEtqYnlMTFJ4MlVoV1B30gFuQVVfeXFMTlJZSkhaR3ZzeWFKQnhFMVEydVcyREZybGp2aExSRWxwSk1MeVFUSDRZRWRoWDJxcXc0U3dYQmM3Q3lCOHRuQzFOUzk3SFNoZ2VkQUg1V3VvMDRNcHF0dWpwRk5OMW92MTFBWUtvVnc?oc=5",
+       "s": "머니투데이",
+       "d": "10/28 11:17"
+      },
+      {
+       "t": "PHP 취약점 점검부터 공격 차단까지…국내 보안업계 긴급 대응 '속도'",
+       "u": "https://news.google.com/rss/articles/CBMieEFVX3lxTFAzMWh4MmluX3o5bVQ5a3llR2Zta2NQYkhSTWxFMEFsaV9FeW12VkVEaGM3OWVVUkM5cWMwNnlNUGk3aHplYUdVdFhJT0dBSTloNUxydzZ2YjdrMkZkeWtldUZrN1FQalFZMTdyNHNlNUR1cURPSVBlatIBeEFVX3lxTFAzMWh4MmluX3o5bVQ5a3llR2Zta2NQYkhSTWxFMEFsaV9FeW12VkVEaGM3OWVVUkM5cWMwNnlNUGk3aHplYUdVdFhJT0dBSTloNUxydzZ2YjdrMkZkeWtldUZrN1FQalFZMTdyNHNlNUR1cURPSVBlag?oc=5",
+       "s": "뉴시스",
+       "d": "10/27 09:59"
+      }
+     ],
+     "pctv": 12.45,
+     "chgv": 1890,
+     "amtv": 71214000000
+    },
+    {
+     "code": "034730",
+     "name": "SK",
+     "market": "코스피",
+     "close": "549,000",
+     "price": "+10.35%",
+     "chg": "+51,500원",
+     "amount": "577억",
+     "avg7": "810억",
+     "avg20": "841억",
+     "r7": 0.71,
+     "r20": 0.69,
+     "reason": "SK하이닉스 분기 매출 100조 돌파...영업이익도 83조 '최대'",
+     "news": [
+      {
+       "t": "SK하이닉스 분기 매출 100조 돌파...영업이익도 83조 '최대'",
+       "u": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBJWlBoYWF3YWhWdUx5MXgyQTMyY0p1UmMtQkF2clUwVEx4YlNIUXZaOTlWYVFRVmMtcnhmMDF5LUNKUWdKb0ZwV3NGYmp2WEtFNno3R3ZVU1B3VE9NVXc?oc=5",
+       "s": "YTN",
+       "d": "10/28 11:46"
+      },
+      {
+       "t": "SK하닉 3분기 영업익 83조 역대 최대…분기매출 100조 첫 돌파(종합)",
+       "u": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0zUWVRRkF4V0JzUTZwT1ctVm5GWEVvOHF1Zi1ETzg0ZDBxQlhtQS1lazhSYXFsSzFBeDJmWmRqWmkwdVR2Sk5RQUxxLUMyYlljczQ4Q01YRmFvOTDSAWBBVV95cUxOczVidUw4UHdTSXhoQl8wbEFiN3lGRFlJRFFNSHBuWEZOY25KSzJrMEZfYUlGbVVxYVZJREw5QXN1cmM4b21Bem1tTEkyUVNxSWU5cTMwbk5ocDJrdXFvNDc?oc=5",
+       "s": "연합뉴스",
+       "d": "10/28 11:10"
+      },
+      {
+       "t": "SK하이닉스, 분기 매출 첫 100조 돌파...영업익 83조 역대 최대",
+       "u": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBYaWNrWEUxVkFWdUxYWXowMU12Tng3cjNCdlQyMG9KdWlaZlF2c2lNeGZRUGktN0NYUHA1akJrZWNLWWJPaUpEclZBSGZuOHQ3NFM2dHd0NFlJOXlRMV9HZlJralRfQ19vekkwMVBqbw?oc=5",
+       "s": "YTN",
+       "d": "10/28 09:46"
+      }
+     ],
+     "pctv": 10.35,
+     "chgv": 51500,
+     "amtv": 57772000000
+    },
+    {
+     "code": "003160",
+     "name": "디아이",
+     "market": "코스피",
+     "close": "41,550",
+     "price": "+9.92%",
+     "chg": "+3,750원",
+     "amount": "547억",
+     "avg7": "220억",
+     "avg20": "330억",
+     "r7": 2.48,
+     "r20": 1.65,
+     "reason": "HBM 관련주 진천동지… 워트 21%·디아이 12% 폭등랠리",
+     "news": [
+      {
+       "t": "HBM 관련주 진천동지… 워트 21%·디아이 12% 폭등랠리",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE41ODZDZ2M4ZG1IOU5uYnJIV2lyb1dmeTlrT1Y1cnFFLUZidllBR2p1MkROdUljUUl0WWgtMWlKTVlVWFFScGdmUUpGMFJQVGMybmZBUXhwUjFQZHBUOEYyZkhtQkZCNjZOVHR5emhLbXBpbGPSAXdBVV95cUxPMHhzdGZVbjQxaEV5VldVaU9vOFlOWHdaWHNFbl9jWW1rNWRrdExwczNZVW5yNzFKM0tVV2RDUDBsNW1kc0lfbzU0ZXVnQndNTE80NGQ1bzBaVFlNSi1WSERYYlhXT19iQUNMUkRDb2pQWnZUdG1nbw?oc=5",
+       "s": "핀포인트뉴스",
+       "d": "10/28 11:00"
+      },
+      {
+       "t": "유에스디아이아이, CHIP 토큰 100만달러 규모 바이백 실행",
+       "u": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1SYTYwQmF1NEV5TkRJSk1maDIxNlF5SFFlc0x3akppRTd3WUZEdm9ySDA3a1h4SXh3WEtUX0JYcnNyMzJ4WkZEcmJma0twU1ZBVnBwYjRMR1k?oc=5",
+       "s": "블록미디어",
+       "d": "10/27 15:30"
+      },
+      {
+       "t": "대한수학회, 김성연 책임연구원 '학술상' 선정...수학계 시상 잇따라",
+       "u": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9pQUVFWElwY1BlRlNhV1VQdzNfdEJPMXpSNkFRODBKN0RfZm1JNG5LbHp3a3lJaEJFVW9kMVVRSEZmVmhqMkFNem5ndUxUbUNhNm9JcThRQWRFQWtOTUstV0Rn?oc=5",
+       "s": "CWN",
+       "d": "10/27 14:00"
+      }
+     ],
+     "pctv": 9.92,
+     "chgv": 3750,
+     "amtv": 54760000000
+    },
+    {
+     "code": "402340",
+     "name": "SK스퀘어",
+     "market": "코스피",
+     "close": "907,000",
+     "price": "+9.54%",
+     "chg": "+79,000원",
+     "amount": "4,874억",
+     "avg7": "4,420억",
+     "avg20": "5,987억",
+     "r7": 1.1,
+     "r20": 0.81,
+     "reason": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+     "news": [
+      {
+       "t": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40UXVIUFgwTTZZa05yUC1YQWlSNkVGWVJwZ1dEeWNNdnM0eE1KanVKN0xlcnpVVTJRRWI4dEExLW9DaEVhYi1nZ2VXUDYtQTJTU1RkSWlNR254QWppVEJSNjBIbXdCM3gzYW9UYndPWXE0ekHSAXdBVV95cUxOMzFRNzFHWnhNSWtnYVY1QmNJWE5yTE5ycjkzNmVmV2gzXzBlQUxaV2t5VzBCTkRzRllfY0lRblFaeTRmWUhHRHppRDZLMHgyR2hlRjlPaGxpcFlnZXVURnQ1MjNGVmRBOWZlMXgtVnJCdjRDUlhCVQ?oc=5",
+       "s": "핀포인트뉴스",
+       "d": "10/27 15:01"
+      },
+      {
+       "t": "[특징주] SK·SK스퀘어, 하이닉스 '사상 최대 주주환원' 기대 10% 급등",
+       "u": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFBwdjFWei1Tc183UDI3d0Q1UnNURS05aGhQT01ucURvZ3Q4MkFHUHlWRGJ1V05NdUk4QnI3QzFGdGZsV0Z5OWpv?oc=5",
+       "s": "아이뉴스24",
+       "d": "10/27 09:27"
+      },
+      {
+       "t": "[오늘의 주목주] '앤트로픽 훈풍' SK스퀘어 주가 7%대 올라, 코스피 '외국인·기관 순매수'에 5630선 상승 마감",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9SNFEwV2JWWjJUTHlwdFdSc2RDMFFxTFEyUFRnVWZkWWh2YkFJcTFLTFN5RF9YenBEYW95UlBEenk3QllTdjdSYTJiNmVJRmRUMzlOSF9qdkhoWTNILS1sS1E5LUNXYTNuQkxGR18tdVQ2MXc?oc=5",
+       "s": "비즈니스포스트",
+       "d": "10/27 17:00"
+      }
+     ],
+     "pctv": 9.54,
+     "chgv": 79000,
+     "amtv": 487415000000
+    },
+    {
+     "code": "005935",
+     "name": "삼성전자우",
+     "market": "코스피",
+     "close": "187,050",
+     "price": "+9.32%",
+     "chg": "+15,950원",
+     "amount": "5,286억",
+     "avg7": "4,758억",
+     "avg20": "6,683억",
+     "r7": 1.11,
+     "r20": 0.79,
+     "reason": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+     "news": [
+      {
+       "t": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5uU2o1T21qTGI3VkdQNTNuQlN2bG1BYV9CcFlJRlpwcFJKV3c2MEtEMm5XY3VEWVNYSVo4dlE3bFVBMk4wRnBDWW0yMXc4S2JlV2JnSGJoRU1kZzdVTmhZcjlyd0NpWWZabUtoLVNPTllxdw?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/28 10:32"
+      },
+      {
+       "t": "삼성전자우 주가, 10월 27일 장중 171,900원 4.69% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1NaDhJTG1wY3p1a2FlaDA2eWp0aGc5MG9ERS1OQ0RXb19LRVZHRzhPT0l4SU9PQ241Y3RBbU50eWtpRXVNdnAyOXpLal8wYlRFMkhPX3Z0aGpKT2huZGx3U0dUeHdpTjRBbDJVQkx5Y0Y5dw?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/27 10:02"
+      },
+      {
+       "t": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+       "u": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qMTlidHV4MllvRUpYYTZtSWZ0Z1hWZWdqczdVU2ZpaXM2cDc0b0k5R1lXYWc5N0JvV2YzZDc2X3dnNnY0S1U3cnVmRkxVdUJPSm56UmFDUXZhYlFV?oc=5",
+       "s": "뉴스핌",
+       "d": "10/28 09:50"
+      }
+     ],
+     "pctv": 9.32,
+     "chgv": 15950,
+     "amtv": 528647000000
+    },
+    {
+     "code": "032830",
+     "name": "삼성생명",
+     "market": "코스피",
+     "close": "278,000",
+     "price": "+9.02%",
+     "chg": "+23,000원",
+     "amount": "576억",
+     "avg7": "554억",
+     "avg20": "681억",
+     "r7": 1.04,
+     "r20": 0.85,
+     "reason": "증시 상승 타고 삼성생명 8% 급등, 미래에셋생명도 6%대 강세[종목NOW]",
+     "news": [
+      {
+       "t": "증시 상승 타고 삼성생명 8% 급등, 미래에셋생명도 6%대 강세[종목NOW]",
+       "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5FQkd4Z21URVdjdFprdFRmR29qQzJPM1N0ZW82elNrTkM3bVJzV2NsTlhpb0tiLWFwd0dXSkpPaV8zMmtfWEhIRl8wOHhyQzJRSTBxczhiT1Badw?oc=5",
+       "s": "파이낸셜뉴스",
+       "d": "10/28 09:36"
+      },
+      {
+       "t": "삼성생명 주가 9%대 급등 '금융주 시총 1위', 삼성전자 배당 확대 기대감 반영",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE03QzBTVy13Q2NmS29IZWhkTjNGbUdmUkItR3dIcHF4UjRPWEx5VmM1TE8xUzNOU1BWcFdVUnpXUGNmODBkOWZGeWpyT2U1S0paRDJLeUVjWmRHU0tncTNsZ2FmMndNMXVRWWdGVVFyeElJVWs?oc=5",
+       "s": "비즈니스포스트",
+       "d": "10/28 10:26"
+      },
+      {
+       "t": "삼성생명, 생보업계 최대 2조원 달러채 '흥행'…美 자산운용사 지분 인수 탄력",
+       "u": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBtaHppeFFtUkI5TzRveGVQWTBuaThrWlFzUl9MV05QVGNVXzFZbFdCZ09yMHRiZV9CZFdsOW9LTG5fVGM3WjFEOFhDWTJIRWJObmpldWJEcXlmOEhqSmc?oc=5",
+       "s": "더구루",
+       "d": "10/28 08:58"
+      }
+     ],
+     "pctv": 9.02,
+     "chgv": 23000,
+     "amtv": 57606000000
+    },
+    {
+     "code": "010170",
+     "name": "대한광통신",
+     "market": "코스닥",
+     "close": "14,930",
+     "price": "+8.98%",
+     "chg": "+1,230원",
+     "amount": "1,479억",
+     "avg7": "841억",
+     "avg20": "1,210억",
+     "r7": 1.76,
+     "r20": 1.22,
+     "reason": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+     "news": [
+      {
+       "t": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4tenZ0YmF5QWwzdlk1cGRQc1hNZWRaQWdLTjk5QmY2TFEydWJDdFdTd1d2S2wyLWRaTVdYclk4WmJ3Sk14Q29lSXU2UWxJU3lOLWwwWGRHMTc4LXRkcm1WS1pWcEUzZDhh?oc=5",
+       "s": "CBC뉴스",
+       "d": "10/27 09:09"
+      },
+      {
+       "t": "대한광통신 주가, 10월 28일 장중 14,370원 4.89% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE81R3VtUnR2cEktcC1PRGJ2TnY0YVJ3Njl0OFVMMV81Q0g5dDdFSmZYdnJjYkdsbXE1dkVtRTJIUlpRRFgwOWlRV3l5QXYwUnljVzhiMEtXWlROeUJSaXh6MndfQWdtTDlCODhfOHNQekxxUQ?oc=5",
+       "s": "중앙이코노미뉴스",
+       "d": "10/28 10:41"
+      },
+      {
+       "t": "특징주, 대한광통신-광통신(광케이블/광섬유 등) 테마 상승세에 7.81% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9tdmtLSHhESHZPU093ZG1vXzMwN0dKbXJYZy0xZ1RkdWpnR093ejNmRFlDaWhOU0Y0M3piZ2RfYXl2YjRaSzZPSFg3eWJzSmJoSGc?oc=5",
+       "s": "매일경제 마켓",
+       "d": "10/28 09:05"
+      }
+     ],
+     "pctv": 8.98,
+     "chgv": 1230,
+     "amtv": 147973000000
+    },
+    {
+     "code": "042510",
+     "name": "라온시큐어",
+     "market": "코스닥",
+     "close": "19,480",
+     "price": "+8.89%",
+     "chg": "+1,590원",
+     "amount": "538억",
+     "avg7": "578억",
+     "avg20": "850억",
+     "r7": 0.93,
+     "r20": 0.63,
+     "reason": "PHP 해킹 공포에 보안주 강세...라온시큐어 한 달 새 45% 급등",
+     "news": [
+      {
+       "t": "PHP 해킹 공포에 보안주 강세...라온시큐어 한 달 새 45% 급등",
+       "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE8zYlU2T3QtUXh1dmdDZ1VQMy1DSy1qamNsTVdOYkVpcGdNamxZZEMxWlpyZkc0Z0g2eW55dE1iZ3FOQzRDN3BQSEFlVEFHa2MtcEFualVlenRQUQ?oc=5",
+       "s": "한국경제",
+       "d": "10/26 16:07"
+      },
+      {
+       "t": "특징주, 라온시큐어-양자암호/양자컴퓨팅 테마 상승세에 1.97% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE8zTHpIVFlmWXZjLXVCaDdCOFlWVERTOVFNbmRHdGtjTE1rUEpQS3pCcVlmSTNfb0pZbHZoR3Jaalc3dnFISTF3U1h6ZnBrbXdxSkE?oc=5",
+       "s": "매일경제 마켓",
+       "d": "10/28 09:45"
+      },
+      {
+       "t": "라온시큐어, 26일 낮 12시36분 1만6980원",
+       "u": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9jY2llUEhhZjhEdVFVV3psTk95WkJsZVJQbWRfVTY1cmY2ZFVfX3BvNFQzZVdmWXhuWHVyUFhfZTVDb3RibkNwN19YUGJ5QkRXRjlWU0V5LWppeHhKbzZvWWRTXzJodw?oc=5",
+       "s": "비건뉴스",
+       "d": "10/26 12:46"
+      }
+     ],
+     "pctv": 8.89,
+     "chgv": 1590,
+     "amtv": 53822000000
+    },
+    {
+     "code": "028260",
+     "name": "삼성물산",
+     "market": "코스피",
+     "close": "327,500",
+     "price": "+8.80%",
+     "chg": "+26,500원",
+     "amount": "825억",
+     "avg7": "935억",
+     "avg20": "1,109억",
+     "r7": 0.88,
+     "r20": 0.74,
+     "reason": "창원 7천억 재건축 대어 품은 삼성물산…IPARK현산은 군포 4천억 재개발 수주",
+     "news": [
+      {
+       "t": "창원 7천억 재건축 대어 품은 삼성물산…IPARK현산은 군포 4천억 재개발 수주",
+       "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5rN0tRMFJpV3A1Z29ieTV3ZlZWMXNxaS0ydTRLbTVXMlZGQ3lBdzlUTi13SjA1X3dYZy00alV6WWNxb09RQ3phQ3BDVkM2R3ZHZ2RMeDJnNDlVUQ?oc=5",
+       "s": "파이낸셜뉴스",
+       "d": "10/26 18:48"
+      },
+      {
+       "t": "삼성물산, 도시정비사업 수주 첫 10조원 돌파",
+       "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9CM0F1ZDJQWmNSQnZMN0dQdE1XSzh2OW8wd0wwRFhaVWJUb0hUbUNtQmdmWUgwSktwODhqME9HZktCalZQajlUTVBETGJMUEhmSHVwcmlIT2FLUlk3ZGVLRGk2MzdPN0R5NlE?oc=5",
+       "s": "뉴스웨이",
+       "d": "10/26 14:41"
+      },
+      {
+       "t": "여의도 시범아파트, 삼성물산 시공자로 선정",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE8wd2JBMjdVVW5DYjU4RDFFNWdoTTByQW90eS01VW1NN3VjTnl4TDdqaTh2ZnJYa01NS1FwLXBjZHRNWXJuOUZRamFIdkRKd21vNTdqYkQ1WEVDbDMtZm9NVEpjM19OQTVWMnBUTl9wTkRVSjg?oc=5",
+       "s": "하우징헤럴드",
+       "d": "10/28 09:29"
+      }
+     ],
+     "pctv": 8.8,
+     "chgv": 26500,
+     "amtv": 82562000000
+    }
+   ],
+   "themes": [
+    {
+     "name": "보안_인터넷",
+     "code": "453",
+     "pct": 11.37,
+     "rise": 4,
+     "fall": 0,
+     "n": 4,
+     "stocks": [
+      {
+       "code": "053800",
+       "name": "안랩",
+       "pct": 24.16,
+       "inList": true
+      },
+      {
+       "code": "053350",
+       "name": "이니텍",
+       "pct": 10.87,
+       "inList": false
+      },
+      {
+       "code": "047560",
+       "name": "이스트소프트",
+       "pct": 5.87,
+       "inList": false
+      },
+      {
+       "code": "136540",
+       "name": "윈스테크넷",
+       "pct": 4.57,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "반도체_전공정장비",
+     "code": "555",
+     "pct": 7.25,
+     "rise": 7,
+     "fall": 0,
+     "n": 7,
+     "stocks": [
+      {
+       "code": "030530",
+       "name": "원익홀딩스",
+       "pct": 19.37,
+       "inList": true
+      },
+      {
+       "code": "031980",
+       "name": "피에스케이홀딩스",
+       "pct": 11.08,
+       "inList": false
+      },
+      {
+       "code": "084370",
+       "name": "유진테크",
+       "pct": 6.37,
+       "inList": false
+      },
+      {
+       "code": "095610",
+       "name": "테스",
+       "pct": 4.95,
+       "inList": false
+      },
+      {
+       "code": "036930",
+       "name": "주성엔지니어링",
+       "pct": 3.78,
+       "inList": true
+      },
+      {
+       "code": "068790",
+       "name": "DMS",
+       "pct": 2.55,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "반도체_후공정소재",
+     "code": "554",
+     "pct": 6.69,
+     "rise": 6,
+     "fall": 0,
+     "n": 6,
+     "stocks": [
+      {
+       "code": "098120",
+       "name": "마이크로컨텍솔",
+       "pct": 12.71,
+       "inList": false
+      },
+      {
+       "code": "033160",
+       "name": "엠케이전자",
+       "pct": 7.66,
+       "inList": false
+      },
+      {
+       "code": "007810",
+       "name": "코리아써키트",
+       "pct": 6.51,
+       "inList": false
+      },
+      {
+       "code": "036710",
+       "name": "심텍홀딩스",
+       "pct": 5.71,
+       "inList": false
+      },
+      {
+       "code": "008060",
+       "name": "대덕",
+       "pct": 4.19,
+       "inList": false
+      },
+      {
+       "code": "077360",
+       "name": "덕산하이메탈",
+       "pct": 3.35,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "반도체_생산",
+     "code": "550",
+     "pct": 6.63,
+     "rise": 3,
+     "fall": 0,
+     "n": 3,
+     "stocks": [
+      {
+       "code": "000660",
+       "name": "SK하이닉스",
+       "pct": 8.2,
+       "inList": true
+      },
+      {
+       "code": "005930",
+       "name": "삼성전자",
+       "pct": 7.88,
+       "inList": true
+      },
+      {
+       "code": "000990",
+       "name": "DB하이텍",
+       "pct": 3.8,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "클라우드 컴퓨팅",
+     "code": "457",
+     "pct": 6.09,
+     "rise": 6,
+     "fall": 2,
+     "n": 9,
+     "stocks": [
+      {
+       "code": "093320",
+       "name": "케이아이엔엑스",
+       "pct": 29.96,
+       "inList": false
+      },
+      {
+       "code": "034730",
+       "name": "SK",
+       "pct": 10.35,
+       "inList": true
+      },
+      {
+       "code": "017670",
+       "name": "SK텔레콤",
+       "pct": 6.8,
+       "inList": false
+      },
+      {
+       "code": "023590",
+       "name": "다우기술",
+       "pct": 3.42,
+       "inList": false
+      },
+      {
+       "code": "032640",
+       "name": "LG유플러스",
+       "pct": 2.93,
+       "inList": false
+      },
+      {
+       "code": "030200",
+       "name": "KT",
+       "pct": 2.46,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "보험_생명보험",
+     "code": "420",
+     "pct": 5.99,
+     "rise": 2,
+     "fall": 0,
+     "n": 2,
+     "stocks": [
+      {
+       "code": "032830",
+       "name": "삼성생명",
+       "pct": 9.02,
+       "inList": true
+      },
+      {
+       "code": "088350",
+       "name": "한화생명",
+       "pct": 2.96,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "네트워크/광통신",
+     "code": "480",
+     "pct": 4.85,
+     "rise": 6,
+     "fall": 2,
+     "n": 9,
+     "stocks": [
+      {
+       "code": "069540",
+       "name": "빛과전자",
+       "pct": 29.88,
+       "inList": true
+      },
+      {
+       "code": "010170",
+       "name": "대한광통신",
+       "pct": 8.98,
+       "inList": true
+      },
+      {
+       "code": "050890",
+       "name": "쏠리드",
+       "pct": 3.57,
+       "inList": false
+      },
+      {
+       "code": "078070",
+       "name": "유비쿼스홀딩스",
+       "pct": 2.55,
+       "inList": false
+      },
+      {
+       "code": "039560",
+       "name": "다산네트웍스",
+       "pct": 1.04,
+       "inList": false
+      },
+      {
+       "code": "032500",
+       "name": "케이엠더블유",
+       "pct": 1.03,
+       "inList": false
+      }
+     ]
+    },
+    {
+     "name": "반도체_전공정소재",
+     "code": "556",
+     "pct": 4.23,
+     "rise": 7,
+     "fall": 0,
+     "n": 7,
+     "stocks": [
+      {
+       "code": "005290",
+       "name": "동진쎄미켐",
+       "pct": 7.5,
+       "inList": false
+      },
+      {
+       "code": "074600",
+       "name": "원익QnC",
+       "pct": 6.1,
+       "inList": false
+      },
+      {
+       "code": "104830",
+       "name": "원익머트리얼즈",
+       "pct": 5.22,
+       "inList": false
+      },
+      {
+       "code": "092070",
+       "name": "디엔에프",
+       "pct": 3.34,
+       "inList": false
+      },
+      {
+       "code": "102710",
+       "name": "이엔에프테크놀로지",
+       "pct": 3.2,
+       "inList": false
+      },
+      {
+       "code": "036830",
+       "name": "솔브레인홀딩스",
+       "pct": 2.12,
+       "inList": false
+      }
+     ]
+    }
+   ],
+   "topAmount": [
+    {
+     "code": "000660",
+     "name": "SK하이닉스",
+     "market": "코스피",
+     "close": "1,451,000",
+     "price": "+8.20%",
+     "chg": "+110,000원",
+     "amount": "3조 3,012억",
+     "avg7": "4조 3,483억",
+     "avg20": "5조 1,020억",
+     "r7": 0.76,
+     "r20": 0.65,
+     "reason": "SK하이닉스 영업이익 83조 돌파, 사상 최대 실적 달성",
+     "news": [
+      {
+       "t": "SK하이닉스 영업이익 83조 돌파, 사상 최대 실적 달성",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5TeFZVTWh0V3RqNVM3aFYzeUhvelNXaVVDaTBHenhvWjhiTDZRN0NKOXVIQjdoTmsxQW92eVpOb2wwak1JeW1yNDB5NHBtSFNBcDFYU1lENVBsMDhsVVQ1VDJlb1hYS2Fu?oc=5",
+       "s": "www.2news.co.kr",
+       "d": "10/28 11:55"
+      },
+      {
+       "t": "SK하이닉스 분기 매출 100조 돌파...영업이익도 83조 '최대'",
+       "u": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBJWlBoYWF3YWhWdUx5MXgyQTMyY0p1UmMtQkF2clUwVEx4YlNIUXZaOTlWYVFRVmMtcnhmMDF5LUNKUWdKb0ZwV3NGYmp2WEtFNno3R3ZVU1B3VE9NVXc?oc=5",
+       "s": "YTN",
+       "d": "10/28 11:46"
+      },
+      {
+       "t": "코스피, 개장 직후 2%대 급등…삼성전자·SK하이닉스 동반 강세 By EBN",
+       "u": "https://news.google.com/rss/articles/CBMicEFVX3lxTE43SHBUYmdwcHlsdkViUk9TcnlzalFJVjM0bE9pbV9EX0MyR0RVdDlMUEtHTEo0ZUFNOGdzdUlYa3NnM0RqakZHaXZJVk1uSWR3al9LVHRrZS1fXzhUSy12MGptWEFEUWlnSldsYjd1eHI?oc=5",
+       "s": "Investing.com 한국어",
+       "d": "10/28 10:04"
+      }
+     ],
+     "pctv": 8.2,
+     "chgv": 110000,
+     "amtv": 3301249000000
+    },
+    {
+     "code": "005930",
+     "name": "삼성전자",
+     "market": "코스피",
+     "close": "239,500",
+     "price": "+7.88%",
+     "chg": "+17,500원",
+     "amount": "2조 2,444억",
+     "avg7": "3조 2,334억",
+     "avg20": "4조 2,439억",
+     "r7": 0.69,
+     "r20": 0.53,
+     "reason": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+     "news": [
+      {
+       "t": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+       "u": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qMTlidHV4MllvRUpYYTZtSWZ0Z1hWZWdqczdVU2ZpaXM2cDc0b0k5R1lXYWc5N0JvV2YzZDc2X3dnNnY0S1U3cnVmRkxVdUJPSm56UmFDUXZhYlFV?oc=5",
+       "s": "뉴스핌",
+       "d": "10/28 09:50"
+      },
+      {
+       "t": "'반도체 훈풍' 코스피, 2%대 상승 5700선 돌파...삼성전자·하이닉스 강세",
+       "u": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE8yOXVjRWMtREhrVXdMUkZNR190VDFkTWVERTBzN3kwWXhOQ2pFQzJiNzR1aHFxNlF1RnQ2UU5FV2xfS2lfZ2lWcm5yWXlGR25BZmhxZjM0WXMzTzZCb2Q0?oc=5",
+       "s": "조세일보",
+       "d": "10/28 09:27"
+      },
+      {
+       "t": "삼성전자·SK하이닉스, 역대 최대 주주환원 기대…저평가 탈출 기대",
+       "u": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE83Y1FybWFJdEM1c1IybnZCX0cxN2xuOFRBUHVLaVhMa1dyQ21VcGlLRkg2N21aQkMyLWUzemw0Q2VtRUZUU2hyS1c1T3FSSl9aUTZDQnNsZmRWc0JmbG1Z?oc=5",
+       "s": "조세일보",
+       "d": "10/28 10:26"
+      }
+     ],
+     "pctv": 7.88,
+     "chgv": 17500,
+     "amtv": 2244447000000
+    },
+    {
+     "code": "009150",
+     "name": "삼성전기",
+     "market": "코스피",
+     "close": "1,301,000",
+     "price": "+8.33%",
+     "chg": "+100,000원",
+     "amount": "7,281억",
+     "avg7": "8,317억",
+     "avg20": "9,384억",
+     "r7": 0.88,
+     "r20": 0.78,
+     "reason": "삼성전기, 내년 빅 어닝 기대…수주 쌓이고 판가 오르고",
+     "news": [
+      {
+       "t": "삼성전기, 내년 빅 어닝 기대…수주 쌓이고 판가 오르고",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9tX2I0Tk1zN0JrVGFYVFYtV0F6cEJISnZWTWU5d3d4eGN5RmVpVzJXMFY0WU5LcDlxYzRSOFhvaFU3X1dYaWtHbGpKV2ZDdjhaZy1faVgtQ183a1NMQ1ZmaTFJckpjVVlfRFlDSmNjTkVrRzQ?oc=5",
+       "s": "디지털투데이",
+       "d": "10/28 07:30"
+      },
+      {
+       "t": "삼성전기 협력사 21곳 필리핀행, 1.1조 MLCC 공급망 확대",
+       "u": "https://news.google.com/rss/articles/CBMia0FVX3lxTE4xV2IzVXdtdWxMLVNvU2tRTm0zc1FwWXIwdXJWbnFGOTFPaFJnb25SODBPMlJ1cUR2Wk1HMWRiUHY1YjVpY2lsRXhvdzF3WWlpZkxCTGVLZUJPdXFyazJheEFfVEVoMmN5WHJN?oc=5",
+       "s": "한국신용신문",
+       "d": "10/28 02:21"
+      },
+      {
+       "t": "미래에셋 상위 1% 투자자, AI 반등 속 삼성전기·삼성전자 순매수 확대",
+       "u": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOdXZDSV9WNGZVQXo4OWFoZ2xGdWF4QUd5N1F2RUM0dVE1cml0bmhDWmRsTlphOUh6WE5KQTNBb0pGd2FhcnNXVTdPWktSRnlmNzNuRVdhdUI5cGhNZEtlZE5Xblh2NUZIU041c3VVekgwS3ZXNVI2U3dTMC1RY1VLcG1mbmpLMjF5dGltRDNkY050aDRK?oc=5",
+       "s": "Traders Union",
+       "d": "10/27 11:47"
+      }
+     ],
+     "pctv": 8.33,
+     "chgv": 100000,
+     "amtv": 728184000000
+    },
+    {
+     "code": "005935",
+     "name": "삼성전자우",
+     "market": "코스피",
+     "close": "187,050",
+     "price": "+9.32%",
+     "chg": "+15,950원",
+     "amount": "5,286억",
+     "avg7": "-",
+     "avg20": "-",
+     "r7": null,
+     "r20": null,
+     "reason": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+     "news": [
+      {
+       "t": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5uU2o1T21qTGI3VkdQNTNuQlN2bG1BYV9CcFlJRlpwcFJKV3c2MEtEMm5XY3VEWVNYSVo4dlE3bFVBMk4wRnBDWW0yMXc4S2JlV2JnSGJoRU1kZzdVTmhZcjlyd0NpWWZabUtoLVNPTllxdw?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/28 10:32"
+      },
+      {
+       "t": "삼성전자우 주가, 10월 27일 장중 171,900원 4.69% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1NaDhJTG1wY3p1a2FlaDA2eWp0aGc5MG9ERS1OQ0RXb19LRVZHRzhPT0l4SU9PQ241Y3RBbU50eWtpRXVNdnAyOXpLal8wYlRFMkhPX3Z0aGpKT2huZGx3U0dUeHdpTjRBbDJVQkx5Y0Y5dw?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/27 10:02"
+      },
+      {
+       "t": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+       "u": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qMTlidHV4MllvRUpYYTZtSWZ0Z1hWZWdqczdVU2ZpaXM2cDc0b0k5R1lXYWc5N0JvV2YzZDc2X3dnNnY0S1U3cnVmRkxVdUJPSm56UmFDUXZhYlFV?oc=5",
+       "s": "뉴스핌",
+       "d": "10/28 09:50"
+      }
+     ],
+     "pctv": 9.32,
+     "chgv": 15950,
+     "amtv": 528647000000
+    },
+    {
+     "code": "402340",
+     "name": "SK스퀘어",
+     "market": "코스피",
+     "close": "908,000",
+     "price": "+9.66%",
+     "chg": "+80,000원",
+     "amount": "4,874억",
+     "avg7": "-",
+     "avg20": "-",
+     "r7": null,
+     "r20": null,
+     "reason": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+     "news": [
+      {
+       "t": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40UXVIUFgwTTZZa05yUC1YQWlSNkVGWVJwZ1dEeWNNdnM0eE1KanVKN0xlcnpVVTJRRWI4dEExLW9DaEVhYi1nZ2VXUDYtQTJTU1RkSWlNR254QWppVEJSNjBIbXdCM3gzYW9UYndPWXE0ekHSAXdBVV95cUxOMzFRNzFHWnhNSWtnYVY1QmNJWE5yTE5ycjkzNmVmV2gzXzBlQUxaV2t5VzBCTkRzRllfY0lRblFaeTRmWUhHRHppRDZLMHgyR2hlRjlPaGxpcFlnZXVURnQ1MjNGVmRBOWZlMXgtVnJCdjRDUlhCVQ?oc=5",
+       "s": "핀포인트뉴스",
+       "d": "10/27 15:01"
+      },
+      {
+       "t": "[특징주] SK·SK스퀘어, 하이닉스 '사상 최대 주주환원' 기대 10% 급등",
+       "u": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFBwdjFWei1Tc183UDI3d0Q1UnNURS05aGhQT01ucURvZ3Q4MkFHUHlWRGJ1V05NdUk4QnI3QzFGdGZsV0Z5OWpv?oc=5",
+       "s": "아이뉴스24",
+       "d": "10/27 09:27"
+      },
+      {
+       "t": "[오늘의 주목주] '앤트로픽 훈풍' SK스퀘어 주가 7%대 올라, 코스피 '외국인·기관 순매수'에 5630선 상승 마감",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9SNFEwV2JWWjJUTHlwdFdSc2RDMFFxTFEyUFRnVWZkWWh2YkFJcTFLTFN5RF9YenBEYW95UlBEenk3QllTdjdSYTJiNmVJRmRUMzlOSF9qdkhoWTNILS1sS1E5LUNXYTNuQkxGR18tdVQ2MXc?oc=5",
+       "s": "비즈니스포스트",
+       "d": "10/27 17:00"
+      }
+     ],
+     "pctv": 9.66,
+     "chgv": 80000,
+     "amtv": 487415000000
+    },
+    {
+     "code": "179880",
+     "name": "멜콘",
+     "market": "코스닥",
+     "close": "18,280",
+     "price": "+15.48%",
+     "chg": "+2,450원",
+     "amount": "2,167억",
+     "avg7": "-",
+     "avg20": "-",
+     "r7": null,
+     "r20": null,
+     "reason": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+     "news": [
+      {
+       "t": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+       "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54YVpyMXpmNWNlZGNxeHBvSnhRdkZwVUdlTmpFaDNyWlBqa3M4TEVrWnY0ZXRabk11MGVGY0hQNWJCX0ZucE4yYVhTQ0pvT3Y0aXZrZktWYXlXeUpRUUFwVV9Fa0MyT1pFckE?oc=5",
+       "s": "https://www.moneystorm.kr/",
+       "d": "10/27 16:47"
+      },
+      {
+       "t": "[특징주] 멜콘, 앤트로픽 發 투심 회복에 반도체 수요 확대 기대… 상한가 직행",
+       "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1taGRnRjJTYUJIS0h2dnQzSVJrR0hUMTBUVFRjYndWbzVUdnRxd0k5WmZhTl9yVmJsenl5elJtUWhlalQ5WDhrMmlZbUd2RnRoMjc3QkZWc1ZRRWYzMUNTN3p6VkFmQnZhRjBtcA?oc=5",
+       "s": "와이드경제",
+       "d": "10/27 15:15"
+      },
+      {
+       "t": "멜콘 1만5830원 상한가…신규 상장주 수급과 장비 수주 확인",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUdIBckFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUQ?oc=5",
+       "s": "잡포스트",
+       "d": "10/27 14:55"
+      }
+     ],
+     "pctv": 15.48,
+     "chgv": 2450,
+     "amtv": 216705000000
+    },
+    {
+     "code": "036930",
+     "name": "주성엔지니어링",
+     "market": "코스닥",
+     "close": "181,300",
+     "price": "+3.72%",
+     "chg": "+6,500원",
+     "amount": "1,668억",
+     "avg7": "2,575억",
+     "avg20": "4,113억",
+     "r7": 0.65,
+     "r20": 0.41,
+     "reason": "신재생에너지 관련주 상승커브…주성엔지니어링·원익IPS·혜인 강세, 지투파워도 상승",
+     "news": [
+      {
+       "t": "신재생에너지 관련주 상승커브…주성엔지니어링·원익IPS·혜인 강세, 지투파워도 상승",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9RcUo0MUhMaFNQQUd0cjItOFlmS0lXWmJjaU1HdTktZVg1Z3NCUWcyMEdtem0wazhYdG1KZUJvMjQ0Q2ZLX2lldEtuVU4tU0NWa09JN1NzSVREY2tJZUo2bmUwVDJLeE5n?oc=5",
+       "s": "CBC뉴스",
+       "d": "10/28 10:22"
+      },
+      {
+       "t": "주성엔지니어링 주가, 10월 28일 장중 183,200원 4.81% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1XRGlkMEJsRmdSVG5BeHhpNkVKa0dIT3k4ZDFYNE9iWVVQQUVRelF0cjgtTUZqMmJ5VFhEbHBSZXducldjMUEwcXY1QV85MkgyTmdhV2Y4QXpnbllZOFFfVzJLVWFqRnBjRmRyRlN2VllkUQ?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/28 11:03"
+      },
+      {
+       "t": "주성엔지니어링 주가, 10월 28일 장중 184,100원 5.32% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE9CMHZaRWRjRzBzLU4ycUQxN25vVWN2QllVNDk4QTN4cTU1NU5WWFhSZ3lkdnNZcFJDOTlrUFVYNVU2d2VQV3N2UV8yM21rR3UxdUpxMExteklEMEtPNnBqbGVWWDhrS2cyRnBNa0VNQmNrdw?oc=5",
+       "s": "중앙이코노미뉴스",
+       "d": "10/28 10:41"
+      }
+     ],
+     "pctv": 3.72,
+     "chgv": 6500,
+     "amtv": 166809000000
+    },
+    {
+     "code": "028050",
+     "name": "삼성E&A",
+     "market": "코스피",
+     "close": "64,000",
+     "price": "+2.89%",
+     "chg": "+1,800원",
+     "amount": "1,615억",
+     "avg7": "3,256억",
+     "avg20": "1,590억",
+     "r7": 0.5,
+     "r20": 1.02,
+     "reason": "'역대 최대' 분기 영업익…삼성E&A, 호실적 이어가",
+     "news": [
+      {
+       "t": "'역대 최대' 분기 영업익…삼성E&A, 호실적 이어가",
+       "u": "https://news.google.com/rss/articles/CBMicEFVX3lxTE4wWXNTbEM0VkROQ2VUYWwtc3J6RFF3NFdVc25aeEFqbEdtdlEwQjJlTXVyaUtTNmExY0xvVG5jRGNtRmpMNWE5dFRiZ1ZCcWoyYjFSZ0dtTThPWnBlTm1FS2l2anA5MjRxb0t1cmQxaW4?oc=5",
+       "s": "신아일보",
+       "d": "10/28 09:53"
+      },
+      {
+       "t": "“중동사태가 열어준 ‘전천후 EPC’ 삼성E&A의 시대…올해 수주 19조 역대 최대”",
+       "u": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBUWmRDLVJBY2t6RVZSY1lTYmlMbHlZT1BmSmhCS3EyMXEyMWh0TWp3N1dGdTMyRWJJemh0N3FvWC1aMFhDcnZZSEx3LXVjV1pINmphV1VvRE5yRHpGVHlaaFpWWndNVXktNnJQaXl6VQ?oc=5",
+       "s": "뉴스퀘스트",
+       "d": "10/26 15:21"
+      },
+      {
+       "t": "삼성E&A, ESG 점수 5.7점 상승 '최대'…개선폭 1위",
+       "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA2dHBMRmNxQjlGal9iV1NnVFBYQUhscU81THVDdXkzM0RaX09xSnJjWmJ0Zzl1M1Vsa1pabWhlenNHYmIzT2xuZzZ6UktWa2RZYjNxekl6S1pvNVlYQWdrZUtZdmxpMl9GVlR2Ng?oc=5",
+       "s": "ESG경제",
+       "d": "10/26 14:37"
+      }
+     ],
+     "pctv": 2.89,
+     "chgv": 1800,
+     "amtv": 161550000000
+    },
+    {
+     "code": "069540",
+     "name": "빛과전자",
+     "market": "코스닥",
+     "close": "4,195",
+     "price": "+29.88%",
+     "chg": "+965원",
+     "amount": "1,495억",
+     "avg7": "-",
+     "avg20": "-",
+     "r7": null,
+     "r20": null,
+     "reason": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+     "news": [
+      {
+       "t": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBObEE3UGs3ZmxaZ3BQeU5wclZQaVpGYVpGTFd2VGhYaGxPMG1MSVFia3BKeDNMUEhVa3ZzSlQ3aWRHdDBZQWc0MWZ5emxJa2hzYjk1MkxGcDFYRG5ZcVM0ZVdOMURZM0lt0gFuQVVfeXFMTzBKNjluMGRPTUFLcjNvTFFTQzJ2aXlxeUNBcEhkUnJ1TmVMV24tdjl2VHQwUUtPeXdOeUFsNUVRZzdieC1uSWtaS3dISEpHZXBCTXo0UUV3TDZSV0lubWFtYUlRcDVOYnE5cFdvS3c?oc=5",
+       "s": "머니투데이",
+       "d": "10/28 09:33"
+      },
+      {
+       "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 수주 소식에 급등",
+       "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1FT2JpTFNXalU2R0FoLUFWeDYwcVJiQ3l3NG5OcVozVU1CdlBSdnZjWGpPazNRUm1MMXY3VTZ0UmVzbEpiTXdmOVp3SklJYmpyRENsYmRCalpWODFTZ1h2a1h1UjJEWGdRT2RMTQ?oc=5",
+       "s": "와이드경제",
+       "d": "10/28 10:45"
+      },
+      {
+       "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 물량 수주.. '급등'",
+       "u": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMlI0QlRwNjkzbjlSVktHUEhlMU53RVhoaFZNd3Q1S1RhdWFUWGl1TTdvcUVDSEJFbjNoNE95bzd2QVBfVDN4UllVVHlXS3BLQ2xHczA5cmZ5NkxVVFk3Y2M2dndZWFU0THo2blhQSnRNQlY5bW5ldVlKdWNkbFpmdHhDRHlXaGNK?oc=5",
+       "s": "글로벌이코노믹",
+       "d": "10/28 10:08"
+      }
+     ],
+     "pctv": 29.88,
+     "chgv": 965,
+     "amtv": 149547000000
+    },
+    {
+     "code": "010170",
+     "name": "대한광통신",
+     "market": "코스닥",
+     "close": "14,930",
+     "price": "+8.98%",
+     "chg": "+1,230원",
+     "amount": "1,479억",
+     "avg7": "-",
+     "avg20": "-",
+     "r7": null,
+     "r20": null,
+     "reason": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+     "news": [
+      {
+       "t": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4tenZ0YmF5QWwzdlk1cGRQc1hNZWRaQWdLTjk5QmY2TFEydWJDdFdTd1d2S2wyLWRaTVdYclk4WmJ3Sk14Q29lSXU2UWxJU3lOLWwwWGRHMTc4LXRkcm1WS1pWcEUzZDhh?oc=5",
+       "s": "CBC뉴스",
+       "d": "10/27 09:09"
+      },
+      {
+       "t": "대한광통신 주가, 10월 28일 장중 14,370원 4.89% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE81R3VtUnR2cEktcC1PRGJ2TnY0YVJ3Njl0OFVMMV81Q0g5dDdFSmZYdnJjYkdsbXE1dkVtRTJIUlpRRFgwOWlRV3l5QXYwUnljVzhiMEtXWlROeUJSaXh6MndfQWdtTDlCODhfOHNQekxxUQ?oc=5",
+       "s": "중앙이코노미뉴스",
+       "d": "10/28 10:41"
+      },
+      {
+       "t": "특징주, 대한광통신-광통신(광케이블/광섬유 등) 테마 상승세에 7.81% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9tdmtLSHhESHZPU093ZG1vXzMwN0dKbXJYZy0xZ1RkdWpnR093ejNmRFlDaWhOU0Y0M3piZ2RfYXl2YjRaSzZPSFg3eWJzSmJoSGc?oc=5",
+       "s": "매일경제 마켓",
+       "d": "10/28 09:05"
+      }
+     ],
+     "pctv": 8.98,
+     "chgv": 1230,
+     "amtv": 147973000000
+    },
+    {
+     "code": "030530",
+     "name": "원익홀딩스",
+     "market": "코스닥",
+     "close": "28,450",
+     "price": "+19.79%",
+     "chg": "+4,700원",
+     "amount": "1,472억",
+     "avg7": "-",
+     "avg20": "-",
+     "r7": null,
+     "r20": null,
+     "reason": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+     "news": [
+      {
+       "t": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQdIBckFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQQ?oc=5",
+       "s": "잡포스트",
+       "d": "10/26 15:00"
+      },
+      {
+       "t": "[속보] 원익홀딩스 주가, 장초반부터 VI 발동하며 급등…2만9900원 터치에 '3만원 고지' 밟나?",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1oUFNFWGRrLVFmRU5aR1g5V2lwcWdEbDlyLU1jVmlhUUVhWVBFelNJcFhkdGdDLS03QlVpQVFGaGxldVZyVkloYlNVbm1IMEpWdWdXYjJYX1dQZ0gtQm9qVWd0cmNvalZZ?oc=5",
+       "s": "CBC뉴스",
+       "d": "10/28 09:55"
+      },
+      {
+       "t": "특징주, 원익홀딩스-반도체 장비 테마 상승세에 7.58% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1NeF9abTh3OEZRZTZESXNpLUNHcVYxOU0ydllaLV9QMThjcWhVUXBsd1Vxc1dDaVB0VEdtbGNzZlpVODlfYXpvYnlpVXZBTTlxMXc?oc=5",
+       "s": "매일경제 마켓",
+       "d": "10/28 09:44"
+      }
+     ],
+     "pctv": 19.79,
+     "chgv": 4700,
+     "amtv": 147246000000
+    },
+    {
+     "code": "006400",
+     "name": "삼성SDI",
+     "market": "코스피",
+     "close": "525,000",
+     "price": "+3.35%",
+     "chg": "+17,000원",
+     "amount": "1,393억",
+     "avg7": "3,436억",
+     "avg20": "3,030억",
+     "r7": 0.41,
+     "r20": 0.46,
+     "reason": "삼성SDI, 미국 AOP와 1GWh ESS 공급 계약…\"북미 ESS 수요 증가에 수주 확대\" 기대",
+     "news": [
+      {
+       "t": "삼성SDI, 미국 AOP와 1GWh ESS 공급 계약…\"북미 ESS 수요 증가에 수주 확대\" 기대",
+       "u": "https://news.google.com/rss/articles/CBMib0FVX3lxTE94UkZoRFNEbDhlVFhfbl9hT0hqRm1xQWxvZF94d3JtLU5iNU1sMUxIS0VjNzBUckM5d0FqUWh2VE84YVpTLU43N0k0MXJ4bDNna0RSOUYxMF9HRll5SnFWUVBZQ2xIbHZrZ0hiQTRCRQ?oc=5",
+       "s": "이코노뉴스",
+       "d": "10/26 19:55"
+      },
+      {
+       "t": "삼성SDI, 미국에 ESS솔루션 공급…현대건설 '알러지 케어 솔루션' 개발 外 기업 소식",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE0yZHBCbV9HOVpoS2FPbFBpOWhFTFZXU2k2MnhkVUswY1RseXpON0VVSmtIUDFQSXl4cHJ4bS1EcHkwOTgxYmJ2N1ZVOHRmQjgxaFlOVE1QaW9fZlRMY3Y1NGhQMEl2bHFJ?oc=5",
+       "s": "데일리팝",
+       "d": "10/27 14:45"
+      },
+      {
+       "t": "삼성SDI와 협력해 온 에코프로비엠, 中 배터리사에도 공급 추진",
+       "u": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1qX3QwZndYcnRRcExEaG02TV9RS2pUTXk4UlFDUXgtbm1sNFNPLXJPU00xcU85WG9rQUNXZ1I5YXhFNHZfd3lwQ3pwWThxZw?oc=5",
+       "s": "인사이트",
+       "d": "10/27 13:13"
+      }
+     ],
+     "pctv": 3.35,
+     "chgv": 17000,
+     "amtv": 139343000000
+    },
+    {
+     "code": "0035S0",
+     "name": "빅웨이브로보틱스",
+     "market": "코스닥",
+     "close": "29,600",
+     "price": "+3.32%",
+     "chg": "+950원",
+     "amount": "1,384억",
+     "avg7": "1,131억",
+     "avg20": "1,432억",
+     "r7": 1.22,
+     "r20": 0.97,
+     "reason": "[급등락주 짚어보기] 루닛·뷰노 의료AI 동반 상한가…빅웨이브로보틱스·컨텍도 급등",
+     "news": [
+      {
+       "t": "[급등락주 짚어보기] 루닛·뷰노 의료AI 동반 상한가…빅웨이브로보틱스·컨텍도 급등",
+       "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5hOEl5RTdJelN3cU5YWEV0RGxKMGJyeGNkUEZpbHV3YTJxOHM0bC1iYm5wbFBZcWd1RjhJSjhpcjB5WGpLUU5wNkR3Uk5aUTVUcTE4a19QRkhkd0V2Nl9RLTJWcjdQdDBUVGc?oc=5",
+       "s": "이투데이",
+       "d": "10/26 16:23"
+      },
+      {
+       "t": "피지컬 AI·휴머노이드주 폭풍매수…빅웨이브로보틱스 상한가 기염",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBpdERpRHhSdEMtUmNVRjRGZGpqNFdWQ1ZweW5tY1kwMEJyaThlS0Q0eGVIMlhzT2FkNmoyY0dBRVBYSWk4dG84YzdwdkxTTTZuWmZ2Z0dYbHhsUlRpZm03OVhFaW5HbmpHUExvdnp5YXJRUjDSAXdBVV95cUxNNVUyekViOVpJencyU3hOcUp2OWRHVndhOEd6N1MtdGFSQjRtd3pmYU5KeWgtclh3VWVtc3VjdVRzOHNEbThjdlpzZGxienEwZjFGVV8xVktleGtjTS1wT0JOdnVDN3dEZklSOUZpTU1sdHp1czN6QQ?oc=5",
+       "s": "핀포인트뉴스",
+       "d": "10/26 15:39"
+      },
+      {
+       "t": "빅웨이브로보틱스 상한가…상장 한 달, 로봇 수요 기대 집중",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFBkdnFYZ3A5X1pJcWpqV0dpM3lSdDJMYzZTT2ZTMFNGYmFjQ0NqbzFHMWFuNEduZmYtT0VyVHJJcjdlLWtpUWstSm9SazdFd1NyY0x1Si1IUWp1T3gzMGZtNUNqNjlGZHd3a0lBVGIySTdBQdIBckFVX3lxTFBkdnFYZ3A5X1pJcWpqV0dpM3lSdDJMYzZTT2ZTMFNGYmFjQ0NqbzFHMWFuNEduZmYtT0VyVHJJcjdlLWtpUWstSm9SazdFd1NyY0x1Si1IUWp1T3gzMGZtNUNqNjlGZHd3a0lBVGIySTdBQQ?oc=5",
+       "s": "잡포스트",
+       "d": "10/26 14:57"
+      }
+     ],
+     "pctv": 3.32,
+     "chgv": 950,
+     "amtv": 138481000000
+    },
+    {
+     "code": "011070",
+     "name": "LG이노텍",
+     "market": "코스피",
+     "close": "362,000",
+     "price": "-3.34%",
+     "chg": "-12,500원",
+     "amount": "1,197억",
+     "avg7": "554억",
+     "avg20": "1,219억",
+     "r7": 2.16,
+     "r20": 0.98,
+     "reason": "\"LG이노텍, 환율 급락에 '어닝 쇼크'…목표가↓\"-대신",
+     "news": [
+      {
+       "t": "\"LG이노텍, 환율 급락에 '어닝 쇼크'…목표가↓\"-대신",
+       "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBTaTdzZks3WXh0UDVWNW1LVHkxb3NlVzRxam5US0JOVTd4OUpLUGlxLXBUNEZFWWpwUW9VU0J2ODdCYUNiTGVpZ3hKOGNyM29rMUVRWTlUdVFNZw?oc=5",
+       "s": "한국경제",
+       "d": "10/28 07:34"
+      },
+      {
+       "t": "LG이노텍, 매출 6조 돌파에도 '어닝쇼크' … 환율 급락에 영업익 절반 '뚝'",
+       "u": "https://news.google.com/rss/articles/CBMie0FVX3lxTFB5NGR0R1J2WndQNUpnUGNTdUJuMGk2d283bnZ3UWY0QkUtQk15TUJiRDU5SDZMTHhYY0E5ZHIxQzRnNFlGV3MzUElCa0dWRHRqNkRQM0d3bGZGNzJycW1XN3VBVW5vUFg1eFh3alM0aV84OW1FRHRKRDBhY9IBgAFBVV95cUxQakRZWXZaMzR6aTRFczFPZEc5eXVzVmxXWHJuRUM0U1gtWktDcnFZX0M0Z056NnFOWHZ1VEd2LVh4QnNwd3BEck9wUDN6ajdUZ1FvdDNQTU1ob3V1RVVWQXIyWjQtS3VBcjlPZlFUXzlVclM0c1VCbjhkb2ZfaWo3aQ?oc=5",
+       "s": "뉴데일리",
+       "d": "10/27 15:45"
+      },
+      {
+       "t": "LG이노텍 주가, 10월 28일 장중 363,500원 2.94% 하락",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFBTOVRzcHJhTVZuclBlNFdiOUh4a25acnhpYlJNcjJTVXZTSlFzQ3l6M0lJZ19BanFCWFVWbnRFQjVmZlZkV0tSdWhFbEJhcGE4LWtqdUdBQjJPUzFrT3o1Zjc2eXI2S2pBb2FiQzZrc2FtQQ?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/28 10:40"
+      }
+     ],
+     "pctv": -3.34,
+     "chgv": -12500,
+     "amtv": 119739000000
+    },
+    {
+     "code": "035420",
+     "name": "NAVER",
+     "market": "코스피",
+     "close": "181,800",
+     "price": "+4.30%",
+     "chg": "+7,500원",
+     "amount": "1,122억",
+     "avg7": "849억",
+     "avg20": "1,070억",
+     "r7": 1.32,
+     "r20": 1.05,
+     "reason": "NAVER 주가, 10월 28일 장중 184,200원 5.68% 상승",
+     "news": [
+      {
+       "t": "NAVER 주가, 10월 28일 장중 184,200원 5.68% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFBZR0xMZmNmTGU0cE5rVkhhRHFXcm9Dc255T0ZURVQ2N192Vm1vNmlqQ2JueTJfcUU5SXRkT25ZNkNhVjVaNGF1blhlOHRtQ3JqMzhfMDBIdVNDRlZ6aDV3WjVXX0RPVXZ0X1ZjcWl2WlZkdw?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/28 10:02"
+      },
+      {
+       "t": "특징주, NAVER-인터넷 대표주 테마 상승세에 3.75% ↑",
+       "u": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBSV2NrUmp6T3NibzYzWmFodFhlbTF5VXVqM2xnVGdNeXdsSlp3YVVUUzl2N1NLbzc0dmFhcGhQel9sUmVyQnc?oc=5",
+       "s": "매일경제",
+       "d": "10/28 09:05"
+      },
+      {
+       "t": "NAVER 주가, 10월 27일 애프터마켓 180,500원 3.62% 상승",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1kZXgtNUVCRVZ3T28zVFdIMmlBMEtEN0Iwakw2YVpWVEdJUFp1RDRteHg2N0lmWDQyTTlhWHdKaGF6TjhBVm1iU0ZMbE91TWlBM3g1b29ydHZUQ2x6Q0Nwc25IQzNHMHl1RU91TVE2WGwwdw?oc=5",
+       "s": "중앙이코노미뉴스",
+       "d": "10/27 17:16"
+      }
+     ],
+     "pctv": 4.3,
+     "chgv": 7500,
+     "amtv": 112269000000
+    }
+   ],
+   "down5": [
+    {
+     "code": "950210",
+     "name": "프레스티지바이오파마",
+     "market": "코스피",
+     "close": "4,090",
+     "price": "-19.01%",
+     "chg": "-960원",
+     "amount": "19억",
+     "avg7": "1억",
+     "avg20": "1억",
+     "r7": 10.52,
+     "r20": 10.55,
+     "reason": "프레스티지바이오파마 '1806억' 스푸트니크 소송, 인도 원소스 반소 제기",
+     "news": [
+      {
+       "t": "프레스티지바이오파마 '1806억' 스푸트니크 소송, 인도 원소스 반소 제기",
+       "u": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1fYjZENEhJbDc4SjVWYWhhSG5SaFROdDNXSTNUTHBoajl3RHdfYTFGNl9TemlMbWFhQ1lsZExJbWRfXzMyNkdrcC10eU1aODItR1ZKY0lvTV9XZVRtcjFYcV9ZUF82WS15WXF3?oc=5",
+       "s": "한국신용신문",
+       "d": "10/28 05:51"
+      },
+      {
+       "t": "프레스티지바이오파마, 미국 ‘AAPS 2026’서 키토산 하이드로겔 기반 피하주사 약물전달 연구 발표",
+       "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTFAyWEFTZDNOMGxpWTFteXNjR3NtRXR5Z3BlT1hNYkFOeWJ4YmpPQmdnUUVyd1MxTlpKMmlTMkJtald0OGZ2aHJGd2U2emk5NnRzZHZsTnFkWUl0SVRKNHE0bFl1UTZxbWNhamc?oc=5",
+       "s": "더스탁(The Stock)",
+       "d": "10/26 16:15"
+      },
+      {
+       "t": "부산시, '2026 부산 바이오헬스 포럼'개최… 인공지능(AI)·헬스케어 빅데이터 활용 전략 모색",
+       "u": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9UY2w0T1BaUGRNMXU4Uk9DOGdOZUZoR21RNXVqSFNyZFl6VFlaLTZhM3lEclF5UXBUTUNCaTVtWXI1a2tGUGpPNUVxUFRnb3FocmN1WDVsbmtXdmRjenlSUEtOdw?oc=5",
+       "s": "경기뉴스원",
+       "d": "10/28 08:30"
+      }
+     ],
+     "pctv": -19.01,
+     "chgv": -960,
+     "amtv": 1912000000
+    },
+    {
+     "code": "408900",
+     "name": "스튜디오미르",
+     "market": "코스닥",
+     "close": "896",
+     "price": "-16.26%",
+     "chg": "-174원",
+     "amount": "1억",
+     "avg7": "0억",
+     "avg20": "0억",
+     "r7": 3.77,
+     "r20": 4.63,
+     "reason": "스튜디오미르, 특정계좌 매매관여 과다로 28일 투자주의종목 지정",
+     "news": [
+      {
+       "t": "스튜디오미르, 특정계좌 매매관여 과다로 28일 투자주의종목 지정",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFA2NktQYXBSdE02OUt2ZVdYVUVWcTJqcm0xdU1VQ1pCUE8wZmJvR0xIVERkQWF4ejZZQlFubUpMUW1QNDNNX2N5bmJTLUQ0YVNERnRZMFFuYk9IamxBdXVIeDEzYWhwZmtlX2dDeWlIaXREZw?oc=5",
+       "s": "톱스타뉴스",
+       "d": "10/28 00:12"
+      },
+      {
+       "t": "스튜디오미르, 마블 애니메이션 제작 맡아",
+       "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5aMUJycU00VXJMX3lsRlpxWjdCYUZSMTdTMDdRcDRBN1dUdFBOMmRzUl9idFlJQldnajVnMmdRX2QxREF0V05VX2VIM1NUdEZyTndWMzBpbVJ6S0FKTFk2Tl85aVFHS0Vm?oc=5",
+       "s": "비건뉴스",
+       "d": "10/27 18:56"
+      },
+      {
+       "t": "스튜디오미르, 마블 애니메이션 스튜디오와 제작 계약",
+       "u": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQODJnTnVhZWpXNXZwSG92eUJGbWw3bmNQeE9SdktlamZveHIxWm5VTU9iUmdrb21oOUVHS185NEtmTGpKWk4zejI1blk3SGFGdW8yYVBROUt5d3ZYaVJkZXJEbGpEcFpaTnlfSlNKQzZWZHFDbnRwUFM1SElwU2d5MA?oc=5",
+       "s": "이데일리",
+       "d": "10/27 17:29"
+      }
+     ],
+     "pctv": -16.26,
+     "chgv": -174,
+     "amtv": 173000000
+    },
+    {
+     "code": "144510",
+     "name": "지씨셀",
+     "market": "코스닥",
+     "close": "10,890",
+     "price": "-15.91%",
+     "chg": "-2,060원",
+     "amount": "25억",
+     "avg7": "1억",
+     "avg20": "3억",
+     "r7": 13.31,
+     "r20": 7.1,
+     "reason": "지씨셀, 美 파트너 NK치료제 개발 중단에 주가 급락…아티바 구조조정",
+     "news": [
+      {
+       "t": "지씨셀, 美 파트너 NK치료제 개발 중단에 주가 급락…아티바 구조조정",
+       "u": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPYzRlbENuUGJNX1doOTRFQk0yQ01CSXdZb2xaczFIcFVDZXY0b3FBS0lvQncxazRpMjZyUWxISm9jWWtGUlVhYWYtQ2FhTEZ6aHFFTVpheVpla1EyeGVHUHFvWGcyZHBYekRBWUszWm5ROTVwMGNjQ3p6ZklJWE9pcDZJZGdFT3PSAZsBQVVfeXFMT2M2bHNaQkM4dzZpaHZhRnVpRzFsWE4yMC1lSElKWk1McWhhOHJxSUtwQm1RR19rWEF1MEtzemlmZm1kTXFVUG5LdkFVdWh3bkxhZ3J0T2NpcURSZWZJQk83cWxzX2tLYXJySjgzdjN4SncxNmhWWVFoVWhlTWJmMW5INVIwN2s2cVJZdnU5WUZyX2ZILWo3X3ZMYTQ?oc=5",
+       "s": "Chosunbiz",
+       "d": "10/28 11:38"
+      },
+      {
+       "t": "지씨셀, 관계사 임상 중단에 주가 9% 하락[Why 바이오]",
+       "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9DMTdmZnNaNHZDNEszaTJqSnVxZ3lPWUpzaEtFS1M1bHJIbGFxZl9CVjliajAydTBfN1hrRUVnT2NBMU5aR1NfdnZPZk4ta3pXa3fSAVNBVV95cUxNVmZ5UzFHVVFueXZtYmFrSWFtVndIV2VMQTZyanpsenhlaVlPUHllZW4tUnVkb05PcWp6aXlfb3daYWU3cEtfd05GSGYzSUZTR250OA?oc=5",
+       "s": "서울경제",
+       "d": "10/28 09:33"
+      },
+      {
+       "t": "지씨셀 기술이전 AlloNK 美개발 중단…3상 계획 취소·계약 향방 주목",
+       "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE9SQjFuUW9JdXhBSW9mbTcyNzRkYi1nVTg0MkhvWjMwdzlmcGFYdV9JWE1hZmpfY1dRcEhER0VKUjBIVmp1eXlSNVFUMGU2VEEzRFVFZkpNR2xVbU5HcGdrQXQ4RFpiaV84WTdjU0RBNE5Rdw?oc=5",
+       "s": "메디코파마",
+       "d": "10/28 07:18"
+      }
+     ],
+     "pctv": -15.91,
+     "chgv": -2060,
+     "amtv": 2505000000
+    },
+    {
+     "code": "475660",
+     "name": "에스켐",
+     "market": "코스닥",
+     "close": "2,480",
+     "price": "-15.36%",
+     "chg": "-450원",
+     "amount": "4억",
+     "avg7": "0억",
+     "avg20": "0억",
+     "r7": 45.26,
+     "r20": 13.31,
+     "reason": "근거 기사 확인 안 됨",
+     "news": [],
+     "pctv": -15.36,
+     "chgv": -450,
+     "amtv": 472000000
+    },
+    {
+     "code": "038060",
+     "name": "루멘스바이오스",
+     "market": "코스닥",
+     "close": "866",
+     "price": "-13.49%",
+     "chg": "-135원",
+     "amount": "4억",
+     "avg7": "0억",
+     "avg20": "0억",
+     "r7": 6.07,
+     "r20": 4.91,
+     "reason": "마이크로 LED 테마에 매수세 유입… 코세스·루멘스바이오스는 '휘청'",
+     "news": [
+      {
+       "t": "마이크로 LED 테마에 매수세 유입… 코세스·루멘스바이오스는 '휘청'",
+       "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBsS3RnampoYXN1N0ZxYjFuak8tTXBhUmhzdTUzV2NuRmtnMG9tQ3ZvY3ExT0tYYXBOZEFZUGs0Q3NFLXRLVkU5NHFOV0UwZDFiSHNMeEJkMEVSN2cwWGVmTVM4eU93V1Ixb1hzeDdyZUVQcVHSAXdBVV95cUxNRUZYRTZLQm1uclozc2J2a1ZLbnV0VmJ4R0VyeFBVc294TkNhQ2NYUlBLQWZUWUpud3A0dElkSE9GcU4zZ0pFZFJxODZmMjNyX3ctbWVJY0lKaHllRjhqTlhsOHYwbERlcjk0ZFdzX1c5NkRRSG5KUQ?oc=5",
+       "s": "핀포인트뉴스",
+       "d": "10/28 10:39"
+      },
+      {
+       "t": "루멘스바이오스 측, 폴라리스우노 주식등 보유 비율 34.00%p 증가",
+       "u": "https://news.google.com/rss/articles/CBMie0FVX3lxTE93T0p2R0hVVE5MX3BGcmplSDl0czcwTnEwVnNnUW1fLW1BRlp0ZGNMOG9ETG1lTU51djB0ZU1PQVpPeERVdVlxWVlUZW9leUJTb1ltQ0dVNU9zb0dWVzRpZlh4Q2RPVE9FWmpsS0JXTnhuZDV3RTNON2Focw?oc=5",
+       "s": "디지털투데이",
+       "d": "10/26 15:41"
+      },
+      {
+       "t": "폴라리스우노 인수한 로아앤코그룹, 독립 경영위원회 출범…내부통제 강화 - 조선비즈",
+       "u": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNdnlrcHFHUmtKZDRaR3V6NXMxc1dFQ3RpNERKbk44bnZZY21WenJ1Q2JmalAyQzBwV0NkZnZxYnhVMTZkVXdRbGhkOWdKczVPbi14NnlVck5VM0NGUmxudmNOU3RFQXVBalpJNWR6VnlNYlV0cjZhSHg5NU8zMWxNNHVOWndEcFZxWXNMemhqYXVORjdqRGhyc1Fia1HSAZwBQVVfeXFMTXZ5a3BxR1JrSmQ0Wkd1ejVzMXNXRUN0aTRESm5OOG52WWNtVnpydUNiZmpQMkMwcFdDZGZ2cWJ4VTE2ZFV3UWxoZDlnSnM1T24teDZ5VXJOVTNDRlJsbnZjTlN0RUF1QWpaSTVkelZ5TWJVdHI2YUh4OTVPMzFsTTR1Tlp3RHBWcVlzTHpoamF1TkY3akRocnNRYmtR?oc=5",
+       "s": "Chosunbiz",
+       "d": "10/26 14:55"
+      }
+     ],
+     "pctv": -13.49,
+     "chgv": -135,
+     "amtv": 425000000
+    }
+   ],
+   "notes": [
+    "12:00 무렵의 장중 스냅샷입니다(KRX 기준). 오후 장에서 달라질 수 있습니다.",
+    "평균 거래대금 대비 비율은 장중 누적 거래대금 기준이라 마감 때보다 낮게 나옵니다."
+   ]
+  }
+ },
+ "indices": [
+  {
+   "name": "코스피",
+   "close": "5,961.27",
+   "change": "+5.73%",
+   "value": "11조 2,854억",
+   "flow": "개인 -1조 5,081억 / 외인 +5,924억 / 기관 +9,250억",
+   "pctv": 5.7274
+  },
+  {
+   "name": "코스닥",
+   "close": "765.98",
+   "change": "+2.98%",
+   "value": "4조 3,984억",
+   "flow": "개인 +271억 / 외인 -1,245억 / 기관 +1,045억",
+   "pctv": 2.9778
+  }
+ ],
+ "summary": [
+  "코스피 5,961.27 (+5.73%), 거래대금 11조 2,854억 / 코스닥 765.98 (+2.98%), 거래대금 4조 3,984억",
+  "코스피 수급: 외국인 +5,924억, 개인 -1조 5,081억, 기관 +9,250억",
+  "삼성전자+SK하이닉스 거래대금 5조 5,456억, 코스피 거래대금의 49.1%",
+  "코스피 상승 602 : 하락 267 (보합 45)",
+  "코스닥 상승 1044 : 하락 624 (보합 67)",
+  "52주 신고가 14종목"
+ ],
+ "top500": [
+  {
+   "code": "069540",
+   "name": "빛과전자",
+   "market": "코스닥",
+   "close": "4,195",
+   "price": "+29.88%",
+   "chg": "+965원",
+   "amount": "1,495억",
+   "avg7": "270억",
+   "avg20": "497억",
+   "r7": 5.52,
+   "r20": 3.0,
+   "reason": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+   "news": [
+    {
+     "t": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBObEE3UGs3ZmxaZ3BQeU5wclZQaVpGYVpGTFd2VGhYaGxPMG1MSVFia3BKeDNMUEhVa3ZzSlQ3aWRHdDBZQWc0MWZ5emxJa2hzYjk1MkxGcDFYRG5ZcVM0ZVdOMURZM0lt0gFuQVVfeXFMTzBKNjluMGRPTUFLcjNvTFFTQzJ2aXlxeUNBcEhkUnJ1TmVMV24tdjl2VHQwUUtPeXdOeUFsNUVRZzdieC1uSWtaS3dISEpHZXBCTXo0UUV3TDZSV0lubWFtYUlRcDVOYnE5cFdvS3c?oc=5",
+     "s": "머니투데이",
+     "d": "10/28 09:33"
+    },
+    {
+     "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 수주 소식에 급등",
+     "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1FT2JpTFNXalU2R0FoLUFWeDYwcVJiQ3l3NG5OcVozVU1CdlBSdnZjWGpPazNRUm1MMXY3VTZ0UmVzbEpiTXdmOVp3SklJYmpyRENsYmRCalpWODFTZ1h2a1h1UjJEWGdRT2RMTQ?oc=5",
+     "s": "와이드경제",
+     "d": "10/28 10:45"
+    },
+    {
+     "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 물량 수주.. '급등'",
+     "u": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMlI0QlRwNjkzbjlSVktHUEhlMU53RVhoaFZNd3Q1S1RhdWFUWGl1TTdvcUVDSEJFbjNoNE95bzd2QVBfVDN4UllVVHlXS3BLQ2xHczA5cmZ5NkxVVFk3Y2M2dndZWFU0THo2blhQSnRNQlY5bW5ldVlKdWNkbFpmdHhDRHlXaGNK?oc=5",
+     "s": "글로벌이코노믹",
+     "d": "10/28 10:08"
+    }
+   ],
+   "pctv": 29.88,
+   "chgv": 965,
+   "amtv": 149547000000
+  },
+  {
+   "code": "053800",
+   "name": "안랩",
+   "market": "코스닥",
+   "close": "115,100",
+   "price": "+24.16%",
+   "chg": "+22,400원",
+   "amount": "898억",
+   "avg7": "219억",
+   "avg20": "216억",
+   "r7": 4.09,
+   "r20": 4.15,
+   "reason": "안랩 15.59% 상승, 9만2700원 마감…사이버보안 투자 기대에 15.59% 상승",
+   "news": [
+    {
+     "t": "안랩 15.59% 상승, 9만2700원 마감…사이버보안 투자 기대에 15.59% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE8wZklZcVd4c2doR1VSNVEwWWh6VmdOWFU0bDRKMS1WaEVKeHYwYzBOZjVIQ2xWc1NDNi1Qc0c1S1hYTnRRS0ZGWERDUHB0UHVfUjB2T3R1TTU2OXNsaElWNUstTFYzUnFsdldPUnl0R05xQdIBckFVX3lxTE8wZklZcVd4c2doR1VSNVEwWWh6VmdOWFU0bDRKMS1WaEVKeHYwYzBOZjVIQ2xWc1NDNi1Qc0c1S1hYTnRRS0ZGWERDUHB0UHVfUjB2T3R1TTU2OXNsaElWNUstTFYzUnFsdldPUnl0R05xQQ?oc=5",
+     "s": "잡포스트",
+     "d": "10/27 15:50"
+    },
+    {
+     "t": "안랩, 3분기 누적 매출 2098억원…연간 최대치 경신 청신호",
+     "u": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1WVlVnQmVsYnoydEc2WDhjbWFBNU5iel9pVTdvSVVBRUZuTmpjSkw0OUhQczA0MEpTTElLRHFUS3NnYkU3Vm5zYXdDdEZHdw?oc=5",
+     "s": "전자신문",
+     "d": "10/28 10:44"
+    },
+    {
+     "t": "안랩, 3분기 매출 795억원·영업이익 109억원 기록…누적 2000억원 돌파",
+     "u": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1ocWVVRnZ5T0pzZlFnNVdzT0laTWtYLWN2SVVjOE43c2JPY1pJdXExNHpuS3JrbmIwLVhvaWU0OHVDcXJnT1h5eUJ2cTFVQTZVcDVndzV1dTNuRjRHcks2aW0wSGhpbXpILWw4?oc=5",
+     "s": "보안뉴스",
+     "d": "10/28 10:00"
+    }
+   ],
+   "pctv": 24.16,
+   "chgv": 22400,
+   "amtv": 89865000000
+  },
+  {
+   "code": "030530",
+   "name": "원익홀딩스",
+   "market": "코스닥",
+   "close": "28,450",
+   "price": "+19.79%",
+   "chg": "+4,700원",
+   "amount": "1,472억",
+   "avg7": "212억",
+   "avg20": "258억",
+   "r7": 6.94,
+   "r20": 5.7,
+   "reason": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+   "news": [
+    {
+     "t": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQdIBckFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQQ?oc=5",
+     "s": "잡포스트",
+     "d": "10/26 15:00"
+    },
+    {
+     "t": "[속보] 원익홀딩스 주가, 장초반부터 VI 발동하며 급등…2만9900원 터치에 '3만원 고지' 밟나?",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1oUFNFWGRrLVFmRU5aR1g5V2lwcWdEbDlyLU1jVmlhUUVhWVBFelNJcFhkdGdDLS03QlVpQVFGaGxldVZyVkloYlNVbm1IMEpWdWdXYjJYX1dQZ0gtQm9qVWd0cmNvalZZ?oc=5",
+     "s": "CBC뉴스",
+     "d": "10/28 09:55"
+    },
+    {
+     "t": "특징주, 원익홀딩스-반도체 장비 테마 상승세에 7.58% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1NeF9abTh3OEZRZTZESXNpLUNHcVYxOU0ydllaLV9QMThjcWhVUXBsd1Vxc1dDaVB0VEdtbGNzZlpVODlfYXpvYnlpVXZBTTlxMXc?oc=5",
+     "s": "매일경제 마켓",
+     "d": "10/28 09:44"
+    }
+   ],
+   "pctv": 19.79,
+   "chgv": 4700,
+   "amtv": 147246000000
+  },
+  {
+   "code": "072950",
+   "name": "빛샘전자",
+   "market": "코스닥",
+   "close": "15,620",
+   "price": "+18.87%",
+   "chg": "+2,480원",
+   "amount": "725억",
+   "avg7": "149억",
+   "avg20": "391억",
+   "r7": 4.85,
+   "r20": 1.85,
+   "reason": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+   "news": [
+    {
+     "t": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4tenZ0YmF5QWwzdlk1cGRQc1hNZWRaQWdLTjk5QmY2TFEydWJDdFdTd1d2S2wyLWRaTVdYclk4WmJ3Sk14Q29lSXU2UWxJU3lOLWwwWGRHMTc4LXRkcm1WS1pWcEUzZDhh?oc=5",
+     "s": "CBC뉴스",
+     "d": "10/27 09:09"
+    },
+    {
+     "t": "특징주, 빛샘전자-광통신(광케이블/광섬유 등) 테마 상승세에 7.61% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiRkFVX3lxTE5fVTJRMHRMY3p3THF6NENXcy02a3pFWWYyazFya0s5UzRUSDNWYzA2ak9pMUJ1NVh1MVpQNjFKVUotd3BEOGc?oc=5",
+     "s": "매일경제",
+     "d": "10/28 09:06"
+    },
+    {
+     "t": "빛샘전자 주가, 10월 27일 장중 13,170원 3.21% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE54YkhRUzFwS2xjX3dKRDhZZnRCUndMZ1hPVGRpRVdYcHBSaDMycnVwZXN0MXlEMDBjazMxOVVvV1dWS0RFTDRpN3BhVnk1c3E3Xzc3Nk43ZG5KeE42YlJhdlNhVGM2WjlwZ3FkVlkwTG9MUQ?oc=5",
+     "s": "중앙이코노미뉴스",
+     "d": "10/27 14:51"
+    }
+   ],
+   "pctv": 18.87,
+   "chgv": 2480,
+   "amtv": 72508000000
+  },
+  {
+   "code": "179880",
+   "name": "멜콘",
+   "market": "코스닥",
+   "close": "18,280",
+   "price": "+15.48%",
+   "chg": "+2,450원",
+   "amount": "2,167억",
+   "avg7": "572억",
+   "avg20": "1,344억",
+   "r7": 3.79,
+   "r20": 1.61,
+   "reason": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+   "news": [
+    {
+     "t": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+     "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54YVpyMXpmNWNlZGNxeHBvSnhRdkZwVUdlTmpFaDNyWlBqa3M4TEVrWnY0ZXRabk11MGVGY0hQNWJCX0ZucE4yYVhTQ0pvT3Y0aXZrZktWYXlXeUpRUUFwVV9Fa0MyT1pFckE?oc=5",
+     "s": "https://www.moneystorm.kr/",
+     "d": "10/27 16:47"
+    },
+    {
+     "t": "[특징주] 멜콘, 앤트로픽 發 투심 회복에 반도체 수요 확대 기대… 상한가 직행",
+     "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1taGRnRjJTYUJIS0h2dnQzSVJrR0hUMTBUVFRjYndWbzVUdnRxd0k5WmZhTl9yVmJsenl5elJtUWhlalQ5WDhrMmlZbUd2RnRoMjc3QkZWc1ZRRWYzMUNTN3p6VkFmQnZhRjBtcA?oc=5",
+     "s": "와이드경제",
+     "d": "10/27 15:15"
+    },
+    {
+     "t": "멜콘 1만5830원 상한가…신규 상장주 수급과 장비 수주 확인",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUdIBckFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUQ?oc=5",
+     "s": "잡포스트",
+     "d": "10/27 14:55"
+    }
+   ],
+   "pctv": 15.48,
+   "chgv": 2450,
+   "amtv": 216705000000
+  },
+  {
+   "code": "411080",
+   "name": "샌즈랩",
+   "market": "코스닥",
+   "close": "9,460",
+   "price": "+15.37%",
+   "chg": "+1,260원",
+   "amount": "981억",
+   "avg7": "241억",
+   "avg20": "190억",
+   "r7": 4.07,
+   "r20": 5.14,
+   "reason": "샌즈랩 23.87% 상승, 8200원 마감…AI 보안 수요 기대에 23.87% 상승…수주 매출 전환 확인",
+   "news": [
+    {
+     "t": "샌즈랩 23.87% 상승, 8200원 마감…AI 보안 수요 기대에 23.87% 상승…수주 매출 전환 확인",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE54R1VHOHhna2x4b0R6d2tsLW8tb1ZTYmRwTVk4Mi1kajZYZmdWZUVHLTNWSEMtT19qdFg4ZkdPNlozUmc3aHlQdHR3bmFPSEFpSTAxbEtnV0NkVFIzYm1tSy11amIwZ1JRUkhHQndBOF9JZ9IBckFVX3lxTE54R1VHOHhna2x4b0R6d2tsLW8tb1ZTYmRwTVk4Mi1kajZYZmdWZUVHLTNWSEMtT19qdFg4ZkdPNlozUmc3aHlQdHR3bmFPSEFpSTAxbEtnV0NkVFIzYm1tSy11amIwZ1JRUkhHQndBOF9JZw?oc=5",
+     "s": "잡포스트",
+     "d": "10/27 15:46"
+    },
+    {
+     "t": "[마감분석] 샌즈랩 23.87% 급등 마감하며 8200원 기록 : 기업주식정보",
+     "u": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE92d0gxd0k2NElrWTI1SUxDbXJfeXZYZUpHa2MyQXdiVElsdG5EcDBicm1iSkZ3SzlCSFdOVlJhLTNqRWo5WkhzNV9YVQ?oc=5",
+     "s": "재경일보",
+     "d": "10/27 15:49"
+    },
+    {
+     "t": "10/27일 공략주 Review _ 샌즈랩",
+     "u": "https://news.google.com/rss/articles/CBMiiwFBVV95cUxPZk9PM3Rza1RDWTZTNHVOODMtTHN0MUhFdUZWQjYtTVVuTXV4TnJ2OXoydHUzLTNMbGZyakZaUFN3VGoyRHhDMFlQSHlFMTlLMHpYU29MeGQxT3l5UjdlcTRXSTJxN3FZcmxESzdQTjhYSTFZOGh2WTExMXJyVkNiMTBUVmd0Uk9UNnlF?oc=5",
+     "s": "네이버 프리미엄콘텐츠",
+     "d": "10/27 15:33"
+    }
+   ],
+   "pctv": 15.37,
+   "chgv": 1260,
+   "amtv": 98162000000
+  },
+  {
+   "code": "356680",
+   "name": "엑스게이트",
+   "market": "코스닥",
+   "close": "17,070",
+   "price": "+12.45%",
+   "chg": "+1,890원",
+   "amount": "712억",
+   "avg7": "201억",
+   "avg20": "433억",
+   "r7": 3.54,
+   "r20": 1.64,
+   "reason": "[종목상담 주식민원처리반] 미국 임상 결과 따른 신약 개발 기대감 고조 '퓨쳐켐' - 머니투데이",
+   "news": [
+    {
+     "t": "[종목상담 주식민원처리반] 미국 임상 결과 따른 신약 개발 기대감 고조 '퓨쳐켐' - 머니투데이",
+     "u": "https://news.google.com/rss/articles/CBMidkFVX3lxTE1ZZGhnNHFfZWhkMFJ1RzVuNVhHcG5sVEZCamY5OU5JMEZRVmh6ZEFOZUF0Zlh1S2JpSUsyQ2JDWnlBUnczYWM3QWxRTlJUOUhpZmdMak1vemFNd2NUUGZSeUhBYWRveUF4U3dLdnRBdDRTOWt4OUHSAXtBVV95cUxPUDdOdGpFeHc3ZUhJTldmNUJ0YnNQMVdjTmU4V29KNkY1QjdaWkVwcE5IbFdNQnVhU3lCVjBNZDctQ0ZJRzVDcENtbThlVTg1d3RWOVFQbzQ4VDk3VVc3bFZlMkdhMWVUYXVURzJqWU5LdmtILVczUzhmVkU?oc=5",
+     "s": "머니투데이",
+     "d": "10/26 19:07"
+    },
+    {
+     "t": "\"증권사·운용사·코인거래소 다 뚫렸다\"…보안주 동반 상승 - 머니투데이",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9mWmlBaGJhekJVdlkwYmhMcjF0MlFfdFRCZy04ZGNUNU9wSXNWc2JvSV9GTUJ5dGN6T0doT1Q5QjNaenJTTUdRejB5dURMZ2d1UW5mZ29xdUc4NEtqYnlMTFJ4MlVoV1B30gFuQVVfeXFMTlJZSkhaR3ZzeWFKQnhFMVEydVcyREZybGp2aExSRWxwSk1MeVFUSDRZRWRoWDJxcXc0U3dYQmM3Q3lCOHRuQzFOUzk3SFNoZ2VkQUg1V3VvMDRNcHF0dWpwRk5OMW92MTFBWUtvVnc?oc=5",
+     "s": "머니투데이",
+     "d": "10/28 11:17"
+    },
+    {
+     "t": "PHP 취약점 점검부터 공격 차단까지…국내 보안업계 긴급 대응 '속도'",
+     "u": "https://news.google.com/rss/articles/CBMieEFVX3lxTFAzMWh4MmluX3o5bVQ5a3llR2Zta2NQYkhSTWxFMEFsaV9FeW12VkVEaGM3OWVVUkM5cWMwNnlNUGk3aHplYUdVdFhJT0dBSTloNUxydzZ2YjdrMkZkeWtldUZrN1FQalFZMTdyNHNlNUR1cURPSVBlatIBeEFVX3lxTFAzMWh4MmluX3o5bVQ5a3llR2Zta2NQYkhSTWxFMEFsaV9FeW12VkVEaGM3OWVVUkM5cWMwNnlNUGk3aHplYUdVdFhJT0dBSTloNUxydzZ2YjdrMkZkeWtldUZrN1FQalFZMTdyNHNlNUR1cURPSVBlag?oc=5",
+     "s": "뉴시스",
+     "d": "10/27 09:59"
+    }
+   ],
+   "pctv": 12.45,
+   "chgv": 1890,
+   "amtv": 71214000000
+  },
+  {
+   "code": "034730",
+   "name": "SK",
+   "market": "코스피",
+   "close": "549,000",
+   "price": "+10.35%",
+   "chg": "+51,500원",
+   "amount": "577억",
+   "avg7": "810억",
+   "avg20": "841억",
+   "r7": 0.71,
+   "r20": 0.69,
+   "reason": "SK하이닉스 분기 매출 100조 돌파...영업이익도 83조 '최대'",
+   "news": [
+    {
+     "t": "SK하이닉스 분기 매출 100조 돌파...영업이익도 83조 '최대'",
+     "u": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBJWlBoYWF3YWhWdUx5MXgyQTMyY0p1UmMtQkF2clUwVEx4YlNIUXZaOTlWYVFRVmMtcnhmMDF5LUNKUWdKb0ZwV3NGYmp2WEtFNno3R3ZVU1B3VE9NVXc?oc=5",
+     "s": "YTN",
+     "d": "10/28 11:46"
+    },
+    {
+     "t": "SK하닉 3분기 영업익 83조 역대 최대…분기매출 100조 첫 돌파(종합)",
+     "u": "https://news.google.com/rss/articles/CBMiW0FVX3lxTE0zUWVRRkF4V0JzUTZwT1ctVm5GWEVvOHF1Zi1ETzg0ZDBxQlhtQS1lazhSYXFsSzFBeDJmWmRqWmkwdVR2Sk5RQUxxLUMyYlljczQ4Q01YRmFvOTDSAWBBVV95cUxOczVidUw4UHdTSXhoQl8wbEFiN3lGRFlJRFFNSHBuWEZOY25KSzJrMEZfYUlGbVVxYVZJREw5QXN1cmM4b21Bem1tTEkyUVNxSWU5cTMwbk5ocDJrdXFvNDc?oc=5",
+     "s": "연합뉴스",
+     "d": "10/28 11:10"
+    },
+    {
+     "t": "SK하이닉스, 분기 매출 첫 100조 돌파...영업익 83조 역대 최대",
+     "u": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBYaWNrWEUxVkFWdUxYWXowMU12Tng3cjNCdlQyMG9KdWlaZlF2c2lNeGZRUGktN0NYUHA1akJrZWNLWWJPaUpEclZBSGZuOHQ3NFM2dHd0NFlJOXlRMV9HZlJralRfQ19vekkwMVBqbw?oc=5",
+     "s": "YTN",
+     "d": "10/28 09:46"
+    }
+   ],
+   "pctv": 10.35,
+   "chgv": 51500,
+   "amtv": 57772000000
+  },
+  {
+   "code": "003160",
+   "name": "디아이",
+   "market": "코스피",
+   "close": "41,550",
+   "price": "+9.92%",
+   "chg": "+3,750원",
+   "amount": "547억",
+   "avg7": "220억",
+   "avg20": "330억",
+   "r7": 2.48,
+   "r20": 1.65,
+   "reason": "HBM 관련주 진천동지… 워트 21%·디아이 12% 폭등랠리",
+   "news": [
+    {
+     "t": "HBM 관련주 진천동지… 워트 21%·디아이 12% 폭등랠리",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE41ODZDZ2M4ZG1IOU5uYnJIV2lyb1dmeTlrT1Y1cnFFLUZidllBR2p1MkROdUljUUl0WWgtMWlKTVlVWFFScGdmUUpGMFJQVGMybmZBUXhwUjFQZHBUOEYyZkhtQkZCNjZOVHR5emhLbXBpbGPSAXdBVV95cUxPMHhzdGZVbjQxaEV5VldVaU9vOFlOWHdaWHNFbl9jWW1rNWRrdExwczNZVW5yNzFKM0tVV2RDUDBsNW1kc0lfbzU0ZXVnQndNTE80NGQ1bzBaVFlNSi1WSERYYlhXT19iQUNMUkRDb2pQWnZUdG1nbw?oc=5",
+     "s": "핀포인트뉴스",
+     "d": "10/28 11:00"
+    },
+    {
+     "t": "유에스디아이아이, CHIP 토큰 100만달러 규모 바이백 실행",
+     "u": "https://news.google.com/rss/articles/CBMiWEFVX3lxTE1SYTYwQmF1NEV5TkRJSk1maDIxNlF5SFFlc0x3akppRTd3WUZEdm9ySDA3a1h4SXh3WEtUX0JYcnNyMzJ4WkZEcmJma0twU1ZBVnBwYjRMR1k?oc=5",
+     "s": "블록미디어",
+     "d": "10/27 15:30"
+    },
+    {
+     "t": "대한수학회, 김성연 책임연구원 '학술상' 선정...수학계 시상 잇따라",
+     "u": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE9pQUVFWElwY1BlRlNhV1VQdzNfdEJPMXpSNkFRODBKN0RfZm1JNG5LbHp3a3lJaEJFVW9kMVVRSEZmVmhqMkFNem5ndUxUbUNhNm9JcThRQWRFQWtOTUstV0Rn?oc=5",
+     "s": "CWN",
+     "d": "10/27 14:00"
+    }
+   ],
+   "pctv": 9.92,
+   "chgv": 3750,
+   "amtv": 54760000000
+  },
+  {
+   "code": "402340",
+   "name": "SK스퀘어",
+   "market": "코스피",
+   "close": "907,000",
+   "price": "+9.54%",
+   "chg": "+79,000원",
+   "amount": "4,874억",
+   "avg7": "4,420억",
+   "avg20": "5,987억",
+   "r7": 1.1,
+   "r20": 0.81,
+   "reason": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+   "news": [
+    {
+     "t": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40UXVIUFgwTTZZa05yUC1YQWlSNkVGWVJwZ1dEeWNNdnM0eE1KanVKN0xlcnpVVTJRRWI4dEExLW9DaEVhYi1nZ2VXUDYtQTJTU1RkSWlNR254QWppVEJSNjBIbXdCM3gzYW9UYndPWXE0ekHSAXdBVV95cUxOMzFRNzFHWnhNSWtnYVY1QmNJWE5yTE5ycjkzNmVmV2gzXzBlQUxaV2t5VzBCTkRzRllfY0lRblFaeTRmWUhHRHppRDZLMHgyR2hlRjlPaGxpcFlnZXVURnQ1MjNGVmRBOWZlMXgtVnJCdjRDUlhCVQ?oc=5",
+     "s": "핀포인트뉴스",
+     "d": "10/27 15:01"
+    },
+    {
+     "t": "[특징주] SK·SK스퀘어, 하이닉스 '사상 최대 주주환원' 기대 10% 급등",
+     "u": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFBwdjFWei1Tc183UDI3d0Q1UnNURS05aGhQT01ucURvZ3Q4MkFHUHlWRGJ1V05NdUk4QnI3QzFGdGZsV0Z5OWpv?oc=5",
+     "s": "아이뉴스24",
+     "d": "10/27 09:27"
+    },
+    {
+     "t": "[오늘의 주목주] '앤트로픽 훈풍' SK스퀘어 주가 7%대 올라, 코스피 '외국인·기관 순매수'에 5630선 상승 마감",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9SNFEwV2JWWjJUTHlwdFdSc2RDMFFxTFEyUFRnVWZkWWh2YkFJcTFLTFN5RF9YenBEYW95UlBEenk3QllTdjdSYTJiNmVJRmRUMzlOSF9qdkhoWTNILS1sS1E5LUNXYTNuQkxGR18tdVQ2MXc?oc=5",
+     "s": "비즈니스포스트",
+     "d": "10/27 17:00"
+    }
+   ],
+   "pctv": 9.54,
+   "chgv": 79000,
+   "amtv": 487415000000
+  },
+  {
+   "code": "005935",
+   "name": "삼성전자우",
+   "market": "코스피",
+   "close": "187,050",
+   "price": "+9.32%",
+   "chg": "+15,950원",
+   "amount": "5,286억",
+   "avg7": "4,758억",
+   "avg20": "6,683억",
+   "r7": 1.11,
+   "r20": 0.79,
+   "reason": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+   "news": [
+    {
+     "t": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5uU2o1T21qTGI3VkdQNTNuQlN2bG1BYV9CcFlJRlpwcFJKV3c2MEtEMm5XY3VEWVNYSVo4dlE3bFVBMk4wRnBDWW0yMXc4S2JlV2JnSGJoRU1kZzdVTmhZcjlyd0NpWWZabUtoLVNPTllxdw?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/28 10:32"
+    },
+    {
+     "t": "삼성전자우 주가, 10월 27일 장중 171,900원 4.69% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1NaDhJTG1wY3p1a2FlaDA2eWp0aGc5MG9ERS1OQ0RXb19LRVZHRzhPT0l4SU9PQ241Y3RBbU50eWtpRXVNdnAyOXpLal8wYlRFMkhPX3Z0aGpKT2huZGx3U0dUeHdpTjRBbDJVQkx5Y0Y5dw?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/27 10:02"
+    },
+    {
+     "t": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+     "u": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qMTlidHV4MllvRUpYYTZtSWZ0Z1hWZWdqczdVU2ZpaXM2cDc0b0k5R1lXYWc5N0JvV2YzZDc2X3dnNnY0S1U3cnVmRkxVdUJPSm56UmFDUXZhYlFV?oc=5",
+     "s": "뉴스핌",
+     "d": "10/28 09:50"
+    }
+   ],
+   "pctv": 9.32,
+   "chgv": 15950,
+   "amtv": 528647000000
+  },
+  {
+   "code": "032830",
+   "name": "삼성생명",
+   "market": "코스피",
+   "close": "278,000",
+   "price": "+9.02%",
+   "chg": "+23,000원",
+   "amount": "576억",
+   "avg7": "554억",
+   "avg20": "681억",
+   "r7": 1.04,
+   "r20": 0.85,
+   "reason": "증시 상승 타고 삼성생명 8% 급등, 미래에셋생명도 6%대 강세[종목NOW]",
+   "news": [
+    {
+     "t": "증시 상승 타고 삼성생명 8% 급등, 미래에셋생명도 6%대 강세[종목NOW]",
+     "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5FQkd4Z21URVdjdFprdFRmR29qQzJPM1N0ZW82elNrTkM3bVJzV2NsTlhpb0tiLWFwd0dXSkpPaV8zMmtfWEhIRl8wOHhyQzJRSTBxczhiT1Badw?oc=5",
+     "s": "파이낸셜뉴스",
+     "d": "10/28 09:36"
+    },
+    {
+     "t": "삼성생명 주가 9%대 급등 '금융주 시총 1위', 삼성전자 배당 확대 기대감 반영",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE03QzBTVy13Q2NmS29IZWhkTjNGbUdmUkItR3dIcHF4UjRPWEx5VmM1TE8xUzNOU1BWcFdVUnpXUGNmODBkOWZGeWpyT2U1S0paRDJLeUVjWmRHU0tncTNsZ2FmMndNMXVRWWdGVVFyeElJVWs?oc=5",
+     "s": "비즈니스포스트",
+     "d": "10/28 10:26"
+    },
+    {
+     "t": "삼성생명, 생보업계 최대 2조원 달러채 '흥행'…美 자산운용사 지분 인수 탄력",
+     "u": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBtaHppeFFtUkI5TzRveGVQWTBuaThrWlFzUl9MV05QVGNVXzFZbFdCZ09yMHRiZV9CZFdsOW9LTG5fVGM3WjFEOFhDWTJIRWJObmpldWJEcXlmOEhqSmc?oc=5",
+     "s": "더구루",
+     "d": "10/28 08:58"
+    }
+   ],
+   "pctv": 9.02,
+   "chgv": 23000,
+   "amtv": 57606000000
+  },
+  {
+   "code": "010170",
+   "name": "대한광통신",
+   "market": "코스닥",
+   "close": "14,930",
+   "price": "+8.98%",
+   "chg": "+1,230원",
+   "amount": "1,479억",
+   "avg7": "841억",
+   "avg20": "1,210억",
+   "r7": 1.76,
+   "r20": 1.22,
+   "reason": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+   "news": [
+    {
+     "t": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4tenZ0YmF5QWwzdlk1cGRQc1hNZWRaQWdLTjk5QmY2TFEydWJDdFdTd1d2S2wyLWRaTVdYclk4WmJ3Sk14Q29lSXU2UWxJU3lOLWwwWGRHMTc4LXRkcm1WS1pWcEUzZDhh?oc=5",
+     "s": "CBC뉴스",
+     "d": "10/27 09:09"
+    },
+    {
+     "t": "대한광통신 주가, 10월 28일 장중 14,370원 4.89% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE81R3VtUnR2cEktcC1PRGJ2TnY0YVJ3Njl0OFVMMV81Q0g5dDdFSmZYdnJjYkdsbXE1dkVtRTJIUlpRRFgwOWlRV3l5QXYwUnljVzhiMEtXWlROeUJSaXh6MndfQWdtTDlCODhfOHNQekxxUQ?oc=5",
+     "s": "중앙이코노미뉴스",
+     "d": "10/28 10:41"
+    },
+    {
+     "t": "특징주, 대한광통신-광통신(광케이블/광섬유 등) 테마 상승세에 7.81% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9tdmtLSHhESHZPU093ZG1vXzMwN0dKbXJYZy0xZ1RkdWpnR093ejNmRFlDaWhOU0Y0M3piZ2RfYXl2YjRaSzZPSFg3eWJzSmJoSGc?oc=5",
+     "s": "매일경제 마켓",
+     "d": "10/28 09:05"
+    }
+   ],
+   "pctv": 8.98,
+   "chgv": 1230,
+   "amtv": 147973000000
+  },
+  {
+   "code": "042510",
+   "name": "라온시큐어",
+   "market": "코스닥",
+   "close": "19,480",
+   "price": "+8.89%",
+   "chg": "+1,590원",
+   "amount": "538억",
+   "avg7": "578억",
+   "avg20": "850억",
+   "r7": 0.93,
+   "r20": 0.63,
+   "reason": "PHP 해킹 공포에 보안주 강세...라온시큐어 한 달 새 45% 급등",
+   "news": [
+    {
+     "t": "PHP 해킹 공포에 보안주 강세...라온시큐어 한 달 새 45% 급등",
+     "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE8zYlU2T3QtUXh1dmdDZ1VQMy1DSy1qamNsTVdOYkVpcGdNamxZZEMxWlpyZkc0Z0g2eW55dE1iZ3FOQzRDN3BQSEFlVEFHa2MtcEFualVlenRQUQ?oc=5",
+     "s": "한국경제",
+     "d": "10/26 16:07"
+    },
+    {
+     "t": "특징주, 라온시큐어-양자암호/양자컴퓨팅 테마 상승세에 1.97% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE8zTHpIVFlmWXZjLXVCaDdCOFlWVERTOVFNbmRHdGtjTE1rUEpQS3pCcVlmSTNfb0pZbHZoR3Jaalc3dnFISTF3U1h6ZnBrbXdxSkE?oc=5",
+     "s": "매일경제 마켓",
+     "d": "10/28 09:45"
+    },
+    {
+     "t": "라온시큐어, 26일 낮 12시36분 1만6980원",
+     "u": "https://news.google.com/rss/articles/CBMiZkFVX3lxTE9jY2llUEhhZjhEdVFVV3psTk95WkJsZVJQbWRfVTY1cmY2ZFVfX3BvNFQzZVdmWXhuWHVyUFhfZTVDb3RibkNwN19YUGJ5QkRXRjlWU0V5LWppeHhKbzZvWWRTXzJodw?oc=5",
+     "s": "비건뉴스",
+     "d": "10/26 12:46"
+    }
+   ],
+   "pctv": 8.89,
+   "chgv": 1590,
+   "amtv": 53822000000
+  },
+  {
+   "code": "028260",
+   "name": "삼성물산",
+   "market": "코스피",
+   "close": "327,500",
+   "price": "+8.80%",
+   "chg": "+26,500원",
+   "amount": "825억",
+   "avg7": "935억",
+   "avg20": "1,109억",
+   "r7": 0.88,
+   "r20": 0.74,
+   "reason": "창원 7천억 재건축 대어 품은 삼성물산…IPARK현산은 군포 4천억 재개발 수주",
+   "news": [
+    {
+     "t": "창원 7천억 재건축 대어 품은 삼성물산…IPARK현산은 군포 4천억 재개발 수주",
+     "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE5rN0tRMFJpV3A1Z29ieTV3ZlZWMXNxaS0ydTRLbTVXMlZGQ3lBdzlUTi13SjA1X3dYZy00alV6WWNxb09RQ3phQ3BDVkM2R3ZHZ2RMeDJnNDlVUQ?oc=5",
+     "s": "파이낸셜뉴스",
+     "d": "10/26 18:48"
+    },
+    {
+     "t": "삼성물산, 도시정비사업 수주 첫 10조원 돌파",
+     "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE9CM0F1ZDJQWmNSQnZMN0dQdE1XSzh2OW8wd0wwRFhaVWJUb0hUbUNtQmdmWUgwSktwODhqME9HZktCalZQajlUTVBETGJMUEhmSHVwcmlIT2FLUlk3ZGVLRGk2MzdPN0R5NlE?oc=5",
+     "s": "뉴스웨이",
+     "d": "10/26 14:41"
+    },
+    {
+     "t": "여의도 시범아파트, 삼성물산 시공자로 선정",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE8wd2JBMjdVVW5DYjU4RDFFNWdoTTByQW90eS01VW1NN3VjTnl4TDdqaTh2ZnJYa01NS1FwLXBjZHRNWXJuOUZRamFIdkRKd21vNTdqYkQ1WEVDbDMtZm9NVEpjM19OQTVWMnBUTl9wTkRVSjg?oc=5",
+     "s": "하우징헤럴드",
+     "d": "10/28 09:29"
+    }
+   ],
+   "pctv": 8.8,
+   "chgv": 26500,
+   "amtv": 82562000000
+  }
+ ],
+ "themes": [
+  {
+   "name": "보안_인터넷",
+   "code": "453",
+   "pct": 11.37,
+   "rise": 4,
+   "fall": 0,
+   "n": 4,
+   "stocks": [
+    {
+     "code": "053800",
+     "name": "안랩",
+     "pct": 24.16,
+     "inList": true
+    },
+    {
+     "code": "053350",
+     "name": "이니텍",
+     "pct": 10.87,
+     "inList": false
+    },
+    {
+     "code": "047560",
+     "name": "이스트소프트",
+     "pct": 5.87,
+     "inList": false
+    },
+    {
+     "code": "136540",
+     "name": "윈스테크넷",
+     "pct": 4.57,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "반도체_전공정장비",
+   "code": "555",
+   "pct": 7.25,
+   "rise": 7,
+   "fall": 0,
+   "n": 7,
+   "stocks": [
+    {
+     "code": "030530",
+     "name": "원익홀딩스",
+     "pct": 19.37,
+     "inList": true
+    },
+    {
+     "code": "031980",
+     "name": "피에스케이홀딩스",
+     "pct": 11.08,
+     "inList": false
+    },
+    {
+     "code": "084370",
+     "name": "유진테크",
+     "pct": 6.37,
+     "inList": false
+    },
+    {
+     "code": "095610",
+     "name": "테스",
+     "pct": 4.95,
+     "inList": false
+    },
+    {
+     "code": "036930",
+     "name": "주성엔지니어링",
+     "pct": 3.78,
+     "inList": true
+    },
+    {
+     "code": "068790",
+     "name": "DMS",
+     "pct": 2.55,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "반도체_후공정소재",
+   "code": "554",
+   "pct": 6.69,
+   "rise": 6,
+   "fall": 0,
+   "n": 6,
+   "stocks": [
+    {
+     "code": "098120",
+     "name": "마이크로컨텍솔",
+     "pct": 12.71,
+     "inList": false
+    },
+    {
+     "code": "033160",
+     "name": "엠케이전자",
+     "pct": 7.66,
+     "inList": false
+    },
+    {
+     "code": "007810",
+     "name": "코리아써키트",
+     "pct": 6.51,
+     "inList": false
+    },
+    {
+     "code": "036710",
+     "name": "심텍홀딩스",
+     "pct": 5.71,
+     "inList": false
+    },
+    {
+     "code": "008060",
+     "name": "대덕",
+     "pct": 4.19,
+     "inList": false
+    },
+    {
+     "code": "077360",
+     "name": "덕산하이메탈",
+     "pct": 3.35,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "반도체_생산",
+   "code": "550",
+   "pct": 6.63,
+   "rise": 3,
+   "fall": 0,
+   "n": 3,
+   "stocks": [
+    {
+     "code": "000660",
+     "name": "SK하이닉스",
+     "pct": 8.2,
+     "inList": true
+    },
+    {
+     "code": "005930",
+     "name": "삼성전자",
+     "pct": 7.88,
+     "inList": true
+    },
+    {
+     "code": "000990",
+     "name": "DB하이텍",
+     "pct": 3.8,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "클라우드 컴퓨팅",
+   "code": "457",
+   "pct": 6.09,
+   "rise": 6,
+   "fall": 2,
+   "n": 9,
+   "stocks": [
+    {
+     "code": "093320",
+     "name": "케이아이엔엑스",
+     "pct": 29.96,
+     "inList": false
+    },
+    {
+     "code": "034730",
+     "name": "SK",
+     "pct": 10.35,
+     "inList": true
+    },
+    {
+     "code": "017670",
+     "name": "SK텔레콤",
+     "pct": 6.8,
+     "inList": false
+    },
+    {
+     "code": "023590",
+     "name": "다우기술",
+     "pct": 3.42,
+     "inList": false
+    },
+    {
+     "code": "032640",
+     "name": "LG유플러스",
+     "pct": 2.93,
+     "inList": false
+    },
+    {
+     "code": "030200",
+     "name": "KT",
+     "pct": 2.46,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "보험_생명보험",
+   "code": "420",
+   "pct": 5.99,
+   "rise": 2,
+   "fall": 0,
+   "n": 2,
+   "stocks": [
+    {
+     "code": "032830",
+     "name": "삼성생명",
+     "pct": 9.02,
+     "inList": true
+    },
+    {
+     "code": "088350",
+     "name": "한화생명",
+     "pct": 2.96,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "네트워크/광통신",
+   "code": "480",
+   "pct": 4.85,
+   "rise": 6,
+   "fall": 2,
+   "n": 9,
+   "stocks": [
+    {
+     "code": "069540",
+     "name": "빛과전자",
+     "pct": 29.88,
+     "inList": true
+    },
+    {
+     "code": "010170",
+     "name": "대한광통신",
+     "pct": 8.98,
+     "inList": true
+    },
+    {
+     "code": "050890",
+     "name": "쏠리드",
+     "pct": 3.57,
+     "inList": false
+    },
+    {
+     "code": "078070",
+     "name": "유비쿼스홀딩스",
+     "pct": 2.55,
+     "inList": false
+    },
+    {
+     "code": "039560",
+     "name": "다산네트웍스",
+     "pct": 1.04,
+     "inList": false
+    },
+    {
+     "code": "032500",
+     "name": "케이엠더블유",
+     "pct": 1.03,
+     "inList": false
+    }
+   ]
+  },
+  {
+   "name": "반도체_전공정소재",
+   "code": "556",
+   "pct": 4.23,
+   "rise": 7,
+   "fall": 0,
+   "n": 7,
+   "stocks": [
+    {
+     "code": "005290",
+     "name": "동진쎄미켐",
+     "pct": 7.5,
+     "inList": false
+    },
+    {
+     "code": "074600",
+     "name": "원익QnC",
+     "pct": 6.1,
+     "inList": false
+    },
+    {
+     "code": "104830",
+     "name": "원익머트리얼즈",
+     "pct": 5.22,
+     "inList": false
+    },
+    {
+     "code": "092070",
+     "name": "디엔에프",
+     "pct": 3.34,
+     "inList": false
+    },
+    {
+     "code": "102710",
+     "name": "이엔에프테크놀로지",
+     "pct": 3.2,
+     "inList": false
+    },
+    {
+     "code": "036830",
+     "name": "솔브레인홀딩스",
+     "pct": 2.12,
+     "inList": false
+    }
+   ]
+  }
+ ],
+ "topAmount": [
+  {
+   "code": "000660",
+   "name": "SK하이닉스",
+   "market": "코스피",
+   "close": "1,451,000",
+   "price": "+8.20%",
+   "chg": "+110,000원",
+   "amount": "3조 3,012억",
+   "avg7": "4조 3,483억",
+   "avg20": "5조 1,020억",
+   "r7": 0.76,
+   "r20": 0.65,
+   "reason": "SK하이닉스 영업이익 83조 돌파, 사상 최대 실적 달성",
+   "news": [
+    {
+     "t": "SK하이닉스 영업이익 83조 돌파, 사상 최대 실적 달성",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5TeFZVTWh0V3RqNVM3aFYzeUhvelNXaVVDaTBHenhvWjhiTDZRN0NKOXVIQjdoTmsxQW92eVpOb2wwak1JeW1yNDB5NHBtSFNBcDFYU1lENVBsMDhsVVQ1VDJlb1hYS2Fu?oc=5",
+     "s": "www.2news.co.kr",
+     "d": "10/28 11:55"
+    },
+    {
+     "t": "SK하이닉스 분기 매출 100조 돌파...영업이익도 83조 '최대'",
+     "u": "https://news.google.com/rss/articles/CBMiXkFVX3lxTFBJWlBoYWF3YWhWdUx5MXgyQTMyY0p1UmMtQkF2clUwVEx4YlNIUXZaOTlWYVFRVmMtcnhmMDF5LUNKUWdKb0ZwV3NGYmp2WEtFNno3R3ZVU1B3VE9NVXc?oc=5",
+     "s": "YTN",
+     "d": "10/28 11:46"
+    },
+    {
+     "t": "코스피, 개장 직후 2%대 급등…삼성전자·SK하이닉스 동반 강세 By EBN",
+     "u": "https://news.google.com/rss/articles/CBMicEFVX3lxTE43SHBUYmdwcHlsdkViUk9TcnlzalFJVjM0bE9pbV9EX0MyR0RVdDlMUEtHTEo0ZUFNOGdzdUlYa3NnM0RqakZHaXZJVk1uSWR3al9LVHRrZS1fXzhUSy12MGptWEFEUWlnSldsYjd1eHI?oc=5",
+     "s": "Investing.com 한국어",
+     "d": "10/28 10:04"
+    }
+   ],
+   "pctv": 8.2,
+   "chgv": 110000,
+   "amtv": 3301249000000
+  },
+  {
+   "code": "005930",
+   "name": "삼성전자",
+   "market": "코스피",
+   "close": "239,500",
+   "price": "+7.88%",
+   "chg": "+17,500원",
+   "amount": "2조 2,444억",
+   "avg7": "3조 2,334억",
+   "avg20": "4조 2,439억",
+   "r7": 0.69,
+   "r20": 0.53,
+   "reason": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+   "news": [
+    {
+     "t": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+     "u": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qMTlidHV4MllvRUpYYTZtSWZ0Z1hWZWdqczdVU2ZpaXM2cDc0b0k5R1lXYWc5N0JvV2YzZDc2X3dnNnY0S1U3cnVmRkxVdUJPSm56UmFDUXZhYlFV?oc=5",
+     "s": "뉴스핌",
+     "d": "10/28 09:50"
+    },
+    {
+     "t": "'반도체 훈풍' 코스피, 2%대 상승 5700선 돌파...삼성전자·하이닉스 강세",
+     "u": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE8yOXVjRWMtREhrVXdMUkZNR190VDFkTWVERTBzN3kwWXhOQ2pFQzJiNzR1aHFxNlF1RnQ2UU5FV2xfS2lfZ2lWcm5yWXlGR25BZmhxZjM0WXMzTzZCb2Q0?oc=5",
+     "s": "조세일보",
+     "d": "10/28 09:27"
+    },
+    {
+     "t": "삼성전자·SK하이닉스, 역대 최대 주주환원 기대…저평가 탈출 기대",
+     "u": "https://news.google.com/rss/articles/CBMiX0FVX3lxTE83Y1FybWFJdEM1c1IybnZCX0cxN2xuOFRBUHVLaVhMa1dyQ21VcGlLRkg2N21aQkMyLWUzemw0Q2VtRUZUU2hyS1c1T3FSSl9aUTZDQnNsZmRWc0JmbG1Z?oc=5",
+     "s": "조세일보",
+     "d": "10/28 10:26"
+    }
+   ],
+   "pctv": 7.88,
+   "chgv": 17500,
+   "amtv": 2244447000000
+  },
+  {
+   "code": "009150",
+   "name": "삼성전기",
+   "market": "코스피",
+   "close": "1,301,000",
+   "price": "+8.33%",
+   "chg": "+100,000원",
+   "amount": "7,281억",
+   "avg7": "8,317억",
+   "avg20": "9,384억",
+   "r7": 0.88,
+   "r20": 0.78,
+   "reason": "삼성전기, 내년 빅 어닝 기대…수주 쌓이고 판가 오르고",
+   "news": [
+    {
+     "t": "삼성전기, 내년 빅 어닝 기대…수주 쌓이고 판가 오르고",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9tX2I0Tk1zN0JrVGFYVFYtV0F6cEJISnZWTWU5d3d4eGN5RmVpVzJXMFY0WU5LcDlxYzRSOFhvaFU3X1dYaWtHbGpKV2ZDdjhaZy1faVgtQ183a1NMQ1ZmaTFJckpjVVlfRFlDSmNjTkVrRzQ?oc=5",
+     "s": "디지털투데이",
+     "d": "10/28 07:30"
+    },
+    {
+     "t": "삼성전기 협력사 21곳 필리핀행, 1.1조 MLCC 공급망 확대",
+     "u": "https://news.google.com/rss/articles/CBMia0FVX3lxTE4xV2IzVXdtdWxMLVNvU2tRTm0zc1FwWXIwdXJWbnFGOTFPaFJnb25SODBPMlJ1cUR2Wk1HMWRiUHY1YjVpY2lsRXhvdzF3WWlpZkxCTGVLZUJPdXFyazJheEFfVEVoMmN5WHJN?oc=5",
+     "s": "한국신용신문",
+     "d": "10/28 02:21"
+    },
+    {
+     "t": "미래에셋 상위 1% 투자자, AI 반등 속 삼성전기·삼성전자 순매수 확대",
+     "u": "https://news.google.com/rss/articles/CBMilAFBVV95cUxOdXZDSV9WNGZVQXo4OWFoZ2xGdWF4QUd5N1F2RUM0dVE1cml0bmhDWmRsTlphOUh6WE5KQTNBb0pGd2FhcnNXVTdPWktSRnlmNzNuRVdhdUI5cGhNZEtlZE5Xblh2NUZIU041c3VVekgwS3ZXNVI2U3dTMC1RY1VLcG1mbmpLMjF5dGltRDNkY050aDRK?oc=5",
+     "s": "Traders Union",
+     "d": "10/27 11:47"
+    }
+   ],
+   "pctv": 8.33,
+   "chgv": 100000,
+   "amtv": 728184000000
+  },
+  {
+   "code": "005935",
+   "name": "삼성전자우",
+   "market": "코스피",
+   "close": "187,050",
+   "price": "+9.32%",
+   "chg": "+15,950원",
+   "amount": "5,286억",
+   "avg7": "-",
+   "avg20": "-",
+   "r7": null,
+   "r20": null,
+   "reason": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+   "news": [
+    {
+     "t": "삼성전자우 주가, 10월 28일 장중 185,300원 8.30% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5uU2o1T21qTGI3VkdQNTNuQlN2bG1BYV9CcFlJRlpwcFJKV3c2MEtEMm5XY3VEWVNYSVo4dlE3bFVBMk4wRnBDWW0yMXc4S2JlV2JnSGJoRU1kZzdVTmhZcjlyd0NpWWZabUtoLVNPTllxdw?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/28 10:32"
+    },
+    {
+     "t": "삼성전자우 주가, 10월 27일 장중 171,900원 4.69% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1NaDhJTG1wY3p1a2FlaDA2eWp0aGc5MG9ERS1OQ0RXb19LRVZHRzhPT0l4SU9PQ241Y3RBbU50eWtpRXVNdnAyOXpLal8wYlRFMkhPX3Z0aGpKT2huZGx3U0dUeHdpTjRBbDJVQkx5Y0Y5dw?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/27 10:02"
+    },
+    {
+     "t": "[특징주] 삼성전자 23만원 돌파…실적 기대에 그룹주 동반 급등",
+     "u": "https://news.google.com/rss/articles/CBMiXEFVX3lxTE5qMTlidHV4MllvRUpYYTZtSWZ0Z1hWZWdqczdVU2ZpaXM2cDc0b0k5R1lXYWc5N0JvV2YzZDc2X3dnNnY0S1U3cnVmRkxVdUJPSm56UmFDUXZhYlFV?oc=5",
+     "s": "뉴스핌",
+     "d": "10/28 09:50"
+    }
+   ],
+   "pctv": 9.32,
+   "chgv": 15950,
+   "amtv": 528647000000
+  },
+  {
+   "code": "402340",
+   "name": "SK스퀘어",
+   "market": "코스피",
+   "close": "908,000",
+   "price": "+9.66%",
+   "chg": "+80,000원",
+   "amount": "4,874억",
+   "avg7": "-",
+   "avg20": "-",
+   "r7": null,
+   "r20": null,
+   "reason": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+   "news": [
+    {
+     "t": "지주사株 상승랠리…SK스퀘어·SK 강세에 저평가 해소 기대",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE40UXVIUFgwTTZZa05yUC1YQWlSNkVGWVJwZ1dEeWNNdnM0eE1KanVKN0xlcnpVVTJRRWI4dEExLW9DaEVhYi1nZ2VXUDYtQTJTU1RkSWlNR254QWppVEJSNjBIbXdCM3gzYW9UYndPWXE0ekHSAXdBVV95cUxOMzFRNzFHWnhNSWtnYVY1QmNJWE5yTE5ycjkzNmVmV2gzXzBlQUxaV2t5VzBCTkRzRllfY0lRblFaeTRmWUhHRHppRDZLMHgyR2hlRjlPaGxpcFlnZXVURnQ1MjNGVmRBOWZlMXgtVnJCdjRDUlhCVQ?oc=5",
+     "s": "핀포인트뉴스",
+     "d": "10/27 15:01"
+    },
+    {
+     "t": "[특징주] SK·SK스퀘어, 하이닉스 '사상 최대 주주환원' 기대 10% 급등",
+     "u": "https://news.google.com/rss/articles/CBMiR0FVX3lxTFBwdjFWei1Tc183UDI3d0Q1UnNURS05aGhQT01ucURvZ3Q4MkFHUHlWRGJ1V05NdUk4QnI3QzFGdGZsV0Z5OWpv?oc=5",
+     "s": "아이뉴스24",
+     "d": "10/27 09:27"
+    },
+    {
+     "t": "[오늘의 주목주] '앤트로픽 훈풍' SK스퀘어 주가 7%대 올라, 코스피 '외국인·기관 순매수'에 5630선 상승 마감",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTE9SNFEwV2JWWjJUTHlwdFdSc2RDMFFxTFEyUFRnVWZkWWh2YkFJcTFLTFN5RF9YenBEYW95UlBEenk3QllTdjdSYTJiNmVJRmRUMzlOSF9qdkhoWTNILS1sS1E5LUNXYTNuQkxGR18tdVQ2MXc?oc=5",
+     "s": "비즈니스포스트",
+     "d": "10/27 17:00"
+    }
+   ],
+   "pctv": 9.66,
+   "chgv": 80000,
+   "amtv": 487415000000
+  },
+  {
+   "code": "179880",
+   "name": "멜콘",
+   "market": "코스닥",
+   "close": "18,280",
+   "price": "+15.48%",
+   "chg": "+2,450원",
+   "amount": "2,167억",
+   "avg7": "-",
+   "avg20": "-",
+   "r7": null,
+   "r20": null,
+   "reason": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+   "news": [
+    {
+     "t": "[특징주] 멜콘, 앤트로픽 IPO 추진에 AI 반도체 기대감…상한가 마감",
+     "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE54YVpyMXpmNWNlZGNxeHBvSnhRdkZwVUdlTmpFaDNyWlBqa3M4TEVrWnY0ZXRabk11MGVGY0hQNWJCX0ZucE4yYVhTQ0pvT3Y0aXZrZktWYXlXeUpRUUFwVV9Fa0MyT1pFckE?oc=5",
+     "s": "https://www.moneystorm.kr/",
+     "d": "10/27 16:47"
+    },
+    {
+     "t": "[특징주] 멜콘, 앤트로픽 發 투심 회복에 반도체 수요 확대 기대… 상한가 직행",
+     "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1taGRnRjJTYUJIS0h2dnQzSVJrR0hUMTBUVFRjYndWbzVUdnRxd0k5WmZhTl9yVmJsenl5elJtUWhlalQ5WDhrMmlZbUd2RnRoMjc3QkZWc1ZRRWYzMUNTN3p6VkFmQnZhRjBtcA?oc=5",
+     "s": "와이드경제",
+     "d": "10/27 15:15"
+    },
+    {
+     "t": "멜콘 1만5830원 상한가…신규 상장주 수급과 장비 수주 확인",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUdIBckFVX3lxTE5GOTh5dHFpZzZ2MXYzeXloNUhTeFNPQlpKN1JLeTlDeWk3ZHM4UjRjYXBxLTFQX0NsU0xKYllPNG5acGN4cU5hUVQ5TmdyM2d0OHhOTGI3OC16V0N0OVlZR09RNVcyaWVLT1FROUhmLXktUQ?oc=5",
+     "s": "잡포스트",
+     "d": "10/27 14:55"
+    }
+   ],
+   "pctv": 15.48,
+   "chgv": 2450,
+   "amtv": 216705000000
+  },
+  {
+   "code": "036930",
+   "name": "주성엔지니어링",
+   "market": "코스닥",
+   "close": "181,300",
+   "price": "+3.72%",
+   "chg": "+6,500원",
+   "amount": "1,668억",
+   "avg7": "2,575억",
+   "avg20": "4,113억",
+   "r7": 0.65,
+   "r20": 0.41,
+   "reason": "신재생에너지 관련주 상승커브…주성엔지니어링·원익IPS·혜인 강세, 지투파워도 상승",
+   "news": [
+    {
+     "t": "신재생에너지 관련주 상승커브…주성엔지니어링·원익IPS·혜인 강세, 지투파워도 상승",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE9RcUo0MUhMaFNQQUd0cjItOFlmS0lXWmJjaU1HdTktZVg1Z3NCUWcyMEdtem0wazhYdG1KZUJvMjQ0Q2ZLX2lldEtuVU4tU0NWa09JN1NzSVREY2tJZUo2bmUwVDJLeE5n?oc=5",
+     "s": "CBC뉴스",
+     "d": "10/28 10:22"
+    },
+    {
+     "t": "주성엔지니어링 주가, 10월 28일 장중 183,200원 4.81% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1XRGlkMEJsRmdSVG5BeHhpNkVKa0dIT3k4ZDFYNE9iWVVQQUVRelF0cjgtTUZqMmJ5VFhEbHBSZXducldjMUEwcXY1QV85MkgyTmdhV2Y4QXpnbllZOFFfVzJLVWFqRnBjRmRyRlN2VllkUQ?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/28 11:03"
+    },
+    {
+     "t": "주성엔지니어링 주가, 10월 28일 장중 184,100원 5.32% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE9CMHZaRWRjRzBzLU4ycUQxN25vVWN2QllVNDk4QTN4cTU1NU5WWFhSZ3lkdnNZcFJDOTlrUFVYNVU2d2VQV3N2UV8yM21rR3UxdUpxMExteklEMEtPNnBqbGVWWDhrS2cyRnBNa0VNQmNrdw?oc=5",
+     "s": "중앙이코노미뉴스",
+     "d": "10/28 10:41"
+    }
+   ],
+   "pctv": 3.72,
+   "chgv": 6500,
+   "amtv": 166809000000
+  },
+  {
+   "code": "028050",
+   "name": "삼성E&A",
+   "market": "코스피",
+   "close": "64,000",
+   "price": "+2.89%",
+   "chg": "+1,800원",
+   "amount": "1,615억",
+   "avg7": "3,256억",
+   "avg20": "1,590억",
+   "r7": 0.5,
+   "r20": 1.02,
+   "reason": "'역대 최대' 분기 영업익…삼성E&A, 호실적 이어가",
+   "news": [
+    {
+     "t": "'역대 최대' 분기 영업익…삼성E&A, 호실적 이어가",
+     "u": "https://news.google.com/rss/articles/CBMicEFVX3lxTE4wWXNTbEM0VkROQ2VUYWwtc3J6RFF3NFdVc25aeEFqbEdtdlEwQjJlTXVyaUtTNmExY0xvVG5jRGNtRmpMNWE5dFRiZ1ZCcWoyYjFSZ0dtTThPWnBlTm1FS2l2anA5MjRxb0t1cmQxaW4?oc=5",
+     "s": "신아일보",
+     "d": "10/28 09:53"
+    },
+    {
+     "t": "“중동사태가 열어준 ‘전천후 EPC’ 삼성E&A의 시대…올해 수주 19조 역대 최대”",
+     "u": "https://news.google.com/rss/articles/CBMib0FVX3lxTFBUWmRDLVJBY2t6RVZSY1lTYmlMbHlZT1BmSmhCS3EyMXEyMWh0TWp3N1dGdTMyRWJJemh0N3FvWC1aMFhDcnZZSEx3LXVjV1pINmphV1VvRE5yRHpGVHlaaFpWWndNVXktNnJQaXl6VQ?oc=5",
+     "s": "뉴스퀘스트",
+     "d": "10/26 15:21"
+    },
+    {
+     "t": "삼성E&A, ESG 점수 5.7점 상승 '최대'…개선폭 1위",
+     "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTFA2dHBMRmNxQjlGal9iV1NnVFBYQUhscU81THVDdXkzM0RaX09xSnJjWmJ0Zzl1M1Vsa1pabWhlenNHYmIzT2xuZzZ6UktWa2RZYjNxekl6S1pvNVlYQWdrZUtZdmxpMl9GVlR2Ng?oc=5",
+     "s": "ESG경제",
+     "d": "10/26 14:37"
+    }
+   ],
+   "pctv": 2.89,
+   "chgv": 1800,
+   "amtv": 161550000000
+  },
+  {
+   "code": "069540",
+   "name": "빛과전자",
+   "market": "코스닥",
+   "close": "4,195",
+   "price": "+29.88%",
+   "chg": "+965원",
+   "amount": "1,495억",
+   "avg7": "-",
+   "avg20": "-",
+   "r7": null,
+   "r20": null,
+   "reason": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+   "news": [
+    {
+     "t": "빛과전자, 16%대 급등…美 광통신사 공급 계약 - 머니투데이",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBObEE3UGs3ZmxaZ3BQeU5wclZQaVpGYVpGTFd2VGhYaGxPMG1MSVFia3BKeDNMUEhVa3ZzSlQ3aWRHdDBZQWc0MWZ5emxJa2hzYjk1MkxGcDFYRG5ZcVM0ZVdOMURZM0lt0gFuQVVfeXFMTzBKNjluMGRPTUFLcjNvTFFTQzJ2aXlxeUNBcEhkUnJ1TmVMV24tdjl2VHQwUUtPeXdOeUFsNUVRZzdieC1uSWtaS3dISEpHZXBCTXo0UUV3TDZSV0lubWFtYUlRcDVOYnE5cFdvS3c?oc=5",
+     "s": "머니투데이",
+     "d": "10/28 09:33"
+    },
+    {
+     "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 수주 소식에 급등",
+     "u": "https://news.google.com/rss/articles/CBMibEFVX3lxTE1FT2JpTFNXalU2R0FoLUFWeDYwcVJiQ3l3NG5OcVozVU1CdlBSdnZjWGpPazNRUm1MMXY3VTZ0UmVzbEpiTXdmOVp3SklJYmpyRENsYmRCalpWODFTZ1h2a1h1UjJEWGdRT2RMTQ?oc=5",
+     "s": "와이드경제",
+     "d": "10/28 10:45"
+    },
+    {
+     "t": "[특징주] 빛과전자, 美 광트랜시버 초도 양산 물량 수주.. '급등'",
+     "u": "https://news.google.com/rss/articles/CBMiiAFBVV95cUxNMlI0QlRwNjkzbjlSVktHUEhlMU53RVhoaFZNd3Q1S1RhdWFUWGl1TTdvcUVDSEJFbjNoNE95bzd2QVBfVDN4UllVVHlXS3BLQ2xHczA5cmZ5NkxVVFk3Y2M2dndZWFU0THo2blhQSnRNQlY5bW5ldVlKdWNkbFpmdHhDRHlXaGNK?oc=5",
+     "s": "글로벌이코노믹",
+     "d": "10/28 10:08"
+    }
+   ],
+   "pctv": 29.88,
+   "chgv": 965,
+   "amtv": 149547000000
+  },
+  {
+   "code": "010170",
+   "name": "대한광통신",
+   "market": "코스닥",
+   "close": "14,930",
+   "price": "+8.98%",
+   "chg": "+1,230원",
+   "amount": "1,479억",
+   "avg7": "-",
+   "avg20": "-",
+   "r7": null,
+   "r20": null,
+   "reason": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+   "news": [
+    {
+     "t": "[특징주] 광통신주 장 초반 동반 강세…빛샘전자 7%↑·대한광통신 5%↑, 광전자·빛과전자도 상승",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE4tenZ0YmF5QWwzdlk1cGRQc1hNZWRaQWdLTjk5QmY2TFEydWJDdFdTd1d2S2wyLWRaTVdYclk4WmJ3Sk14Q29lSXU2UWxJU3lOLWwwWGRHMTc4LXRkcm1WS1pWcEUzZDhh?oc=5",
+     "s": "CBC뉴스",
+     "d": "10/27 09:09"
+    },
+    {
+     "t": "대한광통신 주가, 10월 28일 장중 14,370원 4.89% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE81R3VtUnR2cEktcC1PRGJ2TnY0YVJ3Njl0OFVMMV81Q0g5dDdFSmZYdnJjYkdsbXE1dkVtRTJIUlpRRFgwOWlRV3l5QXYwUnljVzhiMEtXWlROeUJSaXh6MndfQWdtTDlCODhfOHNQekxxUQ?oc=5",
+     "s": "중앙이코노미뉴스",
+     "d": "10/28 10:41"
+    },
+    {
+     "t": "특징주, 대한광통신-광통신(광케이블/광섬유 등) 테마 상승세에 7.81% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9tdmtLSHhESHZPU093ZG1vXzMwN0dKbXJYZy0xZ1RkdWpnR093ejNmRFlDaWhOU0Y0M3piZ2RfYXl2YjRaSzZPSFg3eWJzSmJoSGc?oc=5",
+     "s": "매일경제 마켓",
+     "d": "10/28 09:05"
+    }
+   ],
+   "pctv": 8.98,
+   "chgv": 1230,
+   "amtv": 147973000000
+  },
+  {
+   "code": "030530",
+   "name": "원익홀딩스",
+   "market": "코스닥",
+   "close": "28,450",
+   "price": "+19.79%",
+   "chg": "+4,700원",
+   "amount": "1,472억",
+   "avg7": "-",
+   "avg20": "-",
+   "r7": null,
+   "r20": null,
+   "reason": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+   "news": [
+    {
+     "t": "원익홀딩스 8.11% 상승…반도체 투자 회복 기대 반영",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQdIBckFVX3lxTE1yemtJN3NLS0ItS252VU9IbkFQdmtDZEVsVDZPZDU2V3UwZVJXNjRNNXQyaUpHVjlEZWNkbGJ6WXoxdW13MWluTlROdEt1ckdUWlRYUWg0a09lbzVBSHduR3ViV2FCZDJRR0JISl9DaHpEQQ?oc=5",
+     "s": "잡포스트",
+     "d": "10/26 15:00"
+    },
+    {
+     "t": "[속보] 원익홀딩스 주가, 장초반부터 VI 발동하며 급등…2만9900원 터치에 '3만원 고지' 밟나?",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1oUFNFWGRrLVFmRU5aR1g5V2lwcWdEbDlyLU1jVmlhUUVhWVBFelNJcFhkdGdDLS03QlVpQVFGaGxldVZyVkloYlNVbm1IMEpWdWdXYjJYX1dQZ0gtQm9qVWd0cmNvalZZ?oc=5",
+     "s": "CBC뉴스",
+     "d": "10/28 09:55"
+    },
+    {
+     "t": "특징주, 원익홀딩스-반도체 장비 테마 상승세에 7.58% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE1NeF9abTh3OEZRZTZESXNpLUNHcVYxOU0ydllaLV9QMThjcWhVUXBsd1Vxc1dDaVB0VEdtbGNzZlpVODlfYXpvYnlpVXZBTTlxMXc?oc=5",
+     "s": "매일경제 마켓",
+     "d": "10/28 09:44"
+    }
+   ],
+   "pctv": 19.79,
+   "chgv": 4700,
+   "amtv": 147246000000
+  },
+  {
+   "code": "006400",
+   "name": "삼성SDI",
+   "market": "코스피",
+   "close": "525,000",
+   "price": "+3.35%",
+   "chg": "+17,000원",
+   "amount": "1,393억",
+   "avg7": "3,436억",
+   "avg20": "3,030억",
+   "r7": 0.41,
+   "r20": 0.46,
+   "reason": "삼성SDI, 미국 AOP와 1GWh ESS 공급 계약…\"북미 ESS 수요 증가에 수주 확대\" 기대",
+   "news": [
+    {
+     "t": "삼성SDI, 미국 AOP와 1GWh ESS 공급 계약…\"북미 ESS 수요 증가에 수주 확대\" 기대",
+     "u": "https://news.google.com/rss/articles/CBMib0FVX3lxTE94UkZoRFNEbDhlVFhfbl9hT0hqRm1xQWxvZF94d3JtLU5iNU1sMUxIS0VjNzBUckM5d0FqUWh2VE84YVpTLU43N0k0MXJ4bDNna0RSOUYxMF9HRll5SnFWUVBZQ2xIbHZrZ0hiQTRCRQ?oc=5",
+     "s": "이코노뉴스",
+     "d": "10/26 19:55"
+    },
+    {
+     "t": "삼성SDI, 미국에 ESS솔루션 공급…현대건설 '알러지 케어 솔루션' 개발 外 기업 소식",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE0yZHBCbV9HOVpoS2FPbFBpOWhFTFZXU2k2MnhkVUswY1RseXpON0VVSmtIUDFQSXl4cHJ4bS1EcHkwOTgxYmJ2N1ZVOHRmQjgxaFlOVE1QaW9fZlRMY3Y1NGhQMEl2bHFJ?oc=5",
+     "s": "데일리팝",
+     "d": "10/27 14:45"
+    },
+    {
+     "t": "삼성SDI와 협력해 온 에코프로비엠, 中 배터리사에도 공급 추진",
+     "u": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1qX3QwZndYcnRRcExEaG02TV9RS2pUTXk4UlFDUXgtbm1sNFNPLXJPU00xcU85WG9rQUNXZ1I5YXhFNHZfd3lwQ3pwWThxZw?oc=5",
+     "s": "인사이트",
+     "d": "10/27 13:13"
+    }
+   ],
+   "pctv": 3.35,
+   "chgv": 17000,
+   "amtv": 139343000000
+  },
+  {
+   "code": "0035S0",
+   "name": "빅웨이브로보틱스",
+   "market": "코스닥",
+   "close": "29,600",
+   "price": "+3.32%",
+   "chg": "+950원",
+   "amount": "1,384억",
+   "avg7": "1,131억",
+   "avg20": "1,432억",
+   "r7": 1.22,
+   "r20": 0.97,
+   "reason": "[급등락주 짚어보기] 루닛·뷰노 의료AI 동반 상한가…빅웨이브로보틱스·컨텍도 급등",
+   "news": [
+    {
+     "t": "[급등락주 짚어보기] 루닛·뷰노 의료AI 동반 상한가…빅웨이브로보틱스·컨텍도 급등",
+     "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTE5hOEl5RTdJelN3cU5YWEV0RGxKMGJyeGNkUEZpbHV3YTJxOHM0bC1iYm5wbFBZcWd1RjhJSjhpcjB5WGpLUU5wNkR3Uk5aUTVUcTE4a19QRkhkd0V2Nl9RLTJWcjdQdDBUVGc?oc=5",
+     "s": "이투데이",
+     "d": "10/26 16:23"
+    },
+    {
+     "t": "피지컬 AI·휴머노이드주 폭풍매수…빅웨이브로보틱스 상한가 기염",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBpdERpRHhSdEMtUmNVRjRGZGpqNFdWQ1ZweW5tY1kwMEJyaThlS0Q0eGVIMlhzT2FkNmoyY0dBRVBYSWk4dG84YzdwdkxTTTZuWmZ2Z0dYbHhsUlRpZm03OVhFaW5HbmpHUExvdnp5YXJRUjDSAXdBVV95cUxNNVUyekViOVpJencyU3hOcUp2OWRHVndhOEd6N1MtdGFSQjRtd3pmYU5KeWgtclh3VWVtc3VjdVRzOHNEbThjdlpzZGxienEwZjFGVV8xVktleGtjTS1wT0JOdnVDN3dEZklSOUZpTU1sdHp1czN6QQ?oc=5",
+     "s": "핀포인트뉴스",
+     "d": "10/26 15:39"
+    },
+    {
+     "t": "빅웨이브로보틱스 상한가…상장 한 달, 로봇 수요 기대 집중",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFBkdnFYZ3A5X1pJcWpqV0dpM3lSdDJMYzZTT2ZTMFNGYmFjQ0NqbzFHMWFuNEduZmYtT0VyVHJJcjdlLWtpUWstSm9SazdFd1NyY0x1Si1IUWp1T3gzMGZtNUNqNjlGZHd3a0lBVGIySTdBQdIBckFVX3lxTFBkdnFYZ3A5X1pJcWpqV0dpM3lSdDJMYzZTT2ZTMFNGYmFjQ0NqbzFHMWFuNEduZmYtT0VyVHJJcjdlLWtpUWstSm9SazdFd1NyY0x1Si1IUWp1T3gzMGZtNUNqNjlGZHd3a0lBVGIySTdBQQ?oc=5",
+     "s": "잡포스트",
+     "d": "10/26 14:57"
+    }
+   ],
+   "pctv": 3.32,
+   "chgv": 950,
+   "amtv": 138481000000
+  },
+  {
+   "code": "011070",
+   "name": "LG이노텍",
+   "market": "코스피",
+   "close": "362,000",
+   "price": "-3.34%",
+   "chg": "-12,500원",
+   "amount": "1,197억",
+   "avg7": "554억",
+   "avg20": "1,219억",
+   "r7": 2.16,
+   "r20": 0.98,
+   "reason": "\"LG이노텍, 환율 급락에 '어닝 쇼크'…목표가↓\"-대신",
+   "news": [
+    {
+     "t": "\"LG이노텍, 환율 급락에 '어닝 쇼크'…목표가↓\"-대신",
+     "u": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBTaTdzZks3WXh0UDVWNW1LVHkxb3NlVzRxam5US0JOVTd4OUpLUGlxLXBUNEZFWWpwUW9VU0J2ODdCYUNiTGVpZ3hKOGNyM29rMUVRWTlUdVFNZw?oc=5",
+     "s": "한국경제",
+     "d": "10/28 07:34"
+    },
+    {
+     "t": "LG이노텍, 매출 6조 돌파에도 '어닝쇼크' … 환율 급락에 영업익 절반 '뚝'",
+     "u": "https://news.google.com/rss/articles/CBMie0FVX3lxTFB5NGR0R1J2WndQNUpnUGNTdUJuMGk2d283bnZ3UWY0QkUtQk15TUJiRDU5SDZMTHhYY0E5ZHIxQzRnNFlGV3MzUElCa0dWRHRqNkRQM0d3bGZGNzJycW1XN3VBVW5vUFg1eFh3alM0aV84OW1FRHRKRDBhY9IBgAFBVV95cUxQakRZWXZaMzR6aTRFczFPZEc5eXVzVmxXWHJuRUM0U1gtWktDcnFZX0M0Z056NnFOWHZ1VEd2LVh4QnNwd3BEck9wUDN6ajdUZ1FvdDNQTU1ob3V1RVVWQXIyWjQtS3VBcjlPZlFUXzlVclM0c1VCbjhkb2ZfaWo3aQ?oc=5",
+     "s": "뉴데일리",
+     "d": "10/27 15:45"
+    },
+    {
+     "t": "LG이노텍 주가, 10월 28일 장중 363,500원 2.94% 하락",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFBTOVRzcHJhTVZuclBlNFdiOUh4a25acnhpYlJNcjJTVXZTSlFzQ3l6M0lJZ19BanFCWFVWbnRFQjVmZlZkV0tSdWhFbEJhcGE4LWtqdUdBQjJPUzFrT3o1Zjc2eXI2S2pBb2FiQzZrc2FtQQ?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/28 10:40"
+    }
+   ],
+   "pctv": -3.34,
+   "chgv": -12500,
+   "amtv": 119739000000
+  },
+  {
+   "code": "035420",
+   "name": "NAVER",
+   "market": "코스피",
+   "close": "181,800",
+   "price": "+4.30%",
+   "chg": "+7,500원",
+   "amount": "1,122억",
+   "avg7": "849억",
+   "avg20": "1,070억",
+   "r7": 1.32,
+   "r20": 1.05,
+   "reason": "NAVER 주가, 10월 28일 장중 184,200원 5.68% 상승",
+   "news": [
+    {
+     "t": "NAVER 주가, 10월 28일 장중 184,200원 5.68% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFBZR0xMZmNmTGU0cE5rVkhhRHFXcm9Dc255T0ZURVQ2N192Vm1vNmlqQ2JueTJfcUU5SXRkT25ZNkNhVjVaNGF1blhlOHRtQ3JqMzhfMDBIdVNDRlZ6aDV3WjVXX0RPVXZ0X1ZjcWl2WlZkdw?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/28 10:02"
+    },
+    {
+     "t": "특징주, NAVER-인터넷 대표주 테마 상승세에 3.75% ↑",
+     "u": "https://news.google.com/rss/articles/CBMiRkFVX3lxTFBSV2NrUmp6T3NibzYzWmFodFhlbTF5VXVqM2xnVGdNeXdsSlp3YVVUUzl2N1NLbzc0dmFhcGhQel9sUmVyQnc?oc=5",
+     "s": "매일경제",
+     "d": "10/28 09:05"
+    },
+    {
+     "t": "NAVER 주가, 10월 27일 애프터마켓 180,500원 3.62% 상승",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE1kZXgtNUVCRVZ3T28zVFdIMmlBMEtEN0Iwakw2YVpWVEdJUFp1RDRteHg2N0lmWDQyTTlhWHdKaGF6TjhBVm1iU0ZMbE91TWlBM3g1b29ydHZUQ2x6Q0Nwc25IQzNHMHl1RU91TVE2WGwwdw?oc=5",
+     "s": "중앙이코노미뉴스",
+     "d": "10/27 17:16"
+    }
+   ],
+   "pctv": 4.3,
+   "chgv": 7500,
+   "amtv": 112269000000
+  }
+ ],
+ "down5": [
+  {
+   "code": "950210",
+   "name": "프레스티지바이오파마",
+   "market": "코스피",
+   "close": "4,090",
+   "price": "-19.01%",
+   "chg": "-960원",
+   "amount": "19억",
+   "avg7": "1억",
+   "avg20": "1억",
+   "r7": 10.52,
+   "r20": 10.55,
+   "reason": "프레스티지바이오파마 '1806억' 스푸트니크 소송, 인도 원소스 반소 제기",
+   "news": [
+    {
+     "t": "프레스티지바이오파마 '1806억' 스푸트니크 소송, 인도 원소스 반소 제기",
+     "u": "https://news.google.com/rss/articles/CBMia0FVX3lxTE1fYjZENEhJbDc4SjVWYWhhSG5SaFROdDNXSTNUTHBoajl3RHdfYTFGNl9TemlMbWFhQ1lsZExJbWRfXzMyNkdrcC10eU1aODItR1ZKY0lvTV9XZVRtcjFYcV9ZUF82WS15WXF3?oc=5",
+     "s": "한국신용신문",
+     "d": "10/28 05:51"
+    },
+    {
+     "t": "프레스티지바이오파마, 미국 ‘AAPS 2026’서 키토산 하이드로겔 기반 피하주사 약물전달 연구 발표",
+     "u": "https://news.google.com/rss/articles/CBMiakFVX3lxTFAyWEFTZDNOMGxpWTFteXNjR3NtRXR5Z3BlT1hNYkFOeWJ4YmpPQmdnUUVyd1MxTlpKMmlTMkJtald0OGZ2aHJGd2U2emk5NnRzZHZsTnFkWUl0SVRKNHE0bFl1UTZxbWNhamc?oc=5",
+     "s": "더스탁(The Stock)",
+     "d": "10/26 16:15"
+    },
+    {
+     "t": "부산시, '2026 부산 바이오헬스 포럼'개최… 인공지능(AI)·헬스케어 빅데이터 활용 전략 모색",
+     "u": "https://news.google.com/rss/articles/CBMiY0FVX3lxTE9UY2w0T1BaUGRNMXU4Uk9DOGdOZUZoR21RNXVqSFNyZFl6VFlaLTZhM3lEclF5UXBUTUNCaTVtWXI1a2tGUGpPNUVxUFRnb3FocmN1WDVsbmtXdmRjenlSUEtOdw?oc=5",
+     "s": "경기뉴스원",
+     "d": "10/28 08:30"
+    }
+   ],
+   "pctv": -19.01,
+   "chgv": -960,
+   "amtv": 1912000000
+  },
+  {
+   "code": "408900",
+   "name": "스튜디오미르",
+   "market": "코스닥",
+   "close": "896",
+   "price": "-16.26%",
+   "chg": "-174원",
+   "amount": "1억",
+   "avg7": "0억",
+   "avg20": "0억",
+   "r7": 3.77,
+   "r20": 4.63,
+   "reason": "스튜디오미르, 특정계좌 매매관여 과다로 28일 투자주의종목 지정",
+   "news": [
+    {
+     "t": "스튜디오미르, 특정계좌 매매관여 과다로 28일 투자주의종목 지정",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTFA2NktQYXBSdE02OUt2ZVdYVUVWcTJqcm0xdU1VQ1pCUE8wZmJvR0xIVERkQWF4ejZZQlFubUpMUW1QNDNNX2N5bmJTLUQ0YVNERnRZMFFuYk9IamxBdXVIeDEzYWhwZmtlX2dDeWlIaXREZw?oc=5",
+     "s": "톱스타뉴스",
+     "d": "10/28 00:12"
+    },
+    {
+     "t": "스튜디오미르, 마블 애니메이션 제작 맡아",
+     "u": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE5aMUJycU00VXJMX3lsRlpxWjdCYUZSMTdTMDdRcDRBN1dUdFBOMmRzUl9idFlJQldnajVnMmdRX2QxREF0V05VX2VIM1NUdEZyTndWMzBpbVJ6S0FKTFk2Tl85aVFHS0Vm?oc=5",
+     "s": "비건뉴스",
+     "d": "10/27 18:56"
+    },
+    {
+     "t": "스튜디오미르, 마블 애니메이션 스튜디오와 제작 계약",
+     "u": "https://news.google.com/rss/articles/CBMigAFBVV95cUxQODJnTnVhZWpXNXZwSG92eUJGbWw3bmNQeE9SdktlamZveHIxWm5VTU9iUmdrb21oOUVHS185NEtmTGpKWk4zejI1blk3SGFGdW8yYVBROUt5d3ZYaVJkZXJEbGpEcFpaTnlfSlNKQzZWZHFDbnRwUFM1SElwU2d5MA?oc=5",
+     "s": "이데일리",
+     "d": "10/27 17:29"
+    }
+   ],
+   "pctv": -16.26,
+   "chgv": -174,
+   "amtv": 173000000
+  },
+  {
+   "code": "144510",
+   "name": "지씨셀",
+   "market": "코스닥",
+   "close": "10,890",
+   "price": "-15.91%",
+   "chg": "-2,060원",
+   "amount": "25억",
+   "avg7": "1억",
+   "avg20": "3억",
+   "r7": 13.31,
+   "r20": 7.1,
+   "reason": "지씨셀, 美 파트너 NK치료제 개발 중단에 주가 급락…아티바 구조조정",
+   "news": [
+    {
+     "t": "지씨셀, 美 파트너 NK치료제 개발 중단에 주가 급락…아티바 구조조정",
+     "u": "https://news.google.com/rss/articles/CBMihwFBVV95cUxPYzRlbENuUGJNX1doOTRFQk0yQ01CSXdZb2xaczFIcFVDZXY0b3FBS0lvQncxazRpMjZyUWxISm9jWWtGUlVhYWYtQ2FhTEZ6aHFFTVpheVpla1EyeGVHUHFvWGcyZHBYekRBWUszWm5ROTVwMGNjQ3p6ZklJWE9pcDZJZGdFT3PSAZsBQVVfeXFMT2M2bHNaQkM4dzZpaHZhRnVpRzFsWE4yMC1lSElKWk1McWhhOHJxSUtwQm1RR19rWEF1MEtzemlmZm1kTXFVUG5LdkFVdWh3bkxhZ3J0T2NpcURSZWZJQk83cWxzX2tLYXJySjgzdjN4SncxNmhWWVFoVWhlTWJmMW5INVIwN2s2cVJZdnU5WUZyX2ZILWo3X3ZMYTQ?oc=5",
+     "s": "Chosunbiz",
+     "d": "10/28 11:38"
+    },
+    {
+     "t": "지씨셀, 관계사 임상 중단에 주가 9% 하락[Why 바이오]",
+     "u": "https://news.google.com/rss/articles/CBMiUkFVX3lxTE9DMTdmZnNaNHZDNEszaTJqSnVxZ3lPWUpzaEtFS1M1bHJIbGFxZl9CVjliajAydTBfN1hrRUVnT2NBMU5aR1NfdnZPZk4ta3pXa3fSAVNBVV95cUxNVmZ5UzFHVVFueXZtYmFrSWFtVndIV2VMQTZyanpsenhlaVlPUHllZW4tUnVkb05PcWp6aXlfb3daYWU3cEtfd05GSGYzSUZTR250OA?oc=5",
+     "s": "서울경제",
+     "d": "10/28 09:33"
+    },
+    {
+     "t": "지씨셀 기술이전 AlloNK 美개발 중단…3상 계획 취소·계약 향방 주목",
+     "u": "https://news.google.com/rss/articles/CBMickFVX3lxTE9SQjFuUW9JdXhBSW9mbTcyNzRkYi1nVTg0MkhvWjMwdzlmcGFYdV9JWE1hZmpfY1dRcEhER0VKUjBIVmp1eXlSNVFUMGU2VEEzRFVFZkpNR2xVbU5HcGdrQXQ4RFpiaV84WTdjU0RBNE5Rdw?oc=5",
+     "s": "메디코파마",
+     "d": "10/28 07:18"
+    }
+   ],
+   "pctv": -15.91,
+   "chgv": -2060,
+   "amtv": 2505000000
+  },
+  {
+   "code": "475660",
+   "name": "에스켐",
+   "market": "코스닥",
+   "close": "2,480",
+   "price": "-15.36%",
+   "chg": "-450원",
+   "amount": "4억",
+   "avg7": "0억",
+   "avg20": "0억",
+   "r7": 45.26,
+   "r20": 13.31,
+   "reason": "근거 기사 확인 안 됨",
+   "news": [],
+   "pctv": -15.36,
+   "chgv": -450,
+   "amtv": 472000000
+  },
+  {
+   "code": "038060",
+   "name": "루멘스바이오스",
+   "market": "코스닥",
+   "close": "866",
+   "price": "-13.49%",
+   "chg": "-135원",
+   "amount": "4억",
+   "avg7": "0억",
+   "avg20": "0억",
+   "r7": 6.07,
+   "r20": 4.91,
+   "reason": "마이크로 LED 테마에 매수세 유입… 코세스·루멘스바이오스는 '휘청'",
+   "news": [
+    {
+     "t": "마이크로 LED 테마에 매수세 유입… 코세스·루멘스바이오스는 '휘청'",
+     "u": "https://news.google.com/rss/articles/CBMic0FVX3lxTFBsS3RnampoYXN1N0ZxYjFuak8tTXBhUmhzdTUzV2NuRmtnMG9tQ3ZvY3ExT0tYYXBOZEFZUGs0Q3NFLXRLVkU5NHFOV0UwZDFiSHNMeEJkMEVSN2cwWGVmTVM4eU93V1Ixb1hzeDdyZUVQcVHSAXdBVV95cUxNRUZYRTZLQm1uclozc2J2a1ZLbnV0VmJ4R0VyeFBVc294TkNhQ2NYUlBLQWZUWUpud3A0dElkSE9GcU4zZ0pFZFJxODZmMjNyX3ctbWVJY0lKaHllRjhqTlhsOHYwbERlcjk0ZFdzX1c5NkRRSG5KUQ?oc=5",
+     "s": "핀포인트뉴스",
+     "d": "10/28 10:39"
+    },
+    {
+     "t": "루멘스바이오스 측, 폴라리스우노 주식등 보유 비율 34.00%p 증가",
+     "u": "https://news.google.com/rss/articles/CBMie0FVX3lxTE93T0p2R0hVVE5MX3BGcmplSDl0czcwTnEwVnNnUW1fLW1BRlp0ZGNMOG9ETG1lTU51djB0ZU1PQVpPeERVdVlxWVlUZW9leUJTb1ltQ0dVNU9zb0dWVzRpZlh4Q2RPVE9FWmpsS0JXTnhuZDV3RTNON2Focw?oc=5",
+     "s": "디지털투데이",
+     "d": "10/26 15:41"
+    },
+    {
+     "t": "폴라리스우노 인수한 로아앤코그룹, 독립 경영위원회 출범…내부통제 강화 - 조선비즈",
+     "u": "https://news.google.com/rss/articles/CBMinAFBVV95cUxNdnlrcHFHUmtKZDRaR3V6NXMxc1dFQ3RpNERKbk44bnZZY21WenJ1Q2JmalAyQzBwV0NkZnZxYnhVMTZkVXdRbGhkOWdKczVPbi14NnlVck5VM0NGUmxudmNOU3RFQXVBalpJNWR6VnlNYlV0cjZhSHg5NU8zMWxNNHVOWndEcFZxWXNMemhqYXVORjdqRGhyc1Fia1HSAZwBQVVfeXFMTXZ5a3BxR1JrSmQ0Wkd1ejVzMXNXRUN0aTRESm5OOG52WWNtVnpydUNiZmpQMkMwcFdDZGZ2cWJ4VTE2ZFV3UWxoZDlnSnM1T24teDZ5VXJOVTNDRlJsbnZjTlN0RUF1QWpaSTVkelZ5TWJVdHI2YUh4OTVPMzFsTTR1Tlp3RHBWcVlzTHpoamF1TkY3akRocnNRYmtR?oc=5",
+     "s": "Chosunbiz",
+     "d": "10/26 14:55"
+    }
+   ],
+   "pctv": -13.49,
+   "chgv": -135,
+   "amtv": 425000000
+  }
+ ],
+ "breadth": {
+  "코스피": {
+   "up": 602,
+   "down": 267,
+   "flat": 45,
+   "upper": 0,
+   "lower": 0
+  },
+  "코스닥": {
+   "up": 1044,
+   "down": 624,
+   "flat": 67,
+   "upper": 6,
+   "lower": 0
+  }
+ },
+ "indicators": {
+  "newHigh": {
+   "count": 14,
+   "prev": null,
+   "prevDate": "2026-10-27",
+   "top": [
+    {
+     "code": "263860",
+     "name": "지니언스",
+     "pct": 30.0
+    },
+    {
+     "code": "079940",
+     "name": "가비아",
+     "pct": 25.94
+    },
+    {
+     "code": "053800",
+     "name": "안랩",
+     "pct": 24.16
+    },
+    {
+     "code": "092870",
+     "name": "엑시콘",
+     "pct": 14.14
+    },
+    {
+     "code": "080580",
+     "name": "오킨스전자",
+     "pct": 12.83
+    },
+    {
+     "code": "105740",
+     "name": "디케이락",
+     "pct": 11.02
+    },
+    {
+     "code": "254120",
+     "name": "자비스",
+     "pct": 7.43
+    },
+    {
+     "code": "064290",
+     "name": "인텍플러스",
+     "pct": 7.28
+    },
+    {
+     "code": "012280",
+     "name": "영화금속",
+     "pct": 6.82
+    },
+    {
+     "code": "419050",
+     "name": "삼기에너지솔루션즈",
+     "pct": 5.71
+    },
+    {
+     "code": "144960",
+     "name": "뉴파워프라즈마",
+     "pct": 5.28
+    },
+    {
+     "code": "425420",
+     "name": "티에프이",
+     "pct": 4.86
+    }
+   ]
+  },
+  "newLow": {
+   "count": 32,
+   "prev": null,
+   "prevDate": "2026-10-27",
+   "top": [
+    {
+     "code": "950210",
+     "name": "프레스티지바이오파마",
+     "pct": -19.11
+    },
+    {
+     "code": "144510",
+     "name": "지씨셀",
+     "pct": -15.91
+    },
+    {
+     "code": "475660",
+     "name": "에스켐",
+     "pct": -15.36
+    },
+    {
+     "code": "334970",
+     "name": "프레스티지바이오로직스",
+     "pct": -11.37
+    },
+    {
+     "code": "396690",
+     "name": "미래에셋글로벌리츠",
+     "pct": -7.56
+    },
+    {
+     "code": "099520",
+     "name": "DGI",
+     "pct": -6.67
+    },
+    {
+     "code": "109740",
+     "name": "디에스케이",
+     "pct": -3.19
+    },
+    {
+     "code": "010770",
+     "name": "평화홀딩스",
+     "pct": -2.93
+    },
+    {
+     "code": "388610",
+     "name": "지에프씨생명과학",
+     "pct": -2.64
+    },
+    {
+     "code": "260660",
+     "name": "알리코제약",
+     "pct": -1.96
+    },
+    {
+     "code": "334890",
+     "name": "이지스밸류플러스리츠",
+     "pct": -1.93
+    },
+    {
+     "code": "237690",
+     "name": "에스티팜",
+     "pct": -1.74
+    }
+   ]
+  },
+  "lending": {
+   "date": "2026-10-27",
+   "net": "+30,697,331주",
+   "shares": "32.50억주",
+   "amount": "142조 9,094억",
+   "delta": "+5조 4,702억",
+   "unitNote": "잔고금액 단위는 백만원으로 추정(검증 전)"
+  },
+  "unsupported": "시장 전체 공매도 거래대금·신용융자잔고는 키움 API에 없어 아직 표시하지 않습니다."
+ },
+ "notes": [
+  "12:00 무렵의 장중 스냅샷입니다(KRX 기준). 오후 장에서 달라질 수 있습니다.",
+  "평균 거래대금 대비 비율은 장중 누적 거래대금 기준이라 마감 때보다 낮게 나옵니다."
+ ],
+ "headline": "1차 12:00 · 코스피 +5.73% · 외국인 +5,924억",
+ "latest": "noon",
+ "compare": []
+}
