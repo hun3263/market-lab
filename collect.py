@@ -522,25 +522,30 @@ def news(name, direction="up", days=2, limit=3):
     - 검색어: "종목명" (따옴표로 정확히 일치) + 최근 2일
     - 정렬: 제목에 종목명이 있고, 방향(상승/하락)에 맞는 단어가 많을수록 위로 → '변동 이유'에 가까운 기사 우선
     - 한계: 제목 단어로 고르는 것이라 '진짜 이유'인지는 사람이 확인해야 합니다. 실패하면 빈 목록."""
-    try:
-        root = _rss(f'"{name}" when:{days}d')
-    except Exception:
-        return []
+    import newsdigest
+    items = newsdigest.naver_search(name, display=40)  # 네이버 키가 있으면 네이버(국내 커버리지 넓음)
+    if items is None:
+        try:
+            root = _rss(f'"{name}" when:{days}d')
+        except Exception:
+            return []
+        items = []
+        for item in root.iter("item"):
+            title, src = (item.findtext("title") or "").strip(), (item.findtext("source") or "").strip()
+            if src and title.endswith(" - " + src):  # 구글 뉴스 제목 끝의 ' - 언론사' 를 떼어 언론사 칸으로
+                title = title[: -len(src) - 3].strip()
+            try:
+                when = parsedate_to_datetime(item.findtext("pubDate"))
+            except Exception:
+                continue
+            items.append({"t": title, "u": (item.findtext("link") or "").strip(), "s": src, "when": when})
     now = dt.datetime.now(dt.timezone.utc)
     words = UP_WORDS if direction == "up" else DOWN_WORDS
     seen, cands = set(), []
-    for item in root.iter("item"):
-        title = (item.findtext("title") or "").strip()
-        link = (item.findtext("link") or "").strip()
-        src = (item.findtext("source") or "").strip()
-        try:
-            when = parsedate_to_datetime(item.findtext("pubDate"))
-        except Exception:
-            continue
+    for it in items:
+        title, link, src, when = it["t"], it["u"], it["s"], it["when"]
         if not title or not link or (now - when).days > days:
             continue
-        if src and title.endswith(" - " + src):  # 구글 뉴스 제목 끝의 ' - 언론사' 를 떼어 언론사 칸으로
-            title = title[: -len(src) - 3].strip()
         key = "".join(ch for ch in title if ch.isalnum())[:24]  # 같은 기사 재전송(제목 거의 같음) 제거
         if key in seen:
             continue
@@ -611,9 +616,10 @@ def avg_amounts(h, d, scale):
     return a7, a20, tod
 
 
-def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
+def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None, out_dir=None):
     """한 회차의 화면용 자료(snap)와 종목 상세 파일용 자료(extra)를 만듭니다.
-    prev: 직전 거래일 같은 회차의 snap(선행지표 '전일 → 오늘' 비교용, 없으면 None)"""
+    prev: 직전 거래일 같은 회차의 snap(선행지표 '전일 → 오늘' 비교용, 없으면 None)
+    out_dir: 주면 market.py 로 시장 시계열(series.json)·히트맵(heat/날짜.json)도 갱신"""
     notes = [SESSION_NOTE[session]]
 
     def safe(label, fn, default):
@@ -648,7 +654,30 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
         flow = (f"개인 {signed_won(f['개인'])} / 외인 {signed_won(f['외국인'])} / 기관 {signed_won(f['기관'])}"
                 if f else "수집 실패")
         indices.append({"name": i["name"], "close": f"{i['close']:,.2f}", "change": pct(change),
-                        "value": won(i["amount"]), "flow": flow, "pctv": round(change, 4)})
+                        "value": won(i["amount"]), "flow": flow, "pctv": round(change, 4), "amountv": int(i["amount"])})
+
+    # 상승·하락 종목 수(+상한·하한)
+    breadth = {}
+    lim = safe("상한·하한", lambda: src.limits(d), {}) if hasattr(src, "limits") else {}
+    for mk in ("코스피", "코스닥"):
+        if partial and mk in src.breadth:
+            u, dn, flat = src.breadth[mk]
+        elif not partial and stocks:
+            u = sum(1 for s in stocks if s["market"] == mk and s["pct"] > 0)
+            dn = sum(1 for s in stocks if s["market"] == mk and s["pct"] < 0)
+            flat = sum(1 for s in stocks if s["market"] == mk and s["pct"] == 0)
+        else:
+            continue
+        upper, lower = lim.get(mk, (None, None))
+        breadth[mk] = {"up": u, "down": dn, "flat": flat, "upper": upper, "lower": lower}
+
+    # 시장 시계열·히트맵·RS (market.py)
+    mstat, heat = {}, None
+    if out_dir and hasattr(src, "history"):
+        import market
+        res = safe("시장 시계열", lambda: market.update(src, d, session, out_dir, idx, breadth, notes), None)
+        if res:
+            mstat, heat = res
 
     # 종목 선별 (스팩 제외)
     def clean(rows):
@@ -662,7 +691,15 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
     up = clean(up_raw[:TOP_N * 2])[:TOP_N]
     top_amt = clean(top_raw[:TOP_N * 2])[:TOP_N]
     down = clean(down_raw[:DOWN_N * 3])[:DOWN_N]
-    every = {x["code"]: x for x in down + top_amt + up}  # 화면에 나오는 모든 종목(중복 제거)
+    import market as _m
+    rs15 = _m.rs_top(heat, TOP_N) if heat else []
+    # 같은 종목이 여러 목록에 있어도 하나의 자료(canon)를 함께 쓰도록(평균 배수 누락 버그 수정)
+    every = {}
+    for x in rs15 + down + top_amt + up:
+        every.setdefault(x["code"], {}).update({k: v for k, v in x.items() if v not in (None, 0, "") or k not in every[x["code"]]})
+    for x in up + top_amt + down:  # 순위 API 의 거래대금이 있으면 그것을 우선
+        if x.get("amount"):
+            every[x["code"]]["amount"] = x["amount"]
 
     # 일봉 → 7일·20일 평균 거래대금, 주가 흐름(상세 화면)
     hist = {}
@@ -678,10 +715,33 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
     for code, s in every.items():
         a7, a20, tod = avg_amounts(hist.get(code, []), d, scale)
         if not s.get("amount") and tod:
-            s["amount"] = int(tod)  # 순위표에 없던 종목(주로 하락 TOP)은 일봉 거래대금으로 채움
+            s["amount"] = int(tod)  # 순위표에 없던 종목(하락 TOP·RS)은 일봉 거래대금으로 채움
         s["avg7"], s["avg20"] = a7, a20
-    if partial and any(s["amount"] == 0 for s in up):
+        s.setdefault("amount", 0)
+    if partial and any(not every[s["code"]]["amount"] for s in up):
         notes.append("일부 종목의 거래대금을 찾지 못해 0으로 표시됩니다.")
+
+    # 기본 지표(PER·PBR·ROE 등): 히트맵 캐시에 있으면 재사용, 없으면 ka10001
+    basics = {}
+    if heat:
+        cols = heat["cols"]
+        for r in heat["rows"]:
+            basics[r[0]] = {"per": r[6], "pbr": r[7], "roe": r[8], "rs": r[9], "sector": r[3], "cap": r[4] * 100_000_000,
+                            "market": r[2], "r3": r[12], "r12": r[13]}
+    if hasattr(src, "history"):
+        mkb = _m.backend(src)
+        for code in every:
+            if code not in basics:
+                b = safe(f"기본정보 {every[code]['name']}", lambda c=code: mkb.basic(c), None)
+                if b:
+                    if b.get("mac"):
+                        b["cap"] = b["mac"] * 100_000_000  # 시가총액 단위: 억원(추정)
+                    basics[code] = b
+    if heat:  # 업종 PER(추정)을 종목 기본 지표에 붙임
+        for code, b in basics.items():
+            sp = heat["sectorPer"].get(f"{b.get('market')}|{b.get('sector')}") if b.get("sector") else None
+            if sp:
+                b["sectorPer"] = sp["per"]
 
     # 뉴스(기사 최대 3건, 링크 포함)
     arts = {}
@@ -706,22 +766,30 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
     def ratio(a, b):
         return round(a / b, 2) if a and b else None
 
-    def row(s):
-        return {"code": s["code"], "name": s["name"], "market": s.get("market", ""),
-                "close": f"{s['price']:,}", "price": pct(s["pct"]),
-                "chg": (f"{s['chg']:+,}" if s.get("chg") else "0") + "원",
-                "amount": won(s["amount"]) if s["amount"] else "-",
-                "avg7": won(s["avg7"]) if s.get("avg7") else "-", "avg20": won(s["avg20"]) if s.get("avg20") else "-",
-                "r7": ratio(s["amount"], s.get("avg7")), "r20": ratio(s["amount"], s.get("avg20")),
-                "reason": reason(s), "news": arts.get(s["code"], []),
-                "pctv": round(s["pct"], 4), "chgv": int(s.get("chg") or 0), "amtv": int(s["amount"])}
+    def row(s0):
+        s = every.get(s0["code"], s0)
+        out = {"code": s["code"], "name": s["name"], "market": s.get("market", ""),
+               "close": f"{s['price']:,}", "price": pct(s["pct"]),
+               "chg": (f"{s['chg']:+,}" if s.get("chg") else "0") + "원",
+               "amount": won(s["amount"]) if s["amount"] else "-",
+               "avg7": won(s["avg7"]) if s.get("avg7") else "-", "avg20": won(s["avg20"]) if s.get("avg20") else "-",
+               "r7": ratio(s["amount"], s.get("avg7")), "r20": ratio(s["amount"], s.get("avg20")),
+               "reason": reason(s), "news": arts.get(s["code"], []),
+               "pctv": round(s["pct"], 4), "chgv": int(s.get("chg") or 0), "amtv": int(s["amount"])}
+        if s.get("rs") is not None:
+            out.update({"rs": s["rs"], "r3": s.get("r3"), "r12": s.get("r12"), "sector": s.get("sector")})
+        return out
 
-    # 테마: 키움 테마(ka90001/2) → 실패 시 AI 묶음(키가 있을 때) → 안내 문구
+    # 테마: 키움 테마(ka90001/2) + 테마 헤드라인 기사 → 실패 시 AI 묶음(키가 있을 때) → 안내 문구
     listed = set(every)
     themes = safe("테마", lambda: src.themes(d), []) if hasattr(src, "themes") else []
     for t in themes:
         for x in t["stocks"]:
             x["inList"] = x["code"] in listed
+        if use_news:
+            q = " ".join(t["name"].replace("_", " ").replace("/", " ").split()[:3])
+            t["news"] = [a for a in news(q, "up" if (t.get("pct") or 0) >= 0 else "down", days=2, limit=2)]
+            time.sleep(0.2)
     if not themes and ai and ai.get("themes"):
         pct_by_name = {s["name"]: s["pct"] for s in every.values()}
         themes = [{"name": t.get("name", ""), "ai": True, "action": t.get("action", ""),
@@ -729,21 +797,6 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
                   for t in ai["themes"]]
     if not themes:
         themes = [{"name": "(테마 수집 실패)", "stocks": "-", "action": "다음 회차에 다시 시도합니다."}]
-
-    # 상승·하락 종목 수(+상한·하한)
-    breadth = {}
-    lim = safe("상한·하한", lambda: src.limits(d), {}) if hasattr(src, "limits") else {}
-    for mk in ("코스피", "코스닥"):
-        if partial and mk in src.breadth:
-            u, dn, flat = src.breadth[mk]
-        elif not partial and stocks:
-            u = sum(1 for s in stocks if s["market"] == mk and s["pct"] > 0)
-            dn = sum(1 for s in stocks if s["market"] == mk and s["pct"] < 0)
-            flat = sum(1 for s in stocks if s["market"] == mk and s["pct"] == 0)
-        else:
-            continue
-        upper, lower = lim.get(mk, (None, None))
-        breadth[mk] = {"up": u, "down": dn, "flat": flat, "upper": upper, "lower": lower}
 
     # 선행지표: 52주 신고가·신저가, 대차잔고
     indicators = {}
@@ -758,23 +811,30 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
     if hasattr(src, "lending"):
         lend = safe("대차거래", lambda: src.lending(d), None)
         if lend:
-            unit = 1_000_000  # 잔고금액 단위: 백만원으로 추정(미검증) → 원
+            unit = 1_000_000  # 잔고금액 단위: 백만원(추정 — 1주 평균 약 4.3만원으로 정합)
             indicators["lending"] = {
                 "date": f"{lend['date'][:4]}-{lend['date'][4:6]}-{lend['date'][6:]}",
                 "net": f"{lend['net']:+,.0f}주", "shares": f"{lend['shares'] / 1e8:,.2f}억주",
                 "amount": won(lend["amount_raw"] * unit),
                 "delta": signed_won((lend["amount_raw"] - lend["prev_amount_raw"]) * unit)
                 if lend.get("prev_amount_raw") else None,
-                "unitNote": "잔고금액 단위는 백만원으로 추정(검증 전)"}
-    indicators["unsupported"] = "시장 전체 공매도 거래대금·신용융자잔고는 키움 API에 없어 아직 표시하지 않습니다."
+                "unitNote": "잔고금액 단위 백만원(추정, 1주 평균가로 정합 확인) · 공표가 하루 늦음"}
+    indicators["unsupported"] = "시장 전체 공매도 거래대금은 공식 무료 API가 없어 대차잔고로 대신합니다. 신용공여 잔고는 공공데이터포털 키 발급 후 추가 예정."
 
     # 요약(규칙 기반)
     summary = [" / ".join(f"{i['name']} {i['close']} ({i['change']}), 거래대금 {i['value']}" for i in indices)]
+    am = {i["name"]: i["amount"] for i in idx}
+    if am.get("코스피") and am.get("코스닥"):
+        summary.append(f"거래대금 비율 코스피 {am['코스피'] / (am['코스피'] + am['코스닥']) * 100:.0f} : "
+                       f"코스닥 {am['코스닥'] / (am['코스피'] + am['코스닥']) * 100:.0f} (코스닥/코스피 {am['코스닥'] / am['코스피'] * 100:.0f}%)")
+    for mk, st in (mstat.get("stats") or {}).items():  # 상세 비교표는 화면에서 그림. 요약에는 12개월 최고 대비만
+        if st and st.get("y1"):
+            summary.append(f"{mk} 거래대금은 12개월 최고({won(st['y1'])})의 {st['today'] / st['y1'] * 100:.0f}%")
     k = flows.get("코스피")
     if k:
         summary.append(f"코스피 수급: 외국인 {signed_won(k['외국인'])}, 개인 {signed_won(k['개인'])}, "
                        f"기관 {signed_won(k['기관'])}")
-    kospi_amt = next((i["amount"] for i in idx if i["name"] == "코스피"), 0)
+    kospi_amt = am.get("코스피", 0)
     if partial:
         mega = sum(src.amount_by_code.get(c, 0) for c in MEGA)
     else:
@@ -788,6 +848,10 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
     nh = indicators.get("newHigh")
     if nh:
         summary.append(f"52주 신고가 {nh['count']}종목" + (f" (직전 거래일 {nh['prev']}종목)" if nh["prev"] is not None else ""))
+    if heat:
+        ip = heat["indexPer"]
+        summary.append("지수 PER(추정, 시총 상위 흑자 종목): " + " / ".join(
+            f"{m} {v['per']}배" for m, v in ip.items() if v.get("per")))
     if session == "noon":
         notes.append("평균 거래대금 대비 비율은 장중 누적 거래대금 기준이라 마감 때보다 낮게 나옵니다.")
 
@@ -799,9 +863,15 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None):
             "asof": dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
             "headline": headline, "indices": indices, "flows": flows, "breadth": breadth, "indicators": indicators,
             "summary": summary, "top500": [row(s) for s in up], "themes": themes,
-            "topAmount": [row(s) for s in top_amt], "down5": [row(s) for s in down], "notes": notes}
-    extra = {"hist": hist, "scale": scale,
-             "lists": {"top500": snap["top500"], "topAmount": snap["topAmount"], "down5": snap["down5"]}}
+            "topAmount": [row(s) for s in top_amt], "down5": [row(s) for s in down],
+            "rs15": [row(s) for s in rs15], "rsNote": (heat or {}).get("note"), "heat": bool(heat),
+            "notes": notes}
+    nh_rows = [{"code": x["code"], "name": x["name"], "market": basics.get(x["code"], {}).get("market", ""),
+                "close": "-", "price": pct(x["pct"]), "chg": "", "amount": "-", "reason": "52주 신고가", "news": []}
+               for x in (indicators.get("newHigh") or {}).get("top", [])]
+    extra = {"hist": hist, "scale": scale, "basics": basics,
+             "lists": {"top500": snap["top500"], "topAmount": snap["topAmount"], "down5": snap["down5"],
+                       "rs15": snap["rs15"], "newHigh": nh_rows}}
     return snap, extra
 
 
@@ -880,7 +950,8 @@ def merge_day(path, d, session, snap):
     sessions[session] = snap
     latest = [k for k in ORDER if k in sessions][-1]
     s = sessions[latest]
-    for k in ("indices", "summary", "top500", "themes", "topAmount", "down5", "breadth", "indicators", "notes"):  # 맨 위에는 가장 늦은 회차를 복사
+    for k in ("indices", "summary", "top500", "themes", "topAmount", "down5", "rs15", "rsNote", "heat", "breadth",
+              "indicators", "notes"):  # 맨 위에는 가장 늦은 회차를 복사
         day[k] = s.get(k, [])
     day["headline"] = f"{SESSIONS[latest]['short']} · {s['headline']}"
     day["latest"] = latest
@@ -889,7 +960,8 @@ def merge_day(path, d, session, snap):
 
 
 # ───────────────────────── 종목 상세 파일(data/stocks/코드.json) ─────────────────────────
-LIST_LABEL = {"top500": "500억↑ 상승률", "topAmount": "거래대금 상위", "down5": "하락 TOP5"}
+LIST_LABEL = {"top500": "500억↑ 상승률", "topAmount": "거래대금 상위", "down5": "하락 TOP5", "rs15": "상대강도 상위",
+              "newHigh": "52주 신고가"}
 
 
 def prev_snapshot(out_dir, d, session):
@@ -930,8 +1002,11 @@ def update_stock_files(out_dir, d, session, extra, dart_key=None, dart_budget=12
         except json.JSONDecodeError:
             info = {}
         r0 = hits[0][2]
-        info.update({"code": code, "name": r0["name"], "market": r0.get("market", ""),
+        info.update({"code": code, "name": r0["name"], "market": r0.get("market") or info.get("market", ""),
                      "updated": dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M")})
+        b = extra.get("basics", {}).get(code)
+        if b:
+            info["basic"] = dict({k: v for k, v in b.items() if v is not None}, date=d.isoformat())
         h = extra["hist"].get(code)
         if h:  # 일봉: 날짜별로 덮어쓰며 최근 130거래일 유지
             px = {p[0]: p for p in info.get("prices", [])}
@@ -984,7 +1059,15 @@ def main():
                  ("ka10016 52주 신고가", "/api/dostk/stkinfo", "ka10016", {"mrkt_tp": "000", "ntl_tp": "1", "high_low_close_tp": "1", "stk_cnd": "1",
                   "trde_qty_tp": "00000", "crd_cnd": "0", "updown_incls": "1", "dt": "250", "stex_tp": "1"}, "ntl_pric"),
                  ("ka10068 대차거래추이", "/api/dostk/slb", "ka10068", {"all_tp": "1", "strt_dt": (d - dt.timedelta(days=7)).strftime("%Y%m%d"),
-                  "end_dt": d.strftime("%Y%m%d")}, "dbrt_trde_trnsn")]
+                  "end_dt": d.strftime("%Y%m%d")}, "dbrt_trde_trnsn"),
+                 # v3 추가: 지수 일봉(거래대금 단위·가격 소수점), 기준일 수급(과거 날짜가 반영되는지), 종목 리스트, 전 종목 시세, 기본정보
+                 ("ka20006 코스피 일봉", "/api/dostk/chart", "ka20006", {"inds_cd": "001", "base_dt": d.strftime("%Y%m%d")}, "inds_dt_pole_qry"),
+                 ("ka10051 수급(오늘)", "/api/dostk/sect", "ka10051", {"mrkt_tp": "0", "amt_qty_tp": "0", "stex_tp": "1", "base_dt": d.strftime("%Y%m%d")}, "inds_netprps"),
+                 ("ka10051 수급(7일 전)", "/api/dostk/sect", "ka10051", {"mrkt_tp": "0", "amt_qty_tp": "0", "stex_tp": "1",
+                  "base_dt": (d - dt.timedelta(days=7)).strftime("%Y%m%d")}, "inds_netprps"),
+                 ("ka10099 종목리스트(코스피)", "/api/dostk/stkinfo", "ka10099", {"mrkt_tp": "0"}, "list"),
+                 ("ka20002 업종별주가(코스피)", "/api/dostk/sect", "ka20002", {"mrkt_tp": "0", "inds_cd": "001", "stex_tp": "1"}, "inds_stkpc"),
+                 ("ka10001 기본정보(삼성전자)", "/api/dostk/stkinfo", "ka10001", {"stk_cd": "005930"}, None)]
         for label, path, api, body, key in tests:
             try:
                 pages = src._call(path, api, body)
@@ -1024,12 +1107,12 @@ def main():
 
     prev = prev_snapshot(a.out_dir, d, a.session)
     snap, extra = build_snapshot(src, d, a.session, use_news=not a.no_news,
-                                 api_key=os.environ.get("ANTHROPIC_API_KEY"), prev=prev)
+                                 api_key=os.environ.get("ANTHROPIC_API_KEY"), prev=prev, out_dir=a.out_dir)
 
     out = Path(a.out_dir) / f"{d.isoformat()}.json"
     out.parent.mkdir(parents=True, exist_ok=True)
     day = merge_day(out, d, a.session, snap)
-    out.write_text(json.dumps(day, ensure_ascii=False, indent=1), encoding="utf-8")
+    out.write_text(json.dumps(day, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
     try:  # 상세 파일은 실패해도 본 데이터 저장에는 영향 없음
         update_stock_files(a.out_dir, d, a.session, extra,
                            dart_key=None if a.mock else os.environ.get("DART_API_KEY", "").strip() or None)
