@@ -4,7 +4,7 @@ name: deploy-site
 on:
   push:
     branches: [main]
-    paths: ["template.html", "journal.html", "generate.py", "data/**"]
+    paths: ["template.html", "journal.html", "generate.py", "data/**", ".github/workflows/daily.yml"]
   workflow_dispatch:             # Actions 탭에서 수동으로 다시 배포
 
 permissions:
