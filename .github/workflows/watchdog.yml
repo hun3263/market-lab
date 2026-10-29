@@ -1,0 +1,51 @@
+name: watchdog
+
+# 서버와 별개로 GitHub 가 '오늘 회차가 올라왔는지' 확인합니다. 빠졌거나 실패면 이 작업이 실패로 끝나고,
+# GitHub 가 실패 알림(메일, GitHub 앱 푸시)을 보냅니다. GitHub 예약은 수 분~수십 분 늦을 수 있습니다.
+on:
+  schedule:
+    - cron: "30 22 * * *"    # 07:30 KST  뉴스 최초(news-am)
+    - cron: "40 3 * * 1-5"   # 12:40 KST  1차(noon)
+    - cron: "15 9 * * 1-5"   # 18:15 KST  2차(close)
+    - cron: "0 12 * * *"     # 21:00 KST  3차(nxt) · 뉴스 최종(news-pm)
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: 오늘 회차 확인
+        run: |
+          python3 - <<'PY'
+          import json, datetime as dt, sys
+          KST = dt.timezone(dt.timedelta(hours=9))
+          now = dt.datetime.now(KST); today = now.date().isoformat(); wd = now.weekday() < 5
+          try:
+              st = json.load(open("data/status.json", encoding="utf-8"))
+          except Exception:
+              st = {}
+          plan = [("news-am", "07:00", False), ("noon", "12:05", True), ("close", "17:30", True),
+                  ("nxt", "20:10", True), ("news-pm", "20:30", False)]
+          bad = []
+          for name, hhmm, weekday_only in plan:
+              if weekday_only and not wd:
+                  continue
+              due = dt.datetime.combine(now.date(), dt.time(*map(int, hhmm.split(":"))), KST) + dt.timedelta(minutes=20)
+              if now < due:
+                  continue
+              x = st.get(name)
+              if not x or x.get("date") != today:
+                  bad.append(f"{name}({hhmm}): 오늘 실행 기록 없음 → 서버가 안 돌았거나 GitHub 업로드 실패")
+              elif x.get("result") == "fail":
+                  bad.append(f"{name}({hhmm}): 실패로 기록됨 ({x.get('time')})")
+              else:
+                  print(f"OK  {name} {x.get('time')} {x.get('result')} 경고 {x.get('warnings', 0)}건")
+          if bad:
+              print("\n".join("❌ " + b for b in bad))
+              sys.exit(1)
+          print("모든 예정 회차 정상")
+          PY
