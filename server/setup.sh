@@ -25,13 +25,7 @@ git config user.name "market-lab-server"
 git config user.email "market-lab-server@users.noreply.github.com"
 chmod +x server/run.sh
 
-echo "[5/5] 예약 실행 등록 (평일 12:05 / 17:30 / 20:10, 뉴스 매일 20:00 + 월 08:00)"
-( crontab -l 2>/dev/null | grep -v 'market-lab-job' || true
-  echo "5 12 * * 1-5 $DIR/server/run.sh noon  # market-lab-job"
-  echo "30 17 * * 1-5 $DIR/server/run.sh close # market-lab-job"
-  echo "10 20 * * 1-5 $DIR/server/run.sh nxt   # market-lab-job"
-  echo "0 20 * * * $DIR/server/run.sh news-pm  # market-lab-job"
-  echo "0 8 * * 1 $DIR/server/run.sh news-am   # market-lab-job"
-) | crontab -
-crontab -l | grep market-lab-job
-echo "설치 완료. 다음: 키 입력 → 'server/run.sh close' 로 수동 1회 시험"
+echo "[5/5] 예약 실행 등록 (평일 12:05 / 17:30 / 20:10, 뉴스 매일 07:00 · 20:30)"
+bash server/add-news-cron.sh
+git config core.fileMode false   # 웹 업로드로 실행 권한 표시가 바뀌어도 변경으로 보지 않음
+echo "설치 완료. 다음: 키 입력 → 'bash server/run.sh close' 로 수동 1회 시험"
