@@ -169,6 +169,56 @@ class KiwoomMarket:
     def closes(self, code, d):
         return [c for _, c, _ in self.s.history(code, d, n=260)]
 
+    def closes_long(self, code, d):
+        """{날짜: 수정종가} 약 3년. 캐시(CACHE/px/코드.json)가 짧으면 2페이지(약 1,200거래일), 아니면 1페이지만 받아 합침"""
+        path = CACHE / "px" / f"{code}.json"
+        px = load_json(path, {})
+        pages = 2 if len(px) < 700 else 1
+        rows = self.s._rows(self.s._call("/api/dostk/chart", "ka10081",
+                                         {"stk_cd": code, "base_dt": d.strftime("%Y%m%d"), "upd_stkpc_tp": "1"}, pages=pages),
+                            "stk_dt_pole_chart_qry")
+        new = {_ymd(r["dt"]): int(_num(r["cur_prc"])) for r in rows if r.get("dt") and r.get("cur_prc")}
+        if new and px:
+            # 수정주가가 바뀌었으면(액면분할 등) 겹치는 날 비율로 옛 값 보정
+            common = [k for k in new if k in px and px[k]]
+            if common:
+                k = max(common)
+                ratio = new[k] / px[k]
+                if abs(ratio - 1) > 0.01:
+                    px = {a: round(b * ratio) for a, b in px.items()}
+        px.update(new)
+        cut = (d - dt.timedelta(days=1200)).isoformat()
+        px = {a: b for a, b in sorted(px.items()) if a >= cut}
+        save_json(path, px)
+        return px
+
+    def program_intraday(self, d):
+        """프로그램 매매 분별 누적 순매수(백만원 → 원) {시장: [[시각, 전체, 차익, 비차익], ...]} — ka90005"""
+        out = {}
+        for name, code in (("코스피", "P00101"), ("코스닥", "P10102")):
+            rows = self.s._rows(self.s._call("/api/dostk/mrkcond", "ka90005", {
+                "date": d.strftime("%Y%m%d"), "amt_qty_tp": "1", "mrkt_tp": code, "min_tic_tp": "1", "stex_tp": "1"},
+                pages=6), "prm_trde_trnsn")
+            pts = {}
+            for r in rows:
+                t = str(r.get("cntr_tm", ""))[:4]
+                if len(t) == 4 and "0900" <= t <= "1535":
+                    pts[t] = [f"{t[:2]}:{t[2:]}", int(_snum(r.get("all_netprps") or 0) * 1e6),
+                              int(_snum(r.get("dfrt_trde_netprps") or 0) * 1e6), int(_snum(r.get("ndiffpro_trde_netprps") or 0) * 1e6)]
+            out[name] = [pts[k] for k in sorted(pts)]
+        return out
+
+    def investor_intraday(self, code):
+        """대형주 장중 투자자 누적 순매수 [[시각, 외국인, 기관]] — ka10064(종목 단위, 개인 항목 없음). 금액 단위는 백만원으로 추정"""
+        rows = self.s._rows(self.s._call("/api/dostk/chart", "ka10064", {
+            "mrkt_tp": "000", "amt_qty_tp": "1", "trde_tp": "0", "stk_cd": code}, pages=3), "opmr_invsr_trde_chart")
+        pts = {}
+        for r in rows:
+            t = str(r.get("tm", ""))[:4]
+            if len(t) == 4 and "0900" <= t <= "1535":
+                pts[t] = [f"{t[:2]}:{t[2:]}", int(_snum(r.get("frgnr_invsr") or 0) * 1e6), int(_snum(r.get("orgn") or 0) * 1e6)]
+        return [pts[k] for k in sorted(pts)]
+
 
 class MockMarket:
     """네트워크 없이 화면을 점검하기 위한 가짜 시계열(실제 시장과 무관)"""
@@ -236,14 +286,38 @@ class MockMarket:
                 "hi250": None, "lo250": None, "for": round(self.r.uniform(2, 50), 1)}
 
     def closes(self, code, d):
+        return list(self.closes_long(code, d).values())[-260:]
+
+    def closes_long(self, code, d):
         import random
         rr = random.Random(code)
-        px, out = 10000.0, []
-        drift = rr.uniform(-0.001, 0.002)
-        for _ in range(260):
-            px *= 1 + drift + rr.uniform(-0.025, 0.025)
-            out.append(px)
+        px, out = 10000.0, {}
+        drift = rr.uniform(-0.0005, 0.0012)
+        for x in self._days(d, 800):
+            px *= 1 + drift + rr.uniform(-0.022, 0.022)
+            out[x.isoformat()] = round(px)
         return out
+
+    def program_intraday(self, d):
+        out = {}
+        for m in ("코스피", "코스닥"):
+            v, a, b, pts = 0, 0, 0, []
+            for i in range(0, 391, 5):
+                t = 9 * 60 + i
+                da, db = self.r.gauss(0, 2e9), self.r.gauss(3e8, 6e9)
+                a, b = a + da, b + db
+                pts.append([f"{t // 60:02d}:{t % 60:02d}", int(a + b), int(a), int(b)])
+            out[m] = pts
+        return out
+
+    def investor_intraday(self, code):
+        f, o, pts = 0, 0, []
+        for i in range(0, 391, 5):
+            t = 9 * 60 + i
+            f += self.r.gauss(2e8, 3e9)
+            o += self.r.gauss(-1e8, 2e9)
+            pts.append([f"{t // 60:02d}:{t % 60:02d}", int(f), int(o)])
+        return pts
 
 
 def backend(src):
@@ -372,8 +446,9 @@ def update(src, d, session, out_dir, idx, breadth, notes):
 
     # 오래된 키 정리(1년 반)
     cut = (d - dt.timedelta(days=550)).isoformat()
-    for key in ("flows", "breadth", "per"):
-        ser[key] = {k: v for k, v in sorted(ser[key].items()) if k >= cut}
+    for key in ("flows", "breadth", "per", "nh", "nl"):
+        if key in ser:
+            ser[key] = {k: v for k, v in sorted(ser[key].items()) if k >= cut}
     ser["updated"] = dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M")
     save_json(path, ser)
 
@@ -409,7 +484,7 @@ def build_universe(mk, d, session, out_dir, log):
             except Exception as e:
                 print(f"[경고] 기본정보 {r['name']}: {e}", file=sys.stderr)
             try:
-                closes[r["code"]] = mk.closes(r["code"], d)
+                closes[r["code"]] = list(mk.closes_long(r["code"], d).values())[-260:]
             except Exception as e:
                 print(f"[경고] 일봉 {r['name']}: {e}", file=sys.stderr)
         rs = rs_scores(closes)
@@ -417,6 +492,8 @@ def build_universe(mk, d, session, out_dir, log):
                  "rs": {c: {k: (round(v, 4) if isinstance(v, float) else v) for k, v in x.items()} for c, x in rs.items()}}
         log.append(f"유니버스 {len(rows)}종목 PER·RS 계산 {time.time() - t0:.0f}초")
     cache["rows"] = [r["code"] for r in rows]
+    cache["shares"] = {r["code"]: lst[r["code"]]["shares"] for r in rows}
+    cache["market"] = {r["code"]: r["market"] for r in rows}
     save_json(cache_path, cache)
 
     basics, rs = cache.get("basics", {}), cache.get("rs", {})
@@ -454,3 +531,134 @@ def rs_top(heat, n=15):
     rows.sort(key=lambda r: (-r[9], -(r[12] or 0)))
     return [{"code": r[0], "name": r[1], "market": r[2], "sector": r[3], "price": r[10], "pct": r[5], "chg": r[11],
              "amount": 0, "rs": r[9], "r3": r[12], "r12": r[13], "per": r[6]} for r in rows[:n]]
+
+
+# ───────────────────────── v5: DART 재무(TTM·연환산 PER), 지수 PER 3년, 장중 흐름, 신고가 기록 ─────────────────────────
+def fin_update(src, d, session, out_dir, heat, extra, notes):
+    """extra: {종목코드: {"price":..,"market":..}} (오늘 목록 종목). 반환 {종목코드: {ttmPer, annPer, finPeriod, ...}}
+    DART 조회는 2차(close)에서만, 다른 회차는 캐시로 계산. 지수 PER 3년 시계열도 2차에서 다시 계산."""
+    import dartfin
+    mock = type(src).__name__ == "MockSource"
+    key = os.environ.get("DART_API_KEY", "").strip()
+    if not (key or mock):
+        return {}
+    dart = None
+    if not mock:
+        import dart as dart_mod
+        dart = dart_mod.Dart(key)
+    ucache = load_json(CACHE / "universe.json", {})
+    shares, market_of = dict(ucache.get("shares", {})), dict(ucache.get("market", {}))
+    codes = list(dict.fromkeys(list(shares) + list(extra)))
+    corp_of = {}
+    for c in codes:
+        cc = ("C" + c) if mock else dart.corp_code(c)
+        if cc:
+            corp_of[c] = cc
+
+    class _NoFetch(dartfin.Fin):  # 2차가 아니면 캐시만 읽음(캐시 파일은 건드리지 않음)
+        def period(self, year, reprt, corps, today, refresh_days=1):
+            return dartfin._load(self._path(year, reprt), {}).get("data", {})
+    fin = (dartfin.Fin(dart, mock) if session == "close" or mock else _NoFetch(dart, mock))
+    seqs_cc = dartfin.build(fin, corp_of, d)
+    seqs = {c: seqs_cc.get(cc, []) for c, cc in corp_of.items()}
+
+    # 종목별 PER 3종
+    lst = None
+    metrics = {}
+    for c in codes:
+        price = (extra.get(c) or {}).get("price")
+        sh = shares.get(c)
+        if (price is None or sh is None) and heat:
+            r = next((x for x in heat["rows"] if x[0] == c), None)
+            if r:
+                price, sh = price or r[10], sh or (r[4] * 1e8 / r[10] if r[10] else None)
+        if sh is None:
+            if lst is None:
+                lst = load_json(CACHE / "stocklist.json", {}) if not mock else backend(src).stock_list()
+            sh = (lst.get(c) or {}).get("shares")
+        if price and sh:
+            m = dartfin.stock_metrics(seqs.get(c, []), price * sh)
+            if m:
+                metrics[c] = m
+    if heat:  # 히트맵 행에 덧붙여 저장(화면의 종목 팝업이 사용)
+        if "ttmPer" not in heat["cols"]:
+            heat["cols"] += ["ttmPer", "annPer", "finPeriod"]
+            for r in heat["rows"]:
+                m = metrics.get(r[0], {})
+                r += [m.get("ttmPer"), m.get("annPer"), m.get("finPeriod")]
+        save_json(Path(out_dir) / "heat" / f"{d.isoformat()}.json", heat)
+
+    # 지수 PER 3년 (2차 또는 아직 없을 때)
+    path = Path(out_dir) / "market" / "series.json"
+    ser = load_json(path, {})
+    if session == "close" or not ser.get("perLong") or mock:
+        px = {c: load_json(CACHE / "px" / f"{c}.json", {}) for c in shares} if not mock else \
+             {c: backend(src).closes_long(c, d) for c in shares}
+        long = dartfin.index_per_series({c: seqs.get(c, []) for c in shares}, px, shares, market_of,
+                                        (d - dt.timedelta(days=365 * 3)).isoformat())
+        long["method"] = ("DART 분기 실적 TTM 순이익(공시 기한 이후 반영) · 현재 시총 상위 300 · 적자 제외 · "
+                          "주식수는 현재값 → 추정치")
+        long["updated"] = d.isoformat()
+        ser["perLong"] = long
+        save_json(path, ser)
+        if dart:
+            print(f"DART 분기 실적 호출 {fin.calls}회 · 지수 PER {len(long['dates'])}일 계산")
+    return metrics
+
+
+def intraday(src, d, notes):
+    """3차(20:00)·2차(17:30)에서: 프로그램 매매 분별 + 삼성전자·SK하이닉스 외국인·기관 장중 흐름"""
+    mk = backend(src)
+    out = {}
+    try:
+        out["program"] = mk.program_intraday(d)
+    except Exception as e:
+        notes.append(f"수집 실패: 프로그램 매매 장중 ({type(e).__name__})")
+    big = {}
+    for code, name in (("005930", "삼성전자"), ("000660", "SK하이닉스")):
+        try:
+            big[name] = mk.investor_intraday(code)
+        except Exception as e:
+            notes.append(f"수집 실패: {name} 장중 수급 ({type(e).__name__})")
+    if big:
+        out["big"] = big
+    return out
+
+
+def highs_history(out_dir, d, nh_codes, nl_codes):
+    """52주 신고가·신저가 종목 기록을 series.json 에 쌓고, 종목별 최근 20·60거래일 등장 횟수와 연속일을 계산"""
+    path = Path(out_dir) / "market" / "series.json"
+    ser = load_json(path, {})
+    for key in ("nh", "nl"):
+        ser.setdefault(key, {})
+    for f in sorted(Path(out_dir).glob("20*.json")):  # 처음에는 저장된 날짜 파일(상위 12개만)로 채움
+        if f.stem in ser["nh"] or f.stem >= d.isoformat():
+            continue
+        dd = load_json(f, {})
+        sn = (dd.get("sessions") or {}).get(dd.get("latest") or "", {})
+        ind = (sn or {}).get("indicators") or {}
+        if ind.get("newHigh"):
+            ser["nh"][f.stem] = [x["code"] for x in ind["newHigh"].get("all", ind["newHigh"].get("top", []))]
+        if ind.get("newLow"):
+            ser["nl"][f.stem] = [x["code"] for x in ind["newLow"].get("all", ind["newLow"].get("top", []))]
+    ser["nh"][d.isoformat()] = nh_codes
+    ser["nl"][d.isoformat()] = nl_codes
+    save_json(path, ser)
+
+    def counts(key, codes):
+        days = sorted(ser[key])
+        res = {}
+        for c in codes:
+            c20 = sum(1 for x in days[-20:] if c in ser[key][x])
+            c60 = sum(1 for x in days[-60:] if c in ser[key][x])
+            streak = 0
+            for x in reversed(days):
+                if c in ser[key][x]:
+                    streak += 1
+                else:
+                    break
+            res[c] = {"c20": c20, "c60": c60, "streak": streak}
+        return res, len(days)
+    a, na = counts("nh", nh_codes)
+    b, nb = counts("nl", nl_codes)
+    return a, b, na

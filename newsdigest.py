@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """newsdigest.py : 주요 뉴스를 모아 분류·묶음·중요도 순으로 정리해 data/news/날짜.json 에 저장합니다.
 
-  python newsdigest.py --edition pm      # 매일 20:00 : 직전 24시간 (휴장일 포함 매일)
-  python newsdigest.py --edition am      # 월요일 08:00 : 직전 거래일(금) 20:00 이후 주말·휴일 전체
+  python newsdigest.py --edition am      # 매일 07:00 최초 : 전날 20:30 ~ 07:00 (밤사이·해외)
+  python newsdigest.py --edition pm      # 매일 20:30 최종 : 07:00 ~ 20:30 (국내 장중·장후)
   python newsdigest.py --coverage        # 커버리지 점검: 검색어별 기사 수·언론사 수만 출력(저장 없음)
   python newsdigest.py --edition pm --mock   # 네트워크 없이 화면 점검용 가짜 뉴스
 
@@ -159,9 +159,10 @@ def cluster(items, thr=0.45):
             if x["s"] not in srcs:
                 srcs.append(x["s"])
         lead = its[0]  # 가장 먼저 보도한 기사를 대표로
+        # n = 서로 다른 언론사 수, k = 기사 수(같은 언론사가 여러 번 쓰면 k 가 더 큼). 화면의 '같은 사건 기사'는 앞쪽 몇 건만 보여 줌
         out.append({"t": lead["t"], "u": lead["u"], "s": lead["s"], "desc": lead.get("desc", ""),
-                    "time": lead["when"].astimezone(KST).strftime("%m/%d %H:%M"), "n": len(srcs),
-                    "sources": srcs[:6], "more": [{"t": x["t"], "u": x["u"], "s": x["s"]} for x in its[1:4]],
+                    "time": lead["when"].astimezone(KST).strftime("%m/%d %H:%M"), "n": len(srcs), "k": len(its),
+                    "sources": srcs[:40], "more": [{"t": x["t"], "u": x["u"], "s": x["s"]} for x in its[1:6]],
                     "_last": max(x["when"] for x in its)})
     return out
 
@@ -216,14 +217,14 @@ def mock_items(cat, q, start, end, lang="ko"):
 
 
 def window(edition, now):
-    """pm: 직전 20:00~지금(24시간) / am(월): 직전 금요일 20:00~지금"""
+    """am(07:00 최초): 전날 20:30 ~ 지금 — 밤사이 해외 시장·뉴스 / pm(20:30 최종): 오늘 07:00 ~ 지금 — 국내 장중·장후.
+    휴장일·주말도 매일 두 번 돌아서 빈틈 없이 이어집니다."""
     if edition == "am":
-        x = now.date() - dt.timedelta(days=1)
-        while x.weekday() >= 5:
-            x -= dt.timedelta(days=1)
-        start = dt.datetime.combine(x, dt.time(20, 0), KST)
+        start = dt.datetime.combine(now.date() - dt.timedelta(days=1), dt.time(20, 30), KST)
     else:
-        start = now - dt.timedelta(hours=24)
+        start = dt.datetime.combine(now.date(), dt.time(7, 0), KST)
+        if now - start < dt.timedelta(hours=3):  # 시험 실행 등으로 아침에 pm 을 돌리면 24시간
+            start = now - dt.timedelta(hours=24)
     return start, now
 
 
@@ -241,7 +242,7 @@ def run(edition, out_dir="data", mock=False, now=None):
     tr = "번역 Claude" if os.environ.get("ANTHROPIC_API_KEY") else "번역 없음(원문)"
     src = "모의" if mock else f"구글 뉴스 RSS(국내 한국판 · 해외 미국판, {tr})"
     day["editions"][edition] = {
-        "label": "월요일 08:00 · 주말·휴일 주요 뉴스" if edition == "am" else "20:00 · 오늘의 주요 뉴스",
+        "label": "07:00 최초 · 밤사이 주요 뉴스" if edition == "am" else "20:30 최종 · 오늘의 주요 뉴스",
         "from": start.strftime("%m/%d %H:%M"), "to": end.strftime("%m/%d %H:%M"), "source": src,
         "asof": now.strftime("%Y-%m-%d %H:%M"), "categories": cats,
         "rule": "분야별 검색 → 비슷한 제목 묶음 → 보도한 언론사 수가 많은 순(최근 보도 가산)"}

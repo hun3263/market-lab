@@ -225,16 +225,17 @@ class KiwoomSource:
                                      headers={"Content-Type": "application/json;charset=UTF-8", **headers})
         for attempt in range(3):
             try:
-                with urllib.request.urlopen(req, timeout=20) as r:
+                with urllib.request.urlopen(req, timeout=25) as r:
                     return json.loads(r.read().decode()), r.headers
             except urllib.error.HTTPError as e:
                 if e.code == 429 and attempt < 2:  # 호출 제한: 잠시 쉬고 재시도
                     time.sleep(2 * (attempt + 1))
                     continue
                 raise RuntimeError(f"HTTP {e.code} {path}: {e.read().decode(errors='replace')[:200]}")
-            except urllib.error.URLError as e:
+            except (urllib.error.URLError, ConnectionError, TimeoutError, OSError) as e:
+                # RemoteDisconnected(연결이 중간에 끊김)·타임아웃도 잠시 쉬고 다시 시도 (10/29 3차에서 실측)
                 if attempt < 2:
-                    time.sleep(2)
+                    time.sleep(2 * (attempt + 1))
                     continue
                 raise RuntimeError(f"연결 실패 {path}: {e}")
 
@@ -736,6 +737,14 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None, out_
                     if b.get("mac"):
                         b["cap"] = b["mac"] * 100_000_000  # 시가총액 단위: 억원(추정)
                     basics[code] = b
+    if out_dir and hasattr(src, "history"):  # DART 분기 실적 기반 TTM·연환산 PER (+지수 PER 3년)
+        extra_px = {c: {"price": s["price"], "market": s.get("market")} for c, s in every.items()}
+        fm = safe("DART 분기 실적", lambda: _m.fin_update(src, d, session, out_dir, heat, extra_px, notes), {})
+        for c, m in (fm or {}).items():
+            if c in basics:
+                basics[c].update(m)
+            elif c in every:
+                basics[c] = dict(m)
     if heat:  # 업종 PER(추정)을 종목 기본 지표에 붙임
         for code, b in basics.items():
             sp = heat["sectorPer"].get(f"{b.get('market')}|{b.get('sector')}") if b.get("sector") else None
@@ -805,8 +814,21 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None, out_
             lst = safe("52주 신고가" if kind == 1 else "52주 신저가", lambda k=kind: src.new_high_low(d, k), None)
             if lst is not None:
                 p = pind.get(key) or {}
+                srt = sorted(lst, key=lambda x: -x["pct"] if kind == 1 else x["pct"])
                 indicators[key] = {"count": len(lst), "prev": p.get("count"), "prevDate": (prev or {}).get("_date"),
-                                   "top": sorted(lst, key=lambda x: -x["pct"] if kind == 1 else x["pct"])[:12]}
+                                   "top": srt[:12], "all": srt[:300]}
+    if out_dir and ("newHigh" in indicators or "newLow" in indicators):  # 등장 횟수(최근 20·60거래일)·연속일
+        import market as _mh
+        hc = [x["code"] for x in (indicators.get("newHigh") or {}).get("all", [])]
+        lc = [x["code"] for x in (indicators.get("newLow") or {}).get("all", [])]
+        got = safe("신고가 기록", lambda: _mh.highs_history(out_dir, d, hc, lc), None)
+        if got:
+            a, b, ndays = got
+            for key, cnt in (("newHigh", a), ("newLow", b)):
+                for x in (indicators.get(key) or {}).get("all", []):
+                    x.update(cnt.get(x["code"], {}))
+                if key in indicators:
+                    indicators[key]["days"] = ndays
     if hasattr(src, "lending"):
         lend = safe("대차거래", lambda: src.lending(d), None)
         if lend:
@@ -858,16 +880,21 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None, out_
     kf = flows.get("코스피", {}).get("외국인")
     headline = f"코스피 {head['change']}" + (f" · 외국인 {signed_won(kf)}" if kf is not None else "")
 
+    intra = None
+    if out_dir and session in ("close", "nxt") and hasattr(src, "history"):
+        intra = safe("장중 수급 흐름", lambda: _m.intraday(src, d, notes), None)
+
     snap = {"session": session, "label": SESSIONS[session]["label"], "basis": basis,
             "asof": dt.datetime.now(KST).strftime("%Y-%m-%d %H:%M"),
             "headline": headline, "indices": indices, "flows": flows, "breadth": breadth, "indicators": indicators,
             "summary": summary, "top500": [row(s) for s in up], "themes": themes,
             "topAmount": [row(s) for s in top_amt], "down5": [row(s) for s in down],
             "rs15": [row(s) for s in rs15], "rsNote": (heat or {}).get("note"), "heat": bool(heat),
-            "notes": notes}
+            "intraday": intra, "notes": notes}
     nh_rows = [{"code": x["code"], "name": x["name"], "market": basics.get(x["code"], {}).get("market", ""),
-                "close": "-", "price": pct(x["pct"]), "chg": "", "amount": "-", "reason": "52주 신고가", "news": []}
-               for x in (indicators.get("newHigh") or {}).get("top", [])]
+                "close": "-", "price": pct(x["pct"]), "chg": "", "amount": "-",
+                "reason": "52주 신고가" + (f" · 최근 20거래일 {x['c20']}회" if x.get("c20") else ""), "news": []}
+               for x in (indicators.get("newHigh") or {}).get("all", [])[:40]]
     extra = {"hist": hist, "scale": scale, "basics": basics,
              "lists": {"top500": snap["top500"], "topAmount": snap["topAmount"], "down5": snap["down5"],
                        "rs15": snap["rs15"], "newHigh": nh_rows}}
@@ -950,7 +977,7 @@ def merge_day(path, d, session, snap):
     latest = [k for k in ORDER if k in sessions][-1]
     s = sessions[latest]
     for k in ("indices", "summary", "top500", "themes", "topAmount", "down5", "rs15", "rsNote", "heat", "breadth",
-              "indicators", "notes"):  # 맨 위에는 가장 늦은 회차를 복사
+              "indicators", "intraday", "notes"):  # 맨 위에는 가장 늦은 회차를 복사
         day[k] = s.get(k, [])
     day["headline"] = f"{SESSIONS[latest]['short']} · {s['headline']}"
     day["latest"] = latest
@@ -978,7 +1005,7 @@ def prev_snapshot(out_dir, d, session):
     return None
 
 
-def update_stock_files(out_dir, d, session, extra, dart_key=None, dart_budget=12):
+def update_stock_files(out_dir, d, session, extra, dart_key=None, dart_budget=25):
     """오늘 화면에 나온 종목마다 상세 파일을 갱신합니다: 주가 흐름(일봉), 등장 기록(날짜·사유·기사), DART 정보."""
     folder = Path(out_dir) / STOCK_DIR
     folder.mkdir(parents=True, exist_ok=True)
@@ -1066,7 +1093,11 @@ def main():
                   "base_dt": (d - dt.timedelta(days=7)).strftime("%Y%m%d")}, "inds_netprps"),
                  ("ka10099 종목리스트(코스피)", "/api/dostk/stkinfo", "ka10099", {"mrkt_tp": "0"}, "list"),
                  ("ka20002 업종별주가(코스피)", "/api/dostk/sect", "ka20002", {"mrkt_tp": "0", "inds_cd": "001", "stex_tp": "1"}, "inds_stkpc"),
-                 ("ka10001 기본정보(삼성전자)", "/api/dostk/stkinfo", "ka10001", {"stk_cd": "005930"}, None)]
+                 ("ka10001 기본정보(삼성전자)", "/api/dostk/stkinfo", "ka10001", {"stk_cd": "005930"}, None),
+                 ("ka90005 프로그램 분별(코스피)", "/api/dostk/mrkcond", "ka90005", {"date": d.strftime("%Y%m%d"), "amt_qty_tp": "1",
+                  "mrkt_tp": "P00101", "min_tic_tp": "1", "stex_tp": "1"}, "prm_trde_trnsn"),
+                 ("ka10064 장중 투자자(삼성전자)", "/api/dostk/chart", "ka10064", {"mrkt_tp": "000", "amt_qty_tp": "1", "trde_tp": "0",
+                  "stk_cd": "005930"}, "opmr_invsr_trde_chart")]
         for label, path, api, body, key in tests:
             try:
                 pages = src._call(path, api, body)

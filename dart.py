@@ -73,7 +73,7 @@ class Dart:
         return data
 
     # ── 종목코드 → 고유번호 ──
-    def corp_code(self, stock_code):
+    def corp_code(self, stock_code, _retry=True):
         if self._map is None:
             path = CACHE / "corpcode.json"
             fresh = path.exists() and (time.time() - path.stat().st_mtime) < 30 * 86400
@@ -89,7 +89,14 @@ class Dart:
                 CACHE.mkdir(parents=True, exist_ok=True)
                 path.write_text(json.dumps(m), encoding="utf-8")
             self._map = json.loads(path.read_text(encoding="utf-8"))
-        return self._map.get(stock_code)
+        cc = self._map.get(stock_code)
+        if cc is None and _retry:  # 최근 상장 종목: 대응표가 하루 이상 지났으면 한 번 새로 받음
+            path = CACHE / "corpcode.json"
+            if path.exists() and (time.time() - path.stat().st_mtime) > 86400:
+                path.unlink()
+                self._map = None
+                return self.corp_code(stock_code, _retry=False)
+        return cc
 
     # ── 기업개황 ──
     def company(self, cc):
@@ -109,19 +116,28 @@ class Dart:
 
     # ── 사업보고서 '사업의 개요' 발췌 ──
     def overview(self, cc, today):
-        d = self._json("list.json", corp_code=cc, bgn_de=(today - dt.timedelta(days=500)).strftime("%Y%m%d"),
-                       end_de=today.strftime("%Y%m%d"), pblntf_ty="A", pblntf_detail_ty="A001",
-                       last_reprt_at="Y", page_count="10")
-        reps = [r for r in (d or {}).get("list", []) if "사업보고서" in r.get("report_nm", "")]
-        if not reps:
-            return None
-        rep = sorted(reps, key=lambda r: r["rcept_dt"])[-1]
-        raw = self._get("document.xml", rcept_no=rep["rcept_no"])
-        text = excerpt_from_zip(raw)
-        if not text:
-            return None
-        return {"text": text, "report": rep["report_nm"].strip(), "date": rep["rcept_dt"],
-                "url": f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rep['rcept_no']}"}
+        """사업보고서 → 없으면 반기·분기보고서 → 없으면 증권신고서(신규 상장사) 순서로 '사업의 개요'를 찾음.
+        원문 파일이 zip 이 아니게 오는 경우(10/28 실측: 지니언스 등)는 건너뛰고 다음 보고서를 시도."""
+        reps = []
+        for ty in ("A", "C"):  # A 정기공시, C 발행공시(증권신고서)
+            d = self._json("list.json", corp_code=cc, bgn_de=(today - dt.timedelta(days=730)).strftime("%Y%m%d"),
+                           end_de=today.strftime("%Y%m%d"), pblntf_ty=ty, last_reprt_at="Y", page_count="30")
+            reps += [r for r in (d or {}).get("list", []) if any(k in r.get("report_nm", "") for k in
+                     ("사업보고서", "반기보고서", "분기보고서", "증권신고서(지분증권)", "투자설명서"))]
+            if any("사업보고서" in r["report_nm"] for r in reps):
+                break
+        rank = lambda r: (0 if "사업보고서" in r["report_nm"] else 1 if "반기" in r["report_nm"] else
+                          2 if "분기" in r["report_nm"] else 3, -int(r["rcept_dt"]))
+        for rep in sorted(reps, key=rank)[:4]:
+            try:
+                raw = self._get("document.xml", rcept_no=rep["rcept_no"])
+                text = excerpt_from_zip(raw)
+            except zipfile.BadZipFile:
+                continue
+            if text:
+                return {"text": text, "report": rep["report_nm"].strip(), "date": rep["rcept_dt"],
+                        "url": f"https://dart.fss.or.kr/dsaf001/main.do?rcpNo={rep['rcept_no']}"}
+        return None
 
 
 # ───────────────────────── 파싱(네트워크 없이 시험 가능한 부분) ─────────────────────────
@@ -209,7 +225,7 @@ def enrich(info, code, dart, today):
     heavy = False
     cc = info.get("corp_code") or dart.corp_code(code)
     if not cc:
-        info["dartNote"] = "DART 고유번호 없음(ETF·리츠·외국기업 등)"
+        info["dartNote"] = "DART 고유번호 없음(최근 상장·외국기업·ETF 등) — 다음 날 대응표를 새로 받아 다시 시도"
         return False
     info["corp_code"] = cc
     if _stale((info.get("profile") or {}).get("updated"), BIZ_DAYS):
@@ -217,9 +233,12 @@ def enrich(info, code, dart, today):
     if _stale((info.get("fin") or {}).get("updated"), FIN_DAYS):
         f = dart.financials(cc, today)
         info["fin"] = dict(f or {"none": True}, updated=today.isoformat())
-    if _stale((info.get("biz") or {}).get("updated"), BIZ_DAYS):
+    if _stale((info.get("biz") or {}).get("updated"), 30 if (info.get("biz") or {}).get("none") or
+              "실패" in str(info.get("dartNote", "")) else BIZ_DAYS):
         b = dart.overview(cc, today)
         info["biz"] = dict(b or {"none": True}, updated=today.isoformat())
+        if b:
+            info.pop("dartNote", None)
         heavy = True
     return heavy
 
