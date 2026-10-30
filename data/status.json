@@ -4,5 +4,11 @@
   "time": "07:00",
   "result": "ok",
   "warnings": 0
+ },
+ "noon": {
+  "date": "2026-10-30",
+  "time": "12:06",
+  "result": "ok",
+  "warnings": 0
  }
 }
