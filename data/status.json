@@ -22,5 +22,11 @@
   "time": "20:11",
   "result": "ok",
   "warnings": 0
+ },
+ "news-pm": {
+  "date": "2026-10-30",
+  "time": "20:30",
+  "result": "ok",
+  "warnings": 0
  }
 }
