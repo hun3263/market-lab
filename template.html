@@ -500,7 +500,7 @@ function intradayBlock(it) {
     const last = rows[rows.length - 1];
     cards.push(`<div class="card"><h4>${esc(nm)} 장중 누적 순매수 <small>외국인 ${eok(last[1])} · 기관 ${eok(last[2])}</small></h4>${legend([['외국인', 'var(--s2)'], ['기관', 'var(--s3)']])}
       ${chart({ type: 'line', title: `${nm} 장중 투자자 흐름`, x: rows.map(r => r[0]), xfmt: tf, series: [{ name: '외국인', color: 'var(--s2)', v: rows.map(r => r[1]) }, { name: '기관', color: 'var(--s3)', v: rows.map(r => r[2]) }], fmt: eok, zoom: true,
-        note: '키움 ka10064 장중투자자별매매(종목 단위). 금액 단위는 백만원으로 추정 · 개인 항목은 제공되지 않습니다.' })}</div>`); });
+        note: '키움 ka10064 장중투자자별매매(종목 단위). 하루 몇 개 시각에만 값이 옵니다(10/29 실측 6개, 거래소 장중 잠정치 발표 시각으로 추정). 금액 단위는 백만원으로 추정 · 개인 항목은 제공되지 않습니다.' })}${rows.length < 15 ? `<small class="mut">시각 ${rows.map(r => r[0]).join(' · ')} (잠정치)</small>` : ''}</div>`); });
   if (!cards.length) return '';
   return `<h3>오늘 장중 수급 흐름 <small class="mut">(09:00 → 15:30, 누적)</small></h3><div class="grid2">${cards.join('')}</div>
     <p class="mut">시장 전체의 투자자별 '장중' 추이는 키움 REST에 없어 ① 프로그램 매매(시장 단위)와 ② 시가총액 1·2위 종목의 외국인·기관 흐름으로 대신 봅니다.</p>`;

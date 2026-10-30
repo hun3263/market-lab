@@ -5,7 +5,7 @@ import json
 from pathlib import Path
 
 days = {}
-for f in sorted(Path("data").glob("*.json")):
+for f in sorted(Path("data").glob("20*.json")):  # 날짜 파일만(data/status.json 같은 운영 파일 제외)
     try:
         d = json.loads(f.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:

@@ -35,7 +35,19 @@ def _num(s):
 
 
 def _snum(s):
-    return float(str(s).replace(",", "").replace("+", "").strip() or 0)
+    """키움 숫자 문자열 → 실수. '+1,234' '-1234' 외에 '--1234'(음수 표기 중복)·'' 같은 값도 처리"""
+    t = str(s if s is not None else "").replace(",", "").replace("+", "").strip()
+    if not t:
+        return 0.0
+    try:
+        return float(t)
+    except ValueError:
+        neg = t.startswith("-")
+        try:
+            v = float(t.lstrip("-").strip() or 0)
+        except ValueError:
+            raise ValueError(f"숫자로 바꿀 수 없는 값: {s!r}")
+        return -v if neg else v
 
 
 def _ymd(s):
@@ -199,12 +211,18 @@ class KiwoomMarket:
             rows = self.s._rows(self.s._call("/api/dostk/mrkcond", "ka90005", {
                 "date": d.strftime("%Y%m%d"), "amt_qty_tp": "1", "mrkt_tp": code, "min_tic_tp": "1", "stex_tp": "1"},
                 pages=6), "prm_trde_trnsn")
-            pts = {}
+            pts, bad = {}, []
             for r in rows:
-                t = str(r.get("cntr_tm", ""))[:4]
-                if len(t) == 4 and "0900" <= t <= "1535":
-                    pts[t] = [f"{t[:2]}:{t[2:]}", int(_snum(r.get("all_netprps") or 0) * 1e6),
-                              int(_snum(r.get("dfrt_trde_netprps") or 0) * 1e6), int(_snum(r.get("ndiffpro_trde_netprps") or 0) * 1e6)]
+                t = str(r.get("cntr_tm", "")).strip()
+                t = t[8:12] if len(t) >= 12 else t[:4]   # 'HHMMSS' 또는 'YYYYMMDDHHMMSS' 둘 다 처리
+                if len(t) == 4 and t.isdigit() and "0900" <= t <= "1535":
+                    try:
+                        pts[t] = [f"{t[:2]}:{t[2:]}", int(_snum(r.get("all_netprps")) * 1e6),
+                                  int(_snum(r.get("dfrt_trde_netprps")) * 1e6), int(_snum(r.get("ndiffpro_trde_netprps")) * 1e6)]
+                    except ValueError:
+                        bad.append(r)
+            if bad and not pts:  # 전부 실패하면 원본 1행을 메모에 남김(다음 수정용)
+                raise ValueError(f"{name} 값 형식: " + json.dumps(bad[0], ensure_ascii=False)[:300])
             out[name] = [pts[k] for k in sorted(pts)]
         return out
 
@@ -215,8 +233,11 @@ class KiwoomMarket:
         pts = {}
         for r in rows:
             t = str(r.get("tm", ""))[:4]
-            if len(t) == 4 and "0900" <= t <= "1535":
-                pts[t] = [f"{t[:2]}:{t[2:]}", int(_snum(r.get("frgnr_invsr") or 0) * 1e6), int(_snum(r.get("orgn") or 0) * 1e6)]
+            if len(t) == 4 and t.isdigit() and "0900" <= t <= "1600":
+                try:
+                    pts[t] = [f"{t[:2]}:{t[2:]}", int(_snum(r.get("frgnr_invsr")) * 1e6), int(_snum(r.get("orgn")) * 1e6)]
+                except ValueError:
+                    pass
         return [pts[k] for k in sorted(pts)]
 
 
@@ -613,7 +634,7 @@ def intraday(src, d, notes):
     try:
         out["program"] = mk.program_intraday(d)
     except Exception as e:
-        notes.append(f"수집 실패: 프로그램 매매 장중 ({type(e).__name__})")
+        notes.append(f"수집 실패: 프로그램 매매 장중 ({type(e).__name__}: {str(e)[:200]})")
     big = {}
     for code, name in (("005930", "삼성전자"), ("000660", "SK하이닉스")):
         try:

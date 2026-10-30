@@ -992,7 +992,7 @@ LIST_LABEL = {"top500": "500억↑ 상승률", "topAmount": "거래대금 상위
 
 def prev_snapshot(out_dir, d, session):
     """직전 거래일 파일에서 같은 회차(없으면 가장 늦은 회차) snap 을 찾습니다. 선행지표 '전일 → 오늘' 비교용."""
-    files = sorted(p for p in Path(out_dir).glob("*.json") if p.stem < d.isoformat())
+    files = sorted(p for p in Path(out_dir).glob("20*.json") if p.stem < d.isoformat())
     for p in reversed(files):
         try:
             day = json.loads(p.read_text(encoding="utf-8"))
