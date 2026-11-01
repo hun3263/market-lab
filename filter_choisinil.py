@@ -5,6 +5,9 @@
   신 (52주 신고가)        : series.json 'nh'(키움 ka10016, 250일 기준) 최근 20거래일 등장
   일 (일정재료/기대감)    : ① events.csv 수동 일정표 (1~20거래일 이내)  ② 뉴스 제목의 일정 표현 자동 탐지(후보, 사람이 확인)
 
+v2 (2026-11-02): ① events.csv 테마는 '부분 일치'(예: 반도체 → 반도체_후공정), 최근 10거래일 테마 전체로 매칭
+                 ② kind=M 은 시장 일정(지수형)으로 따로 표시   ③ 기준봉 종목의 매수 자리(차선·10/20일선 중첩) 추정치 계산
+
 사용:  python filter_choisinil.py --data data [--date 2026-10-30] [--events events.csv] [--out data/choisinil]
 결과:  화면 표 + data/choisinil/날짜.json (journal 복기·백테스트 기록용)
 """
@@ -25,6 +28,7 @@ APPEAR_MIN = 3          # [추정] 최근 10거래일 목록 등장 횟수
 THEME_DAYS = 5          # [추정] 강한 테마 판정 기간
 THEME_MIN_DAYS = 3      # [추정] 5일 중 3일 이상 상위 테마
 EVENT_WINDOW = (1, 20)  # [팩트] 方3강 p3: 1주 이내 이벤트 5·10일선, 4주 이내 20일선 → 1~20거래일
+ZONE_TOL = 0.02         # [추정] 차선과 이평이 ±2% 안이면 '중첩'
 MIN_PRICE = 2000        # [팩트] DR1강 p29 필터: 2,000원 미만 제외
 MIN_AMOUNT = 300e8      # [팩트] DR1강 p29 필터: 거래대금 300억 미만 제외(기준봉·최근 최대 대금 기준으로 적용)
 # [팩트] DR5강 p65 지수 구간 (고점 대비 하락률)
@@ -161,19 +165,55 @@ def trading_days_between(d0, d1):
 
 def load_events(path, d):
     """events.csv 열: date,code,theme,event,kind(+/-),source  (code 비우면 theme 전체에 적용)"""
-    out = []
+    out, macro = [], []
     if not path or not Path(path).exists():
-        return out
+        return out, macro
     with open(path, encoding="utf-8-sig") as f:
         for r in csv.DictReader(f):
+            r = {k: (v or "").strip() for k, v in r.items() if k}
             try:
                 n = trading_days_between(d, r["date"])
             except Exception:
                 continue
-            if EVENT_WINDOW[0] <= n <= EVENT_WINDOW[1]:
-                r["dday"] = n
+            r["dday"] = n
+            if r.get("kind", "+").upper() == "M":      # 시장 일정: 종목에 붙이지 않고 따로 표시
+                if 0 <= n <= EVENT_WINDOW[1]:
+                    macro.append(r)
+            elif EVENT_WINDOW[0] <= n <= EVENT_WINDOW[1]:
                 out.append(r)
-    return out
+    return out, sorted(macro, key=lambda x: x["date"])
+
+
+def buy_zone(prices, bar_date):
+    """[추정] 종가 기준 근사 매수 자리. DR1강 p8 6등분선(n차선 = 고점 − n/6 × (고점 − 0일차 저점))
+    + 10·20일 이동평균. 저점 = 기준봉 전날 종가, 고점 = 기준봉 이후 최고 종가 (일봉 고가·저가가 없어 종가로 대신함)"""
+    idx = next((i for i, p in enumerate(prices) if p[0] == bar_date), None)
+    if idx is None or idx < 1 or len(prices) < 20:
+        return None
+    has_hl = all(len(p) >= 5 and p[3] for p in prices[idx:])
+    if has_hl:                                   # collect.py v2 이후: [날짜, 종가, 대금, 고가, 저가]
+        low0 = prices[idx][4]                    # [팩트 DR1강 p14] 0일차(기준봉) 저점
+        high = max(p[3] for p in prices[idx:])   # 기준봉 이후 최고가(장중 고가)
+    else:                                        # 예전 자료: 종가로 근사
+        low0 = prices[idx - 1][1]
+        high = max(p[1] for p in prices[idx:])
+    if high <= low0:
+        return None
+    closes = [p[1] for p in prices]
+    ma10 = sum(closes[-10:]) / 10
+    ma20 = sum(closes[-20:]) / 20
+    lines = {n: round(high - n / 6 * (high - low0)) for n in (2, 3, 4)}
+    close = closes[-1]
+    over = []
+    for n, v in lines.items():
+        for nm, m in (("10일선", ma10), ("20일선", ma20)):
+            if abs(v / m - 1) <= ZONE_TOL:
+                over.append(f"{n}차선≈{nm}")
+    below = [n for n, v in lines.items() if close <= v]
+    pos = f"{max(below)}차선 아래" if below else "2차선 위(아직 눌림 전)"
+    return {"basis": "고가·저가" if has_hl else "종가 근사", "low0": low0, "high": high, "lines": lines,
+            "ma10": round(ma10), "ma20": round(ma20), "overlap": over, "pos": pos,
+            "toLine2%": round((lines[2] / close - 1) * 100, 1)}
 
 
 def schedule_hints(texts):
@@ -231,8 +271,14 @@ def run(data, d=None, events=None, out=None):
     for tn, t in themes.items():
         for c in t["codes"]:
             theme_of[c].append(tn)
+    all_theme_of = defaultdict(set)          # 최근 10거래일 상위 테마 전체 소속(일정 매칭용)
+    for f in day_files[-10:]:
+        for t in (load(f, {}) or {}).get("themes", []):
+            if isinstance(t.get("stocks"), list):
+                for x in t["stocks"]:
+                    all_theme_of[x["code"]].add(t["name"])
     sectors = strong_sectors(heat)
-    ev = load_events(events, d)
+    ev, macro = load_events(events, d)
 
     # 후보 모집단 = 신고가 ∪ 반복 등장 ∪ 강한 테마 구성 ∪ 종목 상세 파일 보유 종목
     stock_dir = data / "stocks"
@@ -272,7 +318,8 @@ def run(data, d=None, events=None, out=None):
         shin = nh_cnt[c] > 0
         shin_why = f"신고가 {nh_cnt[c]}회(최근 {nh_last[c][5:]})" if shin else ""
 
-        my_ev = [e for e in ev if e.get("code") == c or (not e.get("code") and e.get("theme") in theme_of.get(c, []))]
+        my_ev = [e for e in ev if e.get("code") == c or
+                 (not e.get("code") and e.get("theme") and any(e["theme"] in tn for tn in all_theme_of.get(c, ())))]
         texts = [a.get("reason", "") for a in info.get("appear", [])]
         for a in info.get("appear", []):
             texts += [n.get("t", "") for n in a.get("news", []) if isinstance(n, dict)]
@@ -290,17 +337,19 @@ def run(data, d=None, events=None, out=None):
         if any(h["neg"] for h in hints) or any(e.get("kind") == "-" for e in my_ev):
             flags.append("악재 일정/단어")
 
+        zone = buy_zone(prices, bars[-1]["date"]) if bars else None
         score = int(choi) + int(shin) + int(il)
         if score == 0:
             continue
         grade = {3: "A 최신일", 2: "B", 1: "C"}[score]
         rows.append({"code": c, "name": name, "grade": grade, "score": score, "close": close,
                      "choi": choi, "shin": shin, "il": il, "ilHint": bool(hints) and not il,
-                     "why": {"최": choi_why, "신": shin_why, "일": il_why}, "flags": flags})
+                     "why": {"최": choi_why, "신": shin_why, "일": il_why}, "flags": flags,
+                     "themes": sorted(all_theme_of.get(c, ())), "zone": zone})
 
     rows.sort(key=lambda r: (-r["score"], -int(r["ilHint"]), r["flags"] != [], r["name"]))
     result = {"date": d, "regime": regime, "strongThemes": themes, "strongSectors": sectors,
-              "events": ev, "params": {"RS_MIN": RS_MIN, "LOOKBACK_NH": LOOKBACK_NH, "EVENT_WINDOW": EVENT_WINDOW},
+              "events": ev, "macro": macro, "params": {"RS_MIN": RS_MIN, "LOOKBACK_NH": LOOKBACK_NH, "EVENT_WINDOW": EVENT_WINDOW},
               "nhDays": len(nh_days), "rows": rows}
     if out:
         Path(out).mkdir(parents=True, exist_ok=True)
@@ -314,6 +363,8 @@ def show(res, limit=30):
         print(f"  {k}: {v['close']:,.2f}  250일 고점 대비 {v['dd']}% → 구간 {v['regime']}")
     print("■ 강한 테마(최근 5일 중 3일↑ 상위 8):", ", ".join(f"{k}({v['days']}일, 평균 {v['avgPct']}%)" for k, v in res["strongThemes"].items()) or "없음")
     print("■ 강한 업종(RS80 비율):", ", ".join(f"{k}({v['rs80share']:.0%})" for k, v in list(res["strongSectors"].items())[:5]) or "없음")
+    for m in res.get("macro", []):
+        print(f"■ 시장 일정 D-{m['dday']} {m['date']} {m['event']}")
     print(f"■ 후보 {len(res['rows'])}개 (상위 {limit})")
     for r in res["rows"][:limit]:
         mark = "".join(x if r[k] else "·" for x, k in (("최", "choi"), ("신", "shin"), ("일", "il")))
@@ -322,6 +373,11 @@ def show(res, limit=30):
             w = r["why"][k]
             if w:
                 print(f"        {k}: {', '.join(w) if isinstance(w, list) else w}")
+        z = r.get("zone")
+        if z:
+            ln = " / ".join(f"{n}차선 {v:,}" for n, v in z["lines"].items())
+            print(f"        매수자리(추정·{z['basis']}): {ln} | 10일선 {z['ma10']:,} 20일선 {z['ma20']:,} | 현재 {z['pos']}"
+                  + (f" | 중첩: {', '.join(z['overlap'])}" if z["overlap"] else ""))
         if r["flags"]:
             print(f"        ⚠ {', '.join(r['flags'])}")
 

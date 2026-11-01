@@ -127,6 +127,8 @@ class KrxSource:
 
     def history(self, code, d, n=130):
         df = self.stock.get_market_ohlcv(self._s(d - dt.timedelta(days=n * 3 // 2)), self._s(d), code)
+        self.hl = getattr(self, "hl", {})
+        self.hl[code] = {i.strftime("%Y%m%d"): (int(r["고가"]), int(r["저가"])) for i, r in df.tail(n).iterrows()}
         return [(i.strftime("%Y%m%d"), int(r["종가"]), float(r["거래대금"])) for i, r in df.tail(n).iterrows()]
 
 
@@ -361,6 +363,10 @@ class KiwoomSource:
             rows = self._rows(self._call("/api/dostk/chart", "ka10081", dict(body, stk_cd=code)),  # 통합 코드가 안 되면 KRX 로
                               "stk_dt_pole_chart_qry")
         out = [(r["dt"], int(_num(r["cur_prc"])), _num(r.get("trde_prica", 0))) for r in rows[:n] if r.get("dt")]
+        # 고가·저가는 반환 형식(날짜, 종가, 거래대금)을 바꾸지 않으려고 따로 기억합니다 → 종목 상세 prices 4·5번째 칸
+        self.hl = getattr(self, "hl", {})
+        self.hl[code] = {r["dt"]: (int(_num(r.get("high_pric") or 0)), int(_num(r.get("low_pric") or 0)))
+                         for r in rows[:n] if r.get("dt") and r.get("high_pric")}
         return sorted(out)
 
     def limits(self, d):
@@ -895,7 +901,7 @@ def build_snapshot(src, d, session, use_news=True, api_key=None, prev=None, out_
                 "close": "-", "price": pct(x["pct"]), "chg": "", "amount": "-",
                 "reason": "52주 신고가" + (f" · 최근 20거래일 {x['c20']}회" if x.get("c20") else ""), "news": []}
                for x in (indicators.get("newHigh") or {}).get("all", [])[:40]]
-    extra = {"hist": hist, "scale": scale, "basics": basics,
+    extra = {"hist": hist, "hl": getattr(src, "hl", {}), "scale": scale, "basics": basics,
              "lists": {"top500": snap["top500"], "topAmount": snap["topAmount"], "down5": snap["down5"],
                        "rs15": snap["rs15"], "newHigh": nh_rows}}
     return snap, extra
@@ -1036,9 +1042,10 @@ def update_stock_files(out_dir, d, session, extra, dart_key=None, dart_budget=25
         h = extra["hist"].get(code)
         if h:  # 일봉: 날짜별로 덮어쓰며 최근 130거래일 유지
             px = {p[0]: p for p in info.get("prices", [])}
+            hl = extra.get("hl", {}).get(code, {})
             for t, c, a in h:
                 ds = f"{t[:4]}-{t[4:6]}-{t[6:]}"
-                px[ds] = [ds, c, int(a * extra["scale"])]
+                px[ds] = [ds, c, int(a * extra["scale"])] + (list(hl[t]) if t in hl and hl[t][0] else [])  # [날짜, 종가, 대금, 고가, 저가]
             info["prices"] = [px[k] for k in sorted(px)][-130:]
         apps = [a for a in info.get("appear", []) if not (a["date"] == d.isoformat() and a["list"] in {k for k, _, _ in hits})]
         for key, rank, r in hits:

@@ -564,6 +564,26 @@ function stockTable(rows, reasonHead, rs) {
   const head = ['#', '종목', ...(rs ? ['RS'] : []), '등락률 / 등락폭', '거래대금 (평균 대비)', reasonHead];
   return tbl(head, L(rows).map((r, i) => [i + 1, nameCell(r), ...(rs ? [`<b style="font-size:16px">${r.rs ?? '-'}</b><br><small class="mut">3M ${r.r3 != null ? (r.r3 >= 0 ? '+' : '') + r.r3 + '%' : '-'}<br>12M ${r.r12 != null ? (r.r12 >= 0 ? '+' : '') + r.r12 + '%' : '-'}</small>`] : []), pxCell(r), amtCell(r), newsCell(r)]));
 }
+function choisinilHtml(CS) {
+  const RG = { U: '상승기', D1: '1단 하락', D2: '2단 하락', D3: '3단 하락' };
+  let h = '<div class="chips">' + Object.entries(CS.regime || {}).map(([k, v]) =>
+    `<span class="chip">${esc(k)} ${pctn(v.dd)} · <b>${esc(v.regime)}</b> ${esc(RG[v.regime] || '')}</span>`).join('') + '</div>';
+  const th = Object.entries(CS.strongThemes || {});
+  h += `<p class="mut">강한 테마(최근 5일 중 3일↑ 상위): ${th.length ? th.map(([k, v]) => `<b>${esc(k)}</b> ${v.days}일·평균 ${pctn(v.avgPct)}`).join(', ') : '없음'}
+    · 신고가 기록 ${CS.nhDays}거래일치${CS.nhDays < 20 ? ' (20거래일 미만이라 신고가 판정이 아직 짧음)' : ''}</p>`;
+  if (L(CS.macro).length) h += '<h3>다가오는 시장 일정</h3><ul>' + CS.macro.map(m => `<li><b>D-${m.dday}</b> ${esc(m.date)} ${esc(m.event)} <small class="mut">${esc(m.source || '')}</small></li>`).join('') + '</ul>';
+  const rows = L(CS.rows).filter(r => r.score >= 2);
+  const mark = r => [['최', r.choi], ['신', r.shin], ['일', r.il]].map(([t, on]) => `<span class="${on ? 'up' : 'mut'}">${on ? t : '·'}</span>`).join('');
+  const zone = z => !z ? '<span class="mut">기준봉 없음</span>' : Object.entries(z.lines).map(([n, v]) => `${n}차선 ${Number(v).toLocaleString()}`).join('<br>') +
+    `<br><small class="mut">10일 ${Number(z.ma10).toLocaleString()} · 20일 ${Number(z.ma20).toLocaleString()}<br>현재 ${esc(z.pos)}${L(z.overlap).length ? ' · 중첩 ' + esc(z.overlap.join(', ')) : ''}</small>`;
+  h += '<h3>A·B 등급 (2개 이상 충족)</h3>' + tbl(['등급', '종목', '최·신·일', '근거', '매수 자리(추정·종가 근사)', '주의'], rows.map(r => [
+    `<b>${esc(r.grade)}</b>`, stkLink(r) + (r.close ? `<br><small class="mut">${Number(r.close).toLocaleString()}원</small>` : ''), mark(r),
+    ['최', '신', '일'].map(k => { const w = r.why[k]; const t = Array.isArray(w) ? w.join(', ') : w; return t ? `<div><b>${k}</b> ${esc(t)}</div>` : ''; }).join(''),
+    zone(r.zone), L(r.flags).map(esc).join('<br>') || '-']));
+  const c = L(CS.rows).filter(r => r.score === 1).length;
+  h += `<p class="mut">C 등급(1개 충족) ${c}개는 data/choisinil/${esc(CS.date)}.json 에 있습니다. 매수 자리는 종가로 계산한 근사치이므로 HTS 차트의 6등분선과 대조하세요.</p>`;
+  return h;
+}
 function themesHtml(ts) {
   ts = L(ts);
   if (!ts.length) return '<p class="mut">테마 자료 없음</p>';
@@ -689,6 +709,9 @@ async function render() {
   } else {
     h += sec('이 날짜의 시황 파일을 불러오지 못했습니다', '<p class="mut">잠시 후 새로고침하거나 다른 날짜를 눌러 보세요.</p>');
   }
+  const CS = await getJ(`choisinil/${d.date}.json`);   // 최+신+일 필터 결과(없으면 건너뜀)
+  if (cur !== d.date) return;
+  if (CS) h += sec('8. 최+신+일 후보 <small>(드림로드 5강 p38 · 매수 신호 아님, 관심종목 우선순위)</small>', choisinilHtml(CS), 'csi');
   if (NEWS) h += newsTeaser(NEWS);
   h += `<section><h2>💬 생각 · 피드백 메모 <small>(이 브라우저에만 저장됨)</small></h2>
     <select id="tag"><option>시장생각</option><option>종목체크</option><option>피드백</option></select>
