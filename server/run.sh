@@ -54,6 +54,10 @@ p.write_text(json.dumps(s, ensure_ascii=False, indent=1), encoding="utf-8")
 PY
   rm -f "$OUT"
 
+  if [ "$SESSION" = nxt ] && [ "$ok" = 1 ]; then
+    ./.venv/bin/python filter_choisinil.py --data data --events events.csv --out data/choisinil --limit 10 || echo "[경고] 최신일 필터 실패"
+  fi
+
   git add data
   if ! git diff --cached --quiet; then
     git commit -q -m "data: $(TZ=Asia/Seoul date +%F) ${SESSION} 자동 수집 (${RESULT})"
