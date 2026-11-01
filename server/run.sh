@@ -57,6 +57,11 @@ PY
   if [ "$SESSION" = nxt ] && [ "$ok" = 1 ]; then
     ./.venv/bin/python filter_choisinil.py --data data --events events.csv --out data/choisinil --limit 10 || echo "[경고] 최신일 필터 실패"
   fi
+  
+  if [ "$SESSION" = news-am ] && [ "$ok" = 1 ]; then
+    mkdir -p data/calendar && ./.venv/bin/python calendar_collect.py --data data --out data/calendar/events_candidates.csv || echo "[경고] 일정 후보 수집 실패"
+  fi
+
 
   git add data
   if ! git diff --cached --quiet; then
