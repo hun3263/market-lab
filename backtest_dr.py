@@ -20,6 +20,7 @@
   listing.csv : code,name,market      ※ 상장폐지 종목까지 포함해야 생존편향이 줄어듭니다
 
 사용
+  python backtest_dr.py fetch-kiwoom --start 2023-01-01 --out prices   (market-lab 서버: 키움 키·허용 IP 그대로 사용, 약 20~40분)
   python backtest_dr.py fetch --start 2022-01-01 --end 2026-10-30 --out prices   (pykrx 필요, KRX 접속 가능한 서버)
   python backtest_dr.py run --prices prices --from 2023-01-01 --to 2024-12-31 --tag IS
   python backtest_dr.py run --prices prices --from 2025-01-01 --to 2026-10-30 --tag OOS
@@ -256,12 +257,64 @@ def fetch(a):
                 w.writerow([idx.strftime("%Y-%m-%d"), r["종가"]])
 
 
+def fetch_kiwoom(a):
+    """키움 ka10081(수정주가 일봉) 로 전 종목 OHLC·거래대금 저장. 상장폐지 종목은 목록에 없어 생존편향이 남습니다(결과 해석 시 주의).
+    지수는 series.json 대신 업종일봉 ka20006(001 코스피, 101 코스닥)."""
+    import datetime as dt
+    import collect
+    import market
+    src = collect.KiwoomSource("close")
+    mk = market.backend(src)
+    lst = mk.stock_list()
+    out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    with open(out.parent / "listing.csv", "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f); w.writerow(["code", "name", "market"])
+        for c, v in sorted(lst.items()):
+            w.writerow([c, v["name"], "KOSDAQ" if v["market"] == "코스닥" else "KOSPI"])
+    start = a.start.replace("-", "")
+    today = dt.date.today().strftime("%Y%m%d")
+    n = 0
+    for c, v in sorted(lst.items()):
+        if collect.is_etf(v["name"]) or "스팩" in v["name"] or (out / f"{c}.csv").exists():
+            continue
+        rows = []
+        try:
+            for pg in src._call("/api/dostk/chart", "ka10081", {"stk_cd": c, "base_dt": today, "upd_stkpc_tp": "1"}, pages=4):
+                rows += pg.get("stk_dt_pole_chart_qry", [])
+        except Exception as e:
+            print(f"[건너뜀] {c} {v['name']}: {e}")
+            continue
+        rows = sorted({r["dt"]: r for r in rows if r.get("dt") and r["dt"] >= start}.values(), key=lambda r: r["dt"])
+        with open(out / f"{c}.csv", "w", newline="") as f:
+            w = csv.writer(f); w.writerow(["date", "open", "high", "low", "close", "amount"])
+            for r in rows:
+                g = lambda k: abs(float(str(r.get(k) or 0).replace(",", "").replace("+", "") or 0))
+                if g("open_pric") == 0:
+                    continue
+                w.writerow([f"{r['dt'][:4]}-{r['dt'][4:6]}-{r['dt'][6:]}", g("open_pric"), g("high_pric"), g("low_pric"),
+                            g("cur_prc"), g("trde_prica") * 1e6])          # 거래대금 단위 백만원(collect.py 실측 주석) → 원
+        n += 1
+        if n % 100 == 0:
+            print(f"{n}종목 저장")
+    for name, code in (("KOSPI", "001"), ("KOSDAQ", "101")):
+        rows = []
+        for pg in src._call("/api/dostk/chart", "ka20006", {"inds_cd": code, "base_dt": today}, pages=4):
+            rows += pg.get("inds_dt_pole_qry", [])
+        with open(out / f"_{name}.csv", "w", newline="") as f:
+            w = csv.writer(f); w.writerow(["date", "close"])
+            for r in sorted(rows, key=lambda r: r.get("dt", "")):
+                if r.get("dt", "") >= start:
+                    w.writerow([f"{r['dt'][:4]}-{r['dt'][4:6]}-{r['dt'][6:]}", abs(float(str(r["cur_prc"]).replace(",", "").replace("+", ""))) / 100])
+    print(f"완료: {n}종목 + 지수 2개 → {out}  (지수 값 단위는 market.py index_daily 와 같은지 확인: 100으로 나눔 [추정])")
+
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     sp = ap.add_subparsers(dest="cmd", required=True)
     f = sp.add_parser("fetch"); f.add_argument("--start"); f.add_argument("--end"); f.add_argument("--out", default="prices")
+    k = sp.add_parser("fetch-kiwoom"); k.add_argument("--start", default="2023-01-01"); k.add_argument("--out", default="prices")
     r = sp.add_parser("run"); r.add_argument("--prices", default="prices"); r.add_argument("--listing", default="listing.csv")
     r.add_argument("--from", dest="frm", default="2000-01-01"); r.add_argument("--to", default="2100-01-01")
     r.add_argument("--tag", default="ALL"); r.add_argument("--out", default="bt")
     a = ap.parse_args()
-    fetch(a) if a.cmd == "fetch" else run(a)
+    {"fetch": fetch, "fetch-kiwoom": fetch_kiwoom}.get(a.cmd, run)(a)

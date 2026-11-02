@@ -90,7 +90,7 @@ def base_bars(prices):
     """prices = [[YYYY-MM-DD, 종가, 거래대금(원)], ...] → 최근 LOOKBACK_BASE 안의 0일차 기준봉 목록"""
     hits = []
     for i in range(max(1, len(prices) - LOOKBACK_BASE), len(prices)):
-        d, c, a = prices[i]
+        d, c, a = prices[i][:3]
         pc = prices[i - 1][1]
         if not pc:
             continue
@@ -106,7 +106,7 @@ def five_day_50(prices, base_idx):
         return False
     low0 = prices[base_idx - 1][1]
     win = prices[base_idx: base_idx + 5]
-    return any(c / low0 - 1 >= 0.5 for _, c, _ in win)
+    return any(p[1] / low0 - 1 >= 0.5 for p in win)
 
 
 # ── 최: 강한 테마·업종 ──────────────────────────────────────────────────────
@@ -279,6 +279,12 @@ def run(data, d=None, events=None, out=None):
                     all_theme_of[x["code"]].add(t["name"])
     sectors = strong_sectors(heat)
     ev, macro = load_events(events, d)
+    cal = load(data / "calendar" / "calendar.json")        # 증시 일정 탭 자료가 있으면 시장 일정은 거기서 가져옴
+    if cal:
+        macro = [{"date": x["date"], "event": x["title"] + {"confirmed": "", "rule": " (규칙 계산)"}.get(x["status"], " (추정)"),
+                  "dday": trading_days_between(d, x["date"]), "source": x.get("src", "")}
+                 for x in cal["events"] if x["cat"] in ("매크로·금리", "지수·수급", "정책·외교", "실적·공시")
+                 and x["date"] >= d and trading_days_between(d, x["date"]) <= EVENT_WINDOW[1]]
 
     # 후보 모집단 = 신고가 ∪ 반복 등장 ∪ 강한 테마 구성 ∪ 종목 상세 파일 보유 종목
     stock_dir = data / "stocks"

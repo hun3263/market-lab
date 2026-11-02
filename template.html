@@ -489,8 +489,13 @@ function lendingBlock(ind, O) {
 
 /* ── 장중 흐름: 프로그램 매매 · 대형주 외국인/기관 ── */
 function intradayBlock(it) {
-  if (!it || (!it.program && !it.big)) return '';
+  if (!it || (!it.program && !it.big && !it.market)) return '';
   const tf = t => t, cards = [];
+  Object.entries(it.market || {}).forEach(([m, rows]) => { if (L(rows).length < 2) return;
+    const last = rows[rows.length - 1];
+    cards.push(`<div class="card"><h4>${m} 투자자별 장중 누적 순매수 <small>${esc(last[0])} 개인 ${eok(last[1])} · 외국인 ${eok(last[2])} · 기관 ${eok(last[3])}</small></h4>${legend(WHO)}
+      ${chart({ type: 'line', title: `${m} 투자자별 장중 흐름`, x: rows.map(r => r[0]), xfmt: tf, series: WHO.map(([n, c], k) => ({ name: n, color: c, v: rows.map(r => r[k + 1]) })), fmt: eok, zoom: true,
+        note: '키움 ka10051(업종별투자자순매수, 종합 행)을 장중 10분마다 받아 이어 붙인 값(flow_tick.py). 거래소 잠정치라 장 마감 확정치와 다를 수 있습니다.' })}</div>`); });
   Object.entries(it.program || {}).forEach(([m, rows]) => { if (!L(rows).length) return;
     const last = rows[rows.length - 1];
     cards.push(`<div class="card"><h4>${m} 프로그램 매매 누적 순매수 <small>${esc(last[0])} ${eok(last[1])}</small></h4>${legend([['전체', 'var(--ink)'], ['차익', 'var(--s3)'], ['비차익', 'var(--s2)']])}
@@ -503,7 +508,7 @@ function intradayBlock(it) {
         note: '키움 ka10064 장중투자자별매매(종목 단위). 하루 몇 개 시각에만 값이 옵니다(10/29 실측 6개, 거래소 장중 잠정치 발표 시각으로 추정). 금액 단위는 백만원으로 추정 · 개인 항목은 제공되지 않습니다.' })}${rows.length < 15 ? `<small class="mut">시각 ${rows.map(r => r[0]).join(' · ')} (잠정치)</small>` : ''}</div>`); });
   if (!cards.length) return '';
   return `<h3>오늘 장중 수급 흐름 <small class="mut">(09:00 → 15:30, 누적)</small></h3><div class="grid2">${cards.join('')}</div>
-    <p class="mut">시장 전체의 투자자별 '장중' 추이는 키움 REST에 없어 ① 프로그램 매매(시장 단위)와 ② 시가총액 1·2위 종목의 외국인·기관 흐름으로 대신 봅니다.</p>`;
+    <p class="mut">${it.market ? '시장 전체 투자자별 흐름은 10분 간격으로 직접 쌓은 값입니다. ' : "시장 전체의 투자자별 '장중' 추이는 키움 REST에 한 번에 주는 API가 없어 ① 프로그램 매매(시장 단위)와 ② 시가총액 1·2위 종목의 외국인·기관 흐름으로 대신 봅니다. "}</p>`;
 }
 
 /* ── 회차별 비교: 3회차를 한 화면에 ── */
@@ -639,11 +644,12 @@ let BLOCK = {};
 function rerenderBlock(k) { const el = $('blk-' + k); if (el && BLOCK[k]) el.innerHTML = BLOCK[k](); }
 async function render() {
   const hs = decodeURIComponent(location.hash.slice(1)), isNews = hs.startsWith('news');
+  if (hs.startsWith('cal')) return calendarPage();
   const want = isNews ? hs.slice(5) : hs;
   const list = isNews ? DAYS.filter(x => L(x.news).length) : DAYS;
   const d = list.find(x => x.date === want) || list[0] || DAYS[0];
   const mode = isNews || (d && !d.market) ? 'news' : 'market';
-  $('nav').innerHTML = `<div class="topnav"><a href="#${esc(d ? d.date : '')}" class="${mode === 'market' ? 'on' : ''}">📊 시황</a><a href="#news-${esc(d ? d.date : '')}" class="${mode === 'news' ? 'on' : ''}">📰 뉴스</a></div>` +
+  $('nav').innerHTML = `<div class="topnav"><a href="#${esc(d ? d.date : '')}" class="${mode === 'market' ? 'on' : ''}">📊 시황</a><a href="#news-${esc(d ? d.date : '')}" class="${mode === 'news' ? 'on' : ''}">📰 뉴스</a><a href="#cal">🗓 일정</a></div>` +
     (mode === 'news' ? DAYS.filter(x => L(x.news).length) : DAYS).map(x => mode === 'news'
       ? `<a href="#news-${esc(x.date)}" class="${d && x.date === d.date ? 'on' : ''}">${esc(x.date)}<small>${L(x.news).map(k => (ED[k] || [k])[0]).join(' · ')}</small></a>`
       : `<a href="#${esc(x.date)}" class="${d && x.date === d.date ? 'on' : ''}">${esc(x.date)}${x.market ? '' : ' <span style="font-size:10px">📰</span>'}<small>${esc(x.headline)}</small><small>💬 ${load('memo_' + x.date).length}</small></a>`).join('');
@@ -806,6 +812,85 @@ async function openStock(code) {
   openModal(h);
 }
 
+/* ── 🗓 증시 일정 탭 (data/calendar/calendar.json, calendar_build.py 가 만듦) ── */
+const CAL = { view: 'week', base: null, off: {}, data: null };
+const CAT_COL = { '매크로·금리': '#2a78d6', '지수·수급': '#6250d6', '실적·공시': '#c98500', '학회·바이오': '#1baf7a', '전시·산업': '#eb6834', '정책·외교': '#d55181', '계절성·세제': '#64748b', '종목·테마 일정': '#0e7490', '종목 일정(악재)': '#e11d48' };
+const WD = ['일', '월', '화', '수', '목', '금', '토'];
+const ymd = x => x.toISOString().slice(0, 10);
+const addD = (x, n) => { const y = new Date(x); y.setUTCDate(y.getUTCDate() + n); return y; };
+const pD = s => new Date(s + 'T00:00:00Z');
+function calEvents(from, to) {
+  return L(CAL.data.events).filter(e => !CAL.off[e.cat] && e.end >= from && e.date <= to);
+}
+function calChip(e, short) {
+  const c = CAT_COL[e.cat] || '#334155', i = CAL.data.events.indexOf(e);
+  const b = (e.recurring ? '<span title="매년·매달 반복">↻</span>' : '') + (e.status === 'estimated' ? ' <i title="과거 날짜로 추정">추정</i>' : e.status === 'rule' ? ' <i title="규칙으로 계산">규칙</i>' : e.status === 'candidate' ? ' <i>후보</i>' : '') + (e.verified === false ? ' <i title="날짜 출처 검증 전">미검증</i>' : '');
+  return `<button class="cev" style="border-left:3px solid ${c}" onclick="calOpen(${i})">${short ? '' : `<small class="mut">${e.date.slice(5)}${e.end !== e.date ? '~' + e.end.slice(5) : ''}</small> `}${esc(e.title)} ${b}</button>`;
+}
+function calOpen(i) {
+  const e = CAL.data.events[i], past = L((CAL.data.past || {})[e.id]);
+  const mv = past.filter(p => p.move && Object.keys(p.move).length);
+  const avg = k => { const v = mv.map(p => p.move[k]).filter(x => x != null); return v.length ? pctn(v.reduce((a, b) => a + b, 0) / v.length) + ` <small class="mut">(${v.length}회, 상승 ${v.filter(x => x > 0).length}회)</small>` : '-'; };
+  openModal(`<h2>${esc(e.title)}</h2><p><b>${esc(e.date)}${e.end !== e.date ? ' ~ ' + esc(e.end) : ''}</b> · ${esc(e.cat)} · ${{ confirmed: '발표·확정 날짜', rule: '규칙 계산(휴일 확인)', estimated: '과거 날짜로 추정', candidate: '자동 수집 후보' }[e.status] || ''}</p>
+    ${e.impact ? `<p>📌 ${esc(e.impact)}</p>` : ''}${e.themes ? `<p>관련 테마: <b>${esc(e.themes)}</b></p>` : ''}
+    <p class="mut">출처: ${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.src || '링크')}</a>` : esc(e.src || '-')}</p>
+    ${past.length ? `<h3>과거 같은 일정 ${past.length}회</h3>` + tbl(['기간', '코스피', '코스닥'], past.slice().reverse().map(p => [esc(p.start) + (p.end !== p.start ? ' ~ ' + esc(p.end.slice(5)) : ''), p.move && p.move['코스피'] != null ? pctn(p.move['코스피']) : '<span class="mut">자료 없음</span>', p.move && p.move['코스닥'] != null ? pctn(p.move['코스닥']) : '<span class="mut">자료 없음</span>']))
+      + `<p>평균: 코스피 ${avg('코스피')} · 코스닥 ${avg('코스닥')}</p><p class="mut">등락률 = 시작 전날 종가 → 종료 다음 거래일 종가 (data/market/series.json 지수 일봉이 있는 기간만). 일정만의 효과가 아니라 그 기간 시장 전체 움직임이므로 참고용입니다.</p>` : ''}`);
+}
+function calMove(dir) {
+  const b = CAL.base, v = CAL.view;
+  CAL.base = v === 'week' ? addD(b, 7 * dir) : (() => { const y = new Date(b); y.setUTCMonth(y.getUTCMonth() + dir * ({ month: 1, half: 6, year: 12 })[v]); return y; })();
+  calDraw();
+}
+function calDraw() {
+  const v = CAL.view, b = CAL.base, today = CAL.data.today;
+  let h = '';
+  if (v === 'week') {
+    const mon = addD(b, -((b.getUTCDay() + 6) % 7));
+    for (let k = 0; k < 14; k++) {
+      const d = addD(mon, k), ds = ymd(d), evs = calEvents(ds, ds);
+      if (k === 7) h += '<h3 style="margin-top:14px">다음 주</h3>';
+      h += `<div class="crow ${ds === today ? 'today' : ''} ${d.getUTCDay() % 6 === 0 ? 'wkend' : ''}"><div class="cday">${ds.slice(5)} (${WD[d.getUTCDay()]})</div><div class="cevs">${evs.map(e => calChip(e, true)).join('') || '<span class="mut">-</span>'}</div></div>`;
+    }
+    h = `<h3>${ymd(mon)} 주</h3>` + h;
+  } else if (v === 'month') {
+    const y = b.getUTCFullYear(), m = b.getUTCMonth(), first = new Date(Date.UTC(y, m, 1)), start = addD(first, -first.getUTCDay());
+    h += `<h3>${y}년 ${m + 1}월</h3><div class="cgrid">` + WD.map(w => `<div class="chead">${w}</div>`).join('');
+    for (let k = 0; k < 42; k++) {
+      const d = addD(start, k), ds = ymd(d), evs = calEvents(ds, ds).filter(e => e.date === ds || ds === ymd(first) && e.date < ds);
+      h += `<div class="ccell ${d.getUTCMonth() !== m ? 'other' : ''} ${ds === today ? 'today' : ''}"><div class="cnum">${d.getUTCDate()}</div>${evs.map(e => calChip(e, true)).join('')}</div>`;
+    }
+    h += '</div><p class="mut">여러 날 이어지는 일정은 시작일에만 표시합니다.</p>';
+  } else {
+    const n = v === 'half' ? 6 : 12, y0 = b.getUTCFullYear(), m0 = v === 'year' ? 0 : b.getUTCMonth();
+    h += `<h3>${y0}년 ${m0 + 1}월부터 ${n}개월</h3><div class="cmonths">`;
+    for (let k = 0; k < n; k++) {
+      const s = new Date(Date.UTC(y0, m0 + k, 1)), e = new Date(Date.UTC(y0, m0 + k + 1, 0)), evs = calEvents(ymd(s), ymd(e)).filter(x => x.date >= ymd(s));
+      const big = evs.filter(x => !['코스피200 옵션 만기', '미국 고용지표(비농업)'].includes(x.title));
+      h += `<div class="card"><h4>${s.getUTCFullYear()}.${s.getUTCMonth() + 1}월 <small class="mut">${big.length}건</small></h4>${big.map(x => calChip(x)).join('') || '<span class="mut">-</span>'}</div>`;
+    }
+    h += '</div><p class="mut">반기·연간 보기에서는 매달 반복되는 옵션 만기·미국 고용지표를 뺐습니다(주간·월간에서 표시).</p>';
+  }
+  $('calbody').innerHTML = h;
+}
+async function calendarPage() {
+  $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal" class="on">🗓 일정</a></div>`;
+  CAL.data = CAL.data || await getJ('calendar/calendar.json');
+  if (!CAL.data) { $('view').innerHTML = sec('🗓 증시 일정', '<p class="mut">아직 일정 파일이 없습니다. 서버에서 calendar_build.py 가 한 번 실행되면 나타납니다.</p>'); return; }
+  CAL.base = CAL.base || pD(CAL.data.today);
+  const cats = L(CAL.data.cats);
+  $('view').innerHTML = `<h1>🗓 증시 일정 <small class="mut">갱신 ${esc(CAL.data.generated)}</small></h1>
+    <style>.cev{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:6px;background:#fff;color:#0f172a;font-weight:400;padding:3px 6px;margin:2px 0;font-size:12.5px;cursor:pointer}.cev i{font-style:normal;font-size:10.5px;color:#64748b;border:1px solid #cbd5e1;border-radius:4px;padding:0 3px}
+    .crow{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:6px 0}.crow.today{background:#fff7ed}.crow.wkend .cday{color:#94a3b8}.cday{width:92px;flex:none;font-weight:700;font-size:13px}.cevs{flex:1}
+    .cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.chead{text-align:center;font-weight:700;font-size:12px}.ccell{border:1px solid var(--line);border-radius:6px;min-height:84px;padding:3px}.ccell.other{opacity:.45}.ccell.today{outline:2px solid var(--accent)}.cnum{font-size:11px;color:#64748b}
+    .cmonths{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}</style>
+    <div class="tabs">${[['week', '주간'], ['month', '월간'], ['half', '반기'], ['year', '연간']].map(([k, t]) => `<button class="tab ${CAL.view === k ? 'on' : ''}" onclick="CAL.view='${k}';calendarPage()">${t}</button>`).join('')}
+      <button class="tab" onclick="calMove(-1)">◀</button><button class="tab" onclick="CAL.base=pD(CAL.data.today);calDraw()">오늘</button><button class="tab" onclick="calMove(1)">▶</button></div>
+    <div class="chips" style="margin:8px 0">${cats.map(c => `<label class="chip" style="border-color:${CAT_COL[c] || '#cbd5e1'}"><input type="checkbox" ${CAL.off[c] ? '' : 'checked'} onchange="CAL.off['${c}']=!this.checked;calDraw()"> ${esc(c)}</label>`).join('')}</div>
+    <p class="mut">↻ = 매년·매달 반복 일정(누르면 과거 날짜와 그때 코스피·코스닥 등락) · <i>추정</i> = 과거 날짜로 계산, 주최측 발표 전 · <i>규칙</i> = 둘째 목요일 같은 규칙 계산(휴일 확인) · <i>미검증</i> = 과거 날짜 출처 확인 전</p>
+    <div id="calbody"></div>`;
+  calDraw();
+}
 function pick(k) { sel = k; render(); }
 function addMemo() {
   const t = $('txt').value.trim(); if (!t) return;

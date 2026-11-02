@@ -643,6 +643,15 @@ def intraday(src, d, notes):
             notes.append(f"수집 실패: {name} 장중 수급 ({type(e).__name__})")
     if big:
         out["big"] = big
+    # 시장 전체 투자자별 장중 누적(flow_tick.py 가 10분마다 쌓은 파일) → [[시각, 개인, 외국인, 기관]]
+    try:
+        fp = CACHE / "flows" / f"{d.isoformat()}.json"
+        if fp.exists():
+            mf = json.loads(fp.read_text(encoding="utf-8"))
+            if any(len(v) >= 2 for v in mf.values()):
+                out["market"] = mf
+    except Exception as e:
+        notes.append(f"수집 실패: 시장 장중 수급 파일 ({type(e).__name__})")
     return out
 
 
