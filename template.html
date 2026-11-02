@@ -903,7 +903,8 @@ async function calendarPage() {
   CAL.base = CAL.base || pD(CAL.data.today);
   calMergePrivate();
   const cats = L(CAL.data.cats);
-  $('view').innerHTML = `<h1>🗓 증시 일정 <small class="mut">갱신 ${esc(CAL.data.generated)} · ${WATCH.data ? `🔓 관심종목 희석 일정 ${L(WATCH.data.cal).length}건 포함` : '🔒 관심종목 잠금 해제 시 CB·BW·유증 일정 함께 표시'}</small></h1>
+  $('view').innerHTML = `<h1>🗓 증시 일정 <small class="mut">갱신 ${esc(CAL.data.generated)}</small></h1>
+    <section style="padding:10px 14px">${WATCH.data ? `<b>🔓 관심종목 CB·BW·EB·유상증자 일정 ${L(WATCH.data.cal).length}건 표시 중</b> <small class="mut">(보라색 '관심·희석')</small> <button class="tab" onclick="watchLock('cal')">🔒 잠그기</button>` : lockForm('관심종목 CB·BW·유증 일정은 비밀번호로 잠겨 있습니다', 'cal')}</section>
     <style>.cev{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:6px;background:#fff;color:#0f172a;font-weight:400;padding:3px 6px;margin:2px 0;font-size:12.5px;cursor:pointer}.cev i{font-style:normal;font-size:10.5px;color:#64748b;border:1px solid #cbd5e1;border-radius:4px;padding:0 3px}
     .crow{display:flex;gap:10px;border-bottom:1px solid var(--line);padding:6px 0}.crow.today{background:#fff7ed}.crow.wkend .cday{color:#94a3b8}.cday{width:92px;flex:none;font-weight:700;font-size:13px}.cevs{flex:1}
     .cgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}.chead{text-align:center;font-weight:700;font-size:12px}.ccell{border:1px solid var(--line);border-radius:6px;min-height:84px;padding:3px}.ccell.other{opacity:.45}.ccell.today{outline:2px solid var(--accent)}.cnum{font-size:11px;color:#64748b}
@@ -926,13 +927,19 @@ async function watchDecrypt(pw) {
   const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, key, b64u8(E.ct));
   return JSON.parse(new TextDecoder().decode(pt));
 }
-async function watchUnlock(ev, toMemo) {
+function lockForm(msg, dest) {   // 관심종목·메모·일정 공통 잠금 화면(비밀번호 하나로 셋 다 열림)
+  return `<p><b>🔒 ${msg}</b></p>
+      <form onsubmit="watchUnlock(event, '${dest}')" autocomplete="on"><input type="text" name="username" value="market-lab-watch" autocomplete="username" style="display:none">
+      <input id="wpw" type="password" autocomplete="current-password" placeholder="비밀번호" style="padding:8px;border:1px solid #cbd5e1;border-radius:8px;width:260px;max-width:100%">
+      <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut">한 번 열면 관심종목 · 메모 · 일정(CB·BW·유증)이 함께 열립니다. 비밀번호는 이 브라우저 안에서만 쓰이고 저장·전송되지 않습니다.</p>`;
+}
+async function watchUnlock(ev, dest) {
   ev.preventDefault();
   const pw = $('wpw').value; $('wmsg').textContent = '여는 중… (몇 초 걸립니다)';
-  try { WATCH.data = await watchDecrypt(pw); await memoOpen(pw).catch(() => { MEMO.data = null; MEMO.msg = '메모를 열 수 없습니다(예전 비밀번호로 저장된 메모?)'; }); $('wpw').value = ''; WATCH.day = null; toMemo ? memoPage() : watchPage(); }
+  try { WATCH.data = await watchDecrypt(pw); await memoOpen(pw).catch(() => { MEMO.data = null; MEMO.msg = '메모를 열 수 없습니다(예전 비밀번호로 저장된 메모?)'; }); $('wpw').value = ''; WATCH.day = null; dest === 'memo' ? memoPage() : dest === 'cal' ? calendarPage() : watchPage(); }
   catch (e) { $('wmsg').textContent = e.message === 'nofile' ? '아직 암호화 파일이 없습니다(서버 20:10 회차 이후 생성).' : '비밀번호가 맞지 않습니다.'; }
 }
-function watchLock() { WATCH.data = null; WATCH.day = null; Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null }); calMergePrivate(); watchPage(); }
+function watchLock(dest) { WATCH.data = null; WATCH.day = null; Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null }); calMergePrivate(); dest === 'cal' ? calendarPage() : watchPage(); }
 
 /* ───────── 📝 종목 메모장 ─────────
    저장: 이 브라우저(localStorage)에 '관심종목 비밀번호'로 암호화해 저장(AES-GCM).
@@ -1035,10 +1042,7 @@ async function memoGhSave(ev) {
 async function memoPage() {
   $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch">🔒 관심종목</a><a href="#memo" class="on">📝 메모</a></div>`;
   if (!MEMO.data) {
-    $('view').innerHTML = `<h1>📝 종목 메모</h1><section><p>관심종목과 같은 비밀번호로 잠겨 있습니다.</p>
-      <form onsubmit="watchUnlock(event, true)" autocomplete="on"><input type="text" name="username" value="market-lab-watch" autocomplete="username" style="display:none">
-      <input id="wpw" type="password" autocomplete="current-password" placeholder="비밀번호" style="padding:8px;border:1px solid #cbd5e1;border-radius:8px;width:260px;max-width:100%">
-      <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut"></p></section>`;
+    $('view').innerHTML = `<h1>📝 종목 메모</h1><section>${lockForm('메모는 비밀번호로 잠겨 있습니다', 'memo')}${MEMO.msg ? `<p class="mut">${esc(MEMO.msg)}</p>` : ''}</section>`;
     return;
   }
   const codes = Object.keys(MEMO.data.stocks);
@@ -1108,10 +1112,7 @@ function watchPage() {
   $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch" class="on">🔒 관심종목</a><a href="#memo">📝 메모</a></div>`;
   Object.keys(CH).forEach(k => delete CH[k]);
   if (!WATCH.data) {
-    $('view').innerHTML = `<h1>🔒 관심종목</h1><section><p>최+신+일·방배동 필터 결과는 비밀번호로 잠겨 있습니다. 비밀번호는 이 브라우저 안에서만 쓰이고 어디에도 저장·전송되지 않습니다.</p>
-      <form onsubmit="watchUnlock(event)" autocomplete="on"><input type="text" name="username" value="market-lab-watch" autocomplete="username" style="display:none">
-      <input id="wpw" type="password" autocomplete="current-password" placeholder="비밀번호" style="padding:8px;border:1px solid #cbd5e1;border-radius:8px;width:260px;max-width:100%">
-      <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut"></p></section>`;
+    $('view').innerHTML = `<h1>🔒 관심종목</h1><section>${lockForm('관심종목은 비밀번호로 잠겨 있습니다', 'watch')}</section>`;
     return;
   }
   const D = WATCH.data, days = L(D.days), day = days.find(x => x.date === WATCH.day) || days[days.length - 1];
