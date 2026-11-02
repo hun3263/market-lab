@@ -48,6 +48,7 @@ svg text{font-family:inherit}#tip{position:fixed;pointer-events:none;background:
 .chctl .mut{font-size:11px;margin-left:4px}.ch.zoomable{cursor:zoom-in}.ch.zoomable:hover{outline:1px dashed #cbd5e1;outline-offset:3px;border-radius:6px}
 .tiles{display:flex;gap:10px;flex-wrap:wrap}.tile{flex:1;min-width:170px;border:1px solid var(--line);border-radius:10px;padding:10px 12px}
 .tile>b{display:block;font-size:20px;margin:2px 0}.tile small{color:#64748b;font-size:11.5px;display:block}
+.mkb{border:0;background:none;cursor:pointer;padding:0 2px;font-size:13px;opacity:.55}.mkb:hover{opacity:1}
 .jump{position:sticky;top:0;z-index:5;display:flex;gap:4px;overflow-x:auto;padding:6px 0;margin:-6px 0 8px;background:var(--bg,#f5f7fb);border-bottom:1px solid var(--line)}.jump button{flex:none;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;color:#334155;font-weight:400}.totop{float:right;font-size:11px;padding:2px 8px;border-radius:999px;border:1px solid #cbd5e1;background:#fff;color:#64748b;font-weight:400}
 .chips{display:flex;gap:4px;flex-wrap:wrap}.chip{font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:1px 8px;background:#fff}
 .chip.in{border-color:var(--accent);background:#eff6ff;font-weight:700}
@@ -76,7 +77,7 @@ details summary{cursor:pointer;font-size:12px;color:var(--accent);margin-top:6px
 .cnt{display:inline-block;font-size:10px;font-weight:700;padding:0 5px;border-radius:999px;background:#fef3c7;color:#92400e;margin-left:3px}.cnt.s{background:#fee2e2;color:#9f1239}
 .rk{white-space:nowrap}.rk small{color:#64748b}.bd{display:inline-block;font-size:10.5px;font-weight:700;padding:0 6px;border-radius:999px}
 .bd.new{background:#dcfce7;color:#166534}.bd.out{background:#f1f5f9;color:#64748b}.bd.u{color:var(--up)}.bd.d{color:var(--dn)}
-tr.gone td{color:#94a3b8}.topnav{display:flex;gap:6px;margin-bottom:12px}.topnav a{flex:1;text-align:center;border:1px solid #334155;margin:0}
+tr.gone td{color:#94a3b8}.topnav{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:12px}.topnav a{white-space:nowrap;font-size:13px;padding:6px 2px;text-align:center;border:1px solid #334155;margin:0}
 .ed{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}.ed .when{font-size:12px;font-weight:700;padding:2px 10px;border-radius:999px;background:#0f172a;color:#fff}
 .biz{font-size:13.5px;line-height:1.7;white-space:pre-line;background:#f8fafc;border-radius:8px;padding:10px 12px}
 @media(max-width:760px){body{flex-direction:column}aside{width:100%;height:auto;position:static;max-height:220px}main{padding:12px}th,td{padding:6px 5px;font-size:12px}.grid2,.grid3{grid-template-columns:1fr}#modal .box{padding:16px 12px}}
@@ -575,14 +576,14 @@ const D5 = v => v ? esc(v.slice(2).replace(/-/g, '.')) : '';
 function dilHtml(dil) {   // CB·BW·EB·유상증자 공시와 날짜(riskinfo.py)
   return L(dil).map(d => { const t = d.dates || {};
     const parts = [['결의', t['이사회 결의']], ['청약', t['청약']], ['납입', t['납입']], ['청구 시작', t['전환·행사 청구 시작']], ['상장', t['신주 상장 예정']]].filter(x => x[1]).map(([k, v]) => `${k} ${D5(v)}`);
-    return `<div class="hl" style="color:#7e22ce">📌 <a href="${esc(d.url)}" target="_blank" rel="noopener"><b>${esc(d.kind)}</b> ${D5(d.rcept_dt)} 공시</a>${d.ratio ? ` · 주식총수 대비 ${d.ratio}%` : ''}${d.price ? ` · ${d.kind === '유상증자' ? '발행가' : '전환·행사가'} ${Number(d.price).toLocaleString()}원` : ''}${d.method ? ` · ${esc(d.method)}` : ''}${parts.length ? '<br><small>' + parts.join(' · ') + '</small>' : ''}</div>`; }).join('');
+    return `<div class="hl" style="color:#7e22ce">📌 <a href="${esc(d.url)}" target="_blank" rel="noopener"><b>${esc(d.kind)}</b> ${D5(d.rcept_dt)} 공시</a>${d.ratio ? ` · 주식총수 대비 ${d.ratio}%` : ''}${d.price ? ` · ${d.kind === '유상증자' ? '발행가' : '전환·행사가'} ${Number(d.price).toLocaleString()}원` : ''}${d.floor ? ` · 최저조정 ${Number(d.floor).toLocaleString()}원` : ''}${d.method ? ` · ${esc(d.method)}` : ''}${parts.length ? '<br><small>' + parts.join(' · ') + '</small>' : ''}</div>`; }).join('');
 }
 function riskHtml(r) {   // 소형주·진입보류 배지 + 희석 일자 + 기타 주의
   const b = (r.hold ? '<span style="background:#d03b3b;color:#fff;border-radius:4px;padding:0 5px;font-size:11.5px">진입보류</span> ' : '') +
     (r.small ? `<span style="border:1px solid #c98500;color:#a16207;border-radius:4px;padding:0 5px;font-size:11.5px">소형주 ${Number(r.cap).toLocaleString()}억</span>` : (r.cap ? `<small class="mut">시총 ${Number(r.cap).toLocaleString()}억</small>` : ''));
-  const other = L(r.flags).filter(f => !/^(소형주|희석 공시|진입보류)/.test(f));
+  const other = L(r.flags).filter(f => !/^(소형주|희석 공시|진입보류)/.test(f)).map(f => /^전환물량/.test(f) ? `<b style="color:#9333ea">${esc(f)}</b>` : esc(f));
   const hold = L(r.flags).filter(f => /^진입보류/.test(f)).map(f => `<div style="color:#d03b3b;font-size:12px">${esc(f.replace('진입보류: ', ''))}</div>`).join('');
-  return (b + hold + dilHtml(r.dil) + other.map(f => `<div>${esc(f)}</div>`).join('')) || '-';
+  return (b + hold + dilHtml(r.dil) + other.map(f => `<div>${f}</div>`).join('')) || '-';
 }
 function calMergePrivate() {   // 잠금 해제 상태면 관심종목 희석 일정을 일정 탭에 합침(공개 파일에는 없음)
   if (!CAL.data) return;
@@ -603,7 +604,7 @@ function choisinilHtml(CS) {
   const zone = z => !z ? '<span class="mut">기준봉 없음</span>' : Object.entries(z.lines).map(([n, v]) => `${n}차선 ${Number(v).toLocaleString()}`).join('<br>') +
     `<br><small class="mut">기준 ${esc(z.basis)} · 10일 ${Number(z.ma10).toLocaleString()} · 20일 ${Number(z.ma20).toLocaleString()}<br>현재 ${esc(z.pos)}${L(z.overlap).length ? ' · 중첩 ' + esc(z.overlap.join(', ')) : ''}</small>`;
   h += '<h3>A·B 등급 (2개 이상 충족)</h3>' + tbl(['등급', '종목', '최·신·일', '근거', '매수 자리(추정)', '주의'], rows.map(r => [
-    `<b>${esc(r.grade)}</b>`, stkLink(r) + (r.close ? `<br><small class="mut">${Number(r.close).toLocaleString()}원</small>` : ''), mark(r),
+    `<b>${esc(r.grade)}</b>`, stkLink(r) + memoBtns(r, `최신일 ${(r.grade || '')[0]}등급${r.close ? ' · 종가 ' + Number(r.close).toLocaleString() : ''}`) + (r.close ? `<br><small class="mut">${Number(r.close).toLocaleString()}원</small>` : ''), mark(r),
     ['최', '신', '일'].map(k => { const w = r.why[k]; const t = Array.isArray(w) ? w.join(', ') : w; return t ? `<div><b>${k}</b> ${esc(t)}</div>` : ''; }).join('') +
       (L(r.themes).length ? `<div class="mut">#${L(r.themes).slice(0, 3).map(esc).join(' #')}</div>` : '') +
       (r.mat ? L(r.mat.reason).slice(0, 1).map(x => `<div class="hl">💡 ${esc(x.t)}</div>`).join('') + L(r.mat.news).filter(n => !L(r.mat.reason).some(x => x.t === n.t)).slice(0, 1).map(n => `<div class="hl">📰 <a href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.t)}</a></div>`).join('') : ''),
@@ -669,11 +670,12 @@ async function render() {
   const hs = decodeURIComponent(location.hash.slice(1)), isNews = hs.startsWith('news');
   if (hs.startsWith('cal')) return calendarPage();
   if (hs.startsWith('watch')) return watchPage();
+  if (hs.startsWith('memo')) return memoPage();
   const want = isNews ? hs.slice(5) : hs;
   const list = isNews ? DAYS.filter(x => L(x.news).length) : DAYS;
   const d = list.find(x => x.date === want) || list[0] || DAYS[0];
   const mode = isNews || (d && !d.market) ? 'news' : 'market';
-  $('nav').innerHTML = `<div class="topnav"><a href="#${esc(d ? d.date : '')}" class="${mode === 'market' ? 'on' : ''}">📊 시황</a><a href="#news-${esc(d ? d.date : '')}" class="${mode === 'news' ? 'on' : ''}">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch">🔒 관심종목</a></div>` +
+  $('nav').innerHTML = `<div class="topnav"><a href="#${esc(d ? d.date : '')}" class="${mode === 'market' ? 'on' : ''}">📊 시황</a><a href="#news-${esc(d ? d.date : '')}" class="${mode === 'news' ? 'on' : ''}">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch">🔒 관심종목</a><a href="#memo">📝 메모</a></div>` +
     (mode === 'news' ? DAYS.filter(x => L(x.news).length) : DAYS).map(x => mode === 'news'
       ? `<a href="#news-${esc(x.date)}" class="${d && x.date === d.date ? 'on' : ''}">${esc(x.date)}<small>${L(x.news).map(k => (ED[k] || [k])[0]).join(' · ')}</small></a>`
       : `<a href="#${esc(x.date)}" class="${d && x.date === d.date ? 'on' : ''}">${esc(x.date)}${x.market ? '' : ' <span style="font-size:10px">📰</span>'}<small>${esc(x.headline)}</small><small>💬 ${load('memo_' + x.date).length}</small></a>`).join('');
@@ -895,7 +897,7 @@ function calDraw() {
   $('calbody').innerHTML = h;
 }
 async function calendarPage() {
-  $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal" class="on">🗓 일정</a><a href="#watch">🔒 관심종목</a></div>`;
+  $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal" class="on">🗓 일정</a><a href="#watch">🔒 관심종목</a><a href="#memo">📝 메모</a></div>`;
   CAL.data = CAL.data || await getJ('calendar/calendar.json');
   if (!CAL.data) { $('view').innerHTML = sec('🗓 증시 일정', '<p class="mut">아직 일정 파일이 없습니다. 서버에서 calendar_build.py 가 한 번 실행되면 나타납니다.</p>'); return; }
   CAL.base = CAL.base || pD(CAL.data.today);
@@ -924,13 +926,166 @@ async function watchDecrypt(pw) {
   const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, key, b64u8(E.ct));
   return JSON.parse(new TextDecoder().decode(pt));
 }
-async function watchUnlock(ev) {
+async function watchUnlock(ev, toMemo) {
   ev.preventDefault();
   const pw = $('wpw').value; $('wmsg').textContent = '여는 중… (몇 초 걸립니다)';
-  try { WATCH.data = await watchDecrypt(pw); $('wpw').value = ''; WATCH.day = null; watchPage(); }
+  try { WATCH.data = await watchDecrypt(pw); await memoOpen(pw).catch(() => { MEMO.data = null; MEMO.msg = '메모를 열 수 없습니다(예전 비밀번호로 저장된 메모?)'; }); $('wpw').value = ''; WATCH.day = null; toMemo ? memoPage() : watchPage(); }
   catch (e) { $('wmsg').textContent = e.message === 'nofile' ? '아직 암호화 파일이 없습니다(서버 20:10 회차 이후 생성).' : '비밀번호가 맞지 않습니다.'; }
 }
-function watchLock() { WATCH.data = null; WATCH.day = null; calMergePrivate(); watchPage(); }
+function watchLock() { WATCH.data = null; WATCH.day = null; Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null }); calMergePrivate(); watchPage(); }
+
+/* ───────── 📝 종목 메모장 ─────────
+   저장: 이 브라우저(localStorage)에 '관심종목 비밀번호'로 암호화해 저장(AES-GCM).
+   동기화(선택): GitHub 'memo' 브랜치의 memo.json 에 같은 방식으로 암호화해 올림 → 다른 기기에서도 같은 비밀번호로 열림.
+   토큰은 이 브라우저에만(암호화) 저장되고 GitHub 에는 올라가지 않습니다. 사이트(main 브랜치)·자동 배포와는 무관합니다. */
+const MEMO = { key: null, salt: null, data: null, gh: null, msg: '', filter: '전체', q: '', open: {}, px: {} };
+const MEMO_ST = ['관심', '매매중', '청산', '제외'];
+const MEMO_LS = 'mlab.memo.v1', MEMO_ITER = 600000;
+const u8b64 = u => btoa(String.fromCharCode(...u));
+const lsGet = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
+const lsSet = (k, v) => { try { localStorage.setItem(k, v); return true; } catch (e) { return false; } };
+async function memoKey(pw, salt) {
+  const km = await crypto.subtle.importKey('raw', new TextEncoder().encode(pw), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({ name: 'PBKDF2', salt, iterations: MEMO_ITER, hash: 'SHA-256' }, km, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+}
+async function memoEnc(obj) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const ct = new Uint8Array(await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, MEMO.key, new TextEncoder().encode(JSON.stringify(obj))));
+  return { v: 1, kdf: 'PBKDF2-SHA256', iter: MEMO_ITER, salt: u8b64(MEMO.salt), iv: u8b64(iv), ct: u8b64(ct) };
+}
+async function memoDec(E) { return JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, MEMO.key, b64u8(E.ct)))); }
+async function memoOpen(pw) {   // 관심종목 잠금 해제 때 같이 호출
+  const raw = lsGet(MEMO_LS); let E = null; try { E = raw ? JSON.parse(raw) : null; } catch (e) { }
+  MEMO.salt = E ? b64u8(E.salt) : crypto.getRandomValues(new Uint8Array(16));
+  MEMO.key = await memoKey(pw, MEMO.salt);
+  if (E) { const o = await memoDec(E); MEMO.data = o.data; MEMO.gh = o.gh || null; }
+  else { MEMO.data = { v: 1, updated: '', stocks: {} }; MEMO.gh = null; }
+  MEMO.pw = pw;   // 원격 파일(다른 salt) 열 때만 쓰고 잠그면 지움
+  if (MEMO.gh && MEMO.gh.token) memoSync(true);
+}
+async function memoSave(push = true) {
+  MEMO.data.updated = new Date().toISOString();
+  lsSet(MEMO_LS, JSON.stringify(await memoEnc({ data: MEMO.data, gh: MEMO.gh })));
+  if (push && MEMO.gh && MEMO.gh.token) memoSync(false);
+}
+const nowKST = () => new Date(Date.now() + 9 * 3600e3).toISOString().slice(0, 16).replace('T', ' ');
+function memoNameCtx(code) {   // 관심종목 자료에서 그 종목의 최근 모습(등급·점수·희석)
+  const D = WATCH.data || {}, sc = (D.score || {})[code];
+  let last = null; L(D.days).forEach(x => L(x.rows).forEach(r => { if (r.code === code) last = { date: x.date, ...r }; }));
+  const bb = D.bangbae || {}, m = L(bb.material).find(r => r.code === code), e = L(bb.event).find(r => r.code === code);
+  return { sc, last, m, e };
+}
+async function memoMark(code, name, status, ctx) {
+  if (!MEMO.data) { alert('🔒 관심종목 탭에서 먼저 잠금을 풀어 주세요.'); return; }
+  const S = MEMO.data.stocks, t = nowKST();
+  const s = S[code] || (S[code] = { name, status, added: t, updated: t, tags: [], notes: [] });
+  const prev = s.status; s.status = status; s.updated = t; s.name = name || s.name;
+  s.notes.push({ id: Date.now().toString(36), t, kind: '표시', text: `${prev && prev !== status && s.notes.length ? prev + ' → ' : ''}${status} 표시${ctx ? ' · ' + ctx : ''}` });
+  await memoSave();
+  const b = document.querySelector(`[data-mk="${code}-${status}"]`); if (b) { b.textContent = status === '관심' ? '⭐✓' : '💰✓'; }
+}
+const memoBtns = (r, ctx) => `<span style="white-space:nowrap"><button class="mkb" data-mk="${esc(r.code)}-관심" title="관심 표시 → 📝 메모" onclick="memoMark('${esc(r.code)}','${esc(r.name).replace(/'/g, '')}','관심','${esc(ctx || '').replace(/'/g, '')}')">⭐</button><button class="mkb" data-mk="${esc(r.code)}-매매중" title="매매 표시 → 📝 메모" onclick="memoMark('${esc(r.code)}','${esc(r.name).replace(/'/g, '')}','매매중','${esc(ctx || '').replace(/'/g, '')}')">💰</button></span>`;
+// ── GitHub 동기화(선택) ──
+async function gh(path, opt = {}) {
+  const r = await fetch(`https://api.github.com/repos/${MEMO.gh.repo}${path}`, { ...opt, headers: { Authorization: `Bearer ${MEMO.gh.token}`, Accept: 'application/vnd.github+json', ...(opt.headers || {}) } });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(`GitHub ${r.status}`);
+  return r.json();
+}
+function memoMerge(a, b) {   // 메모는 합치고(같은 id 는 하나), 상태·태그는 더 최근 수정본을 따름
+  const out = { v: 1, updated: a.updated > b.updated ? a.updated : b.updated, stocks: {} };
+  new Set([...Object.keys(a.stocks), ...Object.keys(b.stocks)]).forEach(c => {
+    const x = a.stocks[c], y = b.stocks[c];
+    if (!x || !y) { out.stocks[c] = x || y; return; }
+    const n = {}; [...x.notes, ...y.notes].forEach(z => { n[z.id] = z; });
+    const del = new Set([...(x.del || []), ...(y.del || [])]);
+    out.stocks[c] = { ...(x.updated >= y.updated ? x : y), notes: Object.values(n).filter(z => !del.has(z.id)).sort((p, q) => p.t < q.t ? -1 : 1), del: [...del] };
+  });
+  return out;
+}
+async function memoSync(quiet) {
+  const g = MEMO.gh; if (!g || !g.token) return;
+  try {
+    MEMO.msg = '동기화 중…'; if (!quiet) memoDraw();
+    let f = await gh(`/contents/memo.json?ref=${g.branch}`);
+    if (f) {
+      const E = JSON.parse(decodeURIComponent(escape(atob(f.content.replace(/\n/g, '')))));
+      let remote;
+      if (E.salt === u8b64(MEMO.salt)) remote = await memoDec(E);
+      else { const k = await memoKey(MEMO.pw || '', b64u8(E.salt)); remote = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, k, b64u8(E.ct)))); }
+      MEMO.data = memoMerge(MEMO.data, remote.data || remote);
+    } else if (!(await gh(`/branches/${g.branch}`))) {   // memo 브랜치 처음 만들기
+      const base = await gh('/git/ref/heads/main');
+      await gh('/git/refs', { method: 'POST', body: JSON.stringify({ ref: `refs/heads/${g.branch}`, sha: base.object.sha }) });
+    }
+    lsSet(MEMO_LS, JSON.stringify(await memoEnc({ data: MEMO.data, gh: MEMO.gh })));
+    const body = btoa(unescape(encodeURIComponent(JSON.stringify(await memoEnc({ data: MEMO.data })))));
+    await gh('/contents/memo.json', { method: 'PUT', body: JSON.stringify({ message: 'memo sync', content: body, branch: g.branch, ...(f ? { sha: f.sha } : {}) }) });
+    MEMO.msg = `동기화 완료 ${nowKST().slice(11)}`;
+  } catch (e) { MEMO.msg = '동기화 실패: ' + e.message + ' (토큰 권한·저장소 이름 확인)'; }
+  if (location.hash.startsWith('#memo')) memoDraw();
+}
+async function memoGhSave(ev) {
+  ev.preventDefault();
+  const repo = $('ghrepo').value.trim(), tok = $('ghtok').value.trim();
+  MEMO.gh = tok ? { repo: repo || 'hun3263/market-lab', branch: 'memo', token: tok } : null;
+  $('ghtok').value = ''; await memoSave(false); if (MEMO.gh) memoSync(false); else { MEMO.msg = '동기화 끔'; memoDraw(); }
+}
+// ── 화면 ──
+async function memoPage() {
+  $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch">🔒 관심종목</a><a href="#memo" class="on">📝 메모</a></div>`;
+  if (!MEMO.data) {
+    $('view').innerHTML = `<h1>📝 종목 메모</h1><section><p>관심종목과 같은 비밀번호로 잠겨 있습니다.</p>
+      <form onsubmit="watchUnlock(event, true)" autocomplete="on"><input type="text" name="username" value="market-lab-watch" autocomplete="username" style="display:none">
+      <input id="wpw" type="password" autocomplete="current-password" placeholder="비밀번호" style="padding:8px;border:1px solid #cbd5e1;border-radius:8px;width:260px;max-width:100%">
+      <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut"></p></section>`;
+    return;
+  }
+  const codes = Object.keys(MEMO.data.stocks);
+  await Promise.all(codes.filter(c => !(c in MEMO.px)).map(async c => { const i = await getJ(`stocks/${c}.json`); const p = L((i || {}).prices); MEMO.px[c] = p.length ? p[p.length - 1] : null; }));
+  memoDraw();
+}
+function memoDraw() {
+  const S = MEMO.data.stocks, f = MEMO.filter, q = MEMO.q.trim();
+  const list = Object.entries(S).filter(([c, s]) => (f === '전체' || s.status === f) && (!q || s.name.includes(q) || c.includes(q) || L(s.tags).some(t => t.includes(q))))
+    .sort((a, b) => (MEMO_ST.indexOf(a[1].status) - MEMO_ST.indexOf(b[1].status)) || (a[1].updated < b[1].updated ? 1 : -1));
+  const cnt = st => Object.values(S).filter(s => st === '전체' || s.status === st).length;
+  const card = ([c, s]) => {
+    const px = MEMO.px[c], buys = s.notes.filter(n => n.kind === '매수' && n.price), avg = buys.length ? buys.reduce((a, n) => a + +n.price, 0) / buys.length : null;
+    const x = memoNameCtx(c), dil = (x.last && x.last.dil) || (x.m && x.m.dil) || (x.e && x.e.dil);
+    const info = [x.last ? `최근 등장 ${esc(x.last.date.slice(5))} ${esc((x.last.grade || '')[0])}등급` : '', x.sc ? `등장점수 ${x.sc.score}` : '', x.m ? `방배동 재료 ${esc(x.m.d0.slice(5))}` : '', x.e ? `이벤트 D-${x.e.dday} ${esc(x.e.event)}` : ''].filter(Boolean).join(' · ');
+    return `<div class="mcard"><div class="mhead">${stkLink({ code: c, name: s.name })} <small class="mut">${esc(c)}</small>
+      <select onchange="memoSet('${c}','status',this.value)">${MEMO_ST.map(t => `<option ${t === s.status ? 'selected' : ''}>${t}</option>`).join('')}</select>
+      ${px ? `<span>종가 ${Number(px[1]).toLocaleString()}원 <small class="mut">${esc(px[0].slice(5))}</small></span>` : ''}
+      ${avg && px ? `<span>평균 매수 ${Math.round(avg).toLocaleString()}원 → ${pctn((px[1] / avg - 1) * 100)}</span>` : ''}
+      <input class="mtag" value="${esc(L(s.tags).join(' '))}" placeholder="#태그 (띄어쓰기로 구분)" onchange="memoSet('${c}','tags',this.value)"></div>
+      ${info ? `<div class="mut" style="font-size:12.5px">${info}</div>` : ''}${dil ? dilHtml(dil) : ''}
+      <div class="mnotes">${s.notes.slice().reverse().map(n => `<div class="mnote"><small class="mut">${esc(n.t)}</small> <b class="mk-${esc(n.kind)}">${esc(n.kind)}</b>${n.price ? ` <b>${Number(n.price).toLocaleString()}원</b>` : ''} ${esc(n.text).replace(/\n/g, '<br>')} <button class="mdel" title="삭제" onclick="memoDel('${c}','${n.id}')">×</button></div>`).join('')}</div>
+      <form class="madd" onsubmit="memoAdd(event,'${c}')"><select name="k">${['메모', '매수', '매도', '복기'].map(k => `<option>${k}</option>`).join('')}</select>
+        <input name="p" inputmode="numeric" placeholder="가격(선택)" style="width:110px"><textarea name="t" rows="2" placeholder="코멘트 — 진입 이유, 재료, 타점, 손절선, 복기…"></textarea><button type="submit">추가</button></form></div>`;
+  };
+  $('view').innerHTML = `<h1>📝 종목 메모 <small class="mut">${codes_n(S)}종목 · 이 브라우저에 암호화 저장${MEMO.gh ? ' + GitHub 동기화' : ''}</small></h1>
+    <style>.mcard{border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin:10px 0;background:#fff}.mhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center}.mtag{flex:1;min-width:140px;padding:4px 6px;border:1px solid #e2e8f0;border-radius:6px}
+    .mnote{border-left:3px solid #e2e8f0;padding:3px 8px;margin:4px 0;font-size:13.5px}.mdel{float:right;border:0;background:none;color:#94a3b8;cursor:pointer}.mk-매수{color:var(--up)}.mk-매도{color:var(--down)}.mk-복기{color:#9333ea}.mk-표시{color:#64748b}
+    .madd{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}.madd textarea{flex:1;min-width:220px;padding:6px;border:1px solid #cbd5e1;border-radius:6px}.madd select,.madd input{padding:4px;border:1px solid #cbd5e1;border-radius:6px}</style>
+    <div class="tabs">${['전체', ...MEMO_ST].map(t => `<button class="tab ${f === t ? 'on' : ''}" onclick="MEMO.filter='${t}';memoDraw()">${t} ${cnt(t)}</button>`).join('')}
+      <input placeholder="종목·태그 검색" value="${esc(MEMO.q)}" oninput="MEMO.q=this.value;clearTimeout(MEMO.qt);MEMO.qt=setTimeout(memoDraw,300)" style="padding:6px;border:1px solid #cbd5e1;border-radius:8px"></div>
+    <section><h2>종목 ${list.length}개</h2>${list.length ? list.map(card).join('') : '<p class="mut">아직 없습니다. 🔒 관심종목 탭의 ⭐(관심) · 💰(매매) 버튼을 누르거나 아래에서 직접 추가하세요.</p>'}
+      <form onsubmit="memoNew(event)" style="margin-top:8px"><input id="mnew" placeholder="종목코드 6자리 직접 추가 (예: 053800)" style="padding:6px;border:1px solid #cbd5e1;border-radius:8px;width:260px"> <button type="submit">추가</button></form></section>
+    <section><h2>보관 · 동기화</h2><p class="mut">기본은 이 브라우저에만 저장됩니다(브라우저 자료를 지우면 사라짐). 다른 기기와 함께 쓰려면 GitHub 토큰을 넣으세요 — 저장소 <b>Contents 읽기·쓰기</b> 권한만 준 fine-grained 토큰 권장. 메모는 'memo' 브랜치의 memo.json 에 암호문으로만 올라갑니다.</p>
+      <form onsubmit="memoGhSave(event)" autocomplete="off"><input id="ghrepo" value="${esc((MEMO.gh || {}).repo || 'hun3263/market-lab')}" style="padding:6px;width:200px;border:1px solid #cbd5e1;border-radius:6px">
+      <input id="ghtok" type="password" autocomplete="new-password" placeholder="${MEMO.gh ? '저장됨 · 바꾸려면 새 토큰' : 'GitHub 토큰 (github_pat_…)'}" style="padding:6px;width:260px;border:1px solid #cbd5e1;border-radius:6px">
+      <button type="submit">${MEMO.gh ? '토큰 바꾸기/끄기(빈칸)' : '동기화 켜기'}</button> ${MEMO.gh ? '<button type="button" onclick="memoSync(false)">지금 동기화</button>' : ''}</form>
+      <p class="mut">${esc(MEMO.msg)}</p>
+      <button onclick="memoExport()">⬇ 암호화 백업 파일 받기</button> <label class="tab" style="cursor:pointer">⬆ 백업 파일 합치기<input type="file" accept=".json" style="display:none" onchange="memoImport(this)"></label></section>`;
+}
+const codes_n = S => Object.keys(S).length;
+async function memoSet(c, k, v) { const s = MEMO.data.stocks[c]; if (k === 'tags') v = v.split(/\s+/).filter(Boolean).map(t => t.startsWith('#') ? t : '#' + t); if (k === 'status' && s.status !== v) s.notes.push({ id: Date.now().toString(36), t: nowKST(), kind: '표시', text: `${s.status} → ${v}` }); s[k] = v; s.updated = nowKST(); await memoSave(); memoDraw(); }
+async function memoAdd(ev, c) { ev.preventDefault(); const f = ev.target, t = f.t.value.trim(), p = f.p.value.replace(/[^\d.]/g, ''); if (!t && !p) return; const s = MEMO.data.stocks[c]; s.notes.push({ id: Date.now().toString(36), t: nowKST(), kind: f.k.value, text: t, price: p ? +p : null }); s.updated = nowKST(); await memoSave(); memoDraw(); }
+async function memoDel(c, id) { if (!confirm('이 메모를 지울까요?')) return; const s = MEMO.data.stocks[c]; s.notes = s.notes.filter(n => n.id !== id); s.del = [...(s.del || []), id]; s.updated = nowKST(); await memoSave(); memoDraw(); }
+async function memoNew(ev) { ev.preventDefault(); const c = $('mnew').value.trim(); if (!/^\w{6}$/.test(c)) return; const i = await getJ(`stocks/${c}.json`); const nm = (i && i.name) || (findName(c) || {}).name || c; await memoMark(c, nm, '관심', '직접 추가'); delete MEMO.px[c]; memoPage(); }
+async function memoExport() { const b = new Blob([JSON.stringify(await memoEnc({ data: MEMO.data }))], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `market-lab-memo-${nowKST().slice(0, 10)}.json`; a.click(); }
+async function memoImport(inp) { try { const E = JSON.parse(await inp.files[0].text()); const k = await memoKey(MEMO.pw || '', b64u8(E.salt)); const o = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, k, b64u8(E.ct)))); MEMO.data = memoMerge(MEMO.data, o.data || o); await memoSave(); MEMO.msg = '백업을 합쳤습니다'; } catch (e) { MEMO.msg = '백업 파일을 열 수 없습니다(비밀번호가 다른 파일?)'; } memoDraw(); }
 const WATCH_HELP = `<details open><summary><b>최+신+일 등급</b> — 3개 중 몇 개를 충족하느냐 (드림로드 5강 p38)</summary>
 <table class="t"><tr><th>등급</th><th>뜻</th></tr>
 <tr><td><b>A</b> (3점)</td><td>최·신·일 3개 모두 충족 — 강의의 '최신일' 정식 후보</td></tr>
@@ -950,7 +1105,7 @@ const WATCH_HELP = `<details open><summary><b>최+신+일 등급</b> — 3개 �
 <tr><td><b>이벤트 매매</b></td><td>20거래일 안 일정이 있는 종목(events.csv · DART · 테마 일정)</td><td>1주 이내 5·10일선, 4주 이내 20일선 매수 · 최근 20일 +30%↑면 '선반영' → 1주 전부터 매수 금지</td><td>3강 p3·p11 [팩트] · 30% [추정]</td></tr>
 <tr><td>공통 주의</td><td colspan="2">부채비율 200% 초과 · 영업적자 · 신규/재상장 의심 · 시총 1,500억 미만 제외 · 소형주/진입보류/희석 공시 (위 최신일과 같은 기준)</td><td>6강 p5 [팩트] · 숫자 [추정]</td></tr></table></details>`;
 function watchPage() {
-  $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch" class="on">🔒 관심종목</a></div>`;
+  $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch" class="on">🔒 관심종목</a><a href="#memo">📝 메모</a></div>`;
   Object.keys(CH).forEach(k => delete CH[k]);
   if (!WATCH.data) {
     $('view').innerHTML = `<h1>🔒 관심종목</h1><section><p>최+신+일·방배동 필터 결과는 비밀번호로 잠겨 있습니다. 비밀번호는 이 브라우저 안에서만 쓰이고 어디에도 저장·전송되지 않습니다.</p>
@@ -973,7 +1128,7 @@ function watchPage() {
   const lastRow = {}; days.forEach(x => L(x.rows).forEach(r => { lastRow[r.code] = r; }));
   const rank = Object.entries(S).filter(([, v]) => v.n20 > 0).sort((a, b) => b[1].score - a[1].score).slice(0, 40);
   const bar = v => `<div style="background:#eef2f7;border-radius:4px;width:80px;height:8px;display:inline-block;vertical-align:middle"><div style="background:var(--up);height:8px;border-radius:4px;width:${Math.min(100, v)}%"></div></div> <b>${v}</b>`;
-  const rankT = tbl(['#', '종목', '등장 점수', '최근20일 A·B', '연속', '처음', '첫 등장 후 +5/+10/+20일', '테마 · 재료'], rank.map(([c, v], i) => [i + 1, stkLink({ code: c, name: NM[c] || c }),
+  const rankT = tbl(['#', '종목', '등장 점수', '최근20일 A·B', '연속', '처음', '첫 등장 후 +5/+10/+20일', '테마 · 재료'], rank.map(([c, v], i) => [i + 1, stkLink({ code: c, name: NM[c] || c }) + memoBtns({ code: c, name: NM[c] || c }, `등장점수 ${v.score}`),
     bar(v.score), `<span style="white-space:nowrap">${v.n20}일</span>`, `<span style="white-space:nowrap">${v.streak}일</span>`, `<span style="white-space:nowrap">${esc(v.first)}</span>`, `${pc((O[c] || {}).r5)} / ${pc((O[c] || {}).r10)} / ${pc((O[c] || {}).r20)}`, matCell(c, (lastRow[c] || {}).themes)]));
   // 2) 과거 등장 지도
   const allDates = [...new Set([...L((D.backfill || {}).days).map(x => x.date), ...days.map(x => x.date)])].sort();
@@ -994,9 +1149,9 @@ function watchPage() {
   const bang = !B ? '<p class="mut">아직 방배동 필터(bangbae_filter.py) 결과가 없습니다.</p>' :
     `<h3>① 시세 연속성 · 시장 매매 (오늘 상위 테마)</h3>` + tbl(['테마', '등락', '연속성', '대장 · 차순위', '시장 매매 조건(5강 p35)'], L(B.themes).map(t => [`<b>${esc(t.name)}</b>` + L(t.news).map(n => `<div class="hl">📰 <a href="${esc(n.u)}" target="_blank" rel="noopener">${esc(n.t)}</a></div>`).join(''), pctn(t.pct),
       `<b>${t.cont}/3</b><br><small class="mut">${t.fresh ? '신선 ' : ''}${t.ext ? '확장 ' : ''}${t.conn ? '연관' : ''}</small>`, [t.lead, t.second].filter(Boolean).map(x => `${stkLink(x)} ${pctn(x.pct)}`).join('<br>'), L(t.market).map(esc).join('<br>') || '<span class="mut">-</span>'])) +
-    `<h3>② 재료 매매 (재료일 다음날 대응, 4강 p8)</h3>` + tbl(['종목', '재료일 · 충족 조건', '재료', '판정·계획', '참고 구간', '주의'], L(B.material).map(m => [stkLink(m) + (m.close ? `<br><small class="mut">${Number(m.close).toLocaleString()}원</small>` : ''), esc(m.d0.slice(5)) + '<br>' + pctn(m.pct0) + (m.amt0 ? `<br><small class="mut">${Number(m.amt0).toLocaleString()}억</small>` : '') + (m.cond ? `<div class="hl">${esc(m.cond)}</div>` : ''),
+    `<h3>② 재료 매매 (재료일 다음날 대응, 4강 p8)</h3>` + tbl(['종목', '재료일 · 충족 조건', '재료', '판정·계획', '참고 구간', '주의'], L(B.material).map(m => [stkLink(m) + memoBtns(m, `방배동 재료 ${m.d0.slice(5)} ${m.pct0 >= 0 ? '+' : ''}${m.pct0}%`) + (m.close ? `<br><small class="mut">${Number(m.close).toLocaleString()}원</small>` : ''), esc(m.d0.slice(5)) + '<br>' + pctn(m.pct0) + (m.amt0 ? `<br><small class="mut">${Number(m.amt0).toLocaleString()}억</small>` : '') + (m.cond ? `<div class="hl">${esc(m.cond)}</div>` : ''),
       esc(m.reason) + L(m.themes).map(t => `<div class="mut">#${esc(t)}</div>`).join(''), esc(m.plan), L(m.zone).filter(Boolean).map(v => Number(v).toLocaleString()).join(' ~ ') || '-', riskHtml(m)])) +
-    `<h3>③ 이벤트 매매 (20거래일 안 일정, 3강 p3·p11)</h3>` + tbl(['D-day', '종목', '일정', '기준선', '20일 수익률', '계획', '주의'], L(B.event).map(e => ['D-' + e.dday, stkLink(e), esc(e.event) + `<br><small class="mut">${esc(e.src)}</small>`, esc(e.line) + ' ' + L(e.ma).map(v => Number(v).toLocaleString()).join(' / '), pctn(e.run20), esc(e.plan), riskHtml(e)])) +
+    `<h3>③ 이벤트 매매 (20거래일 안 일정, 3강 p3·p11)</h3>` + tbl(['D-day', '종목', '일정', '기준선', '20일 수익률', '계획', '주의'], L(B.event).map(e => ['D-' + e.dday, stkLink(e) + memoBtns(e, `이벤트 D-${e.dday} ${e.event}`), esc(e.event) + `<br><small class="mut">${esc(e.src)}</small>`, esc(e.line) + ' ' + L(e.ma).map(v => Number(v).toLocaleString()).join(' / '), pctn(e.run20), esc(e.plan), riskHtml(e)])) +
     `<p class="mut">근거: ${esc(B.rules)} · 기준일 ${esc(B.date)}</p>`;
   const cs = L(day.rows).filter(r => r.score < 2);
   $('view').innerHTML = `<h1>🔒 관심종목 <small class="mut">갱신 ${esc(D.generated)} · 공개 시황·뉴스·일정과 분리</small></h1>
@@ -1008,7 +1163,7 @@ function watchPage() {
     ${sec('과거 등장 지도 <small>(진한 칸 A · 옅은 칸 B · 날짜를 누르면 그날 목록)</small>', `<div class="seg" style="margin-bottom:6px">${[[20, '1달'], [60, '3달'], [120, '6달'], [250, '1년']].map(([n, l]) => `<button class="${(WATCH.span || 60) === n ? 'on' : ''}" onclick="WATCH.span=${n};watchPage()">${l}</button>`).join('')}</div>` + heat + '<style>.hm{border-collapse:collapse;font-size:11px}.hm th,.hm td{border:1px solid #f1f5f9;padding:2px 3px;min-width:14px;text-align:center}.hm td.hA{background:#d03b3b}.hm td.hB{background:#f4a8a8}</style>')}
     ${sec('과거 재현 검증 <small>(백필: 그날 알 수 있던 자료만으로 A·B 를 다시 뽑고 그 뒤 수익률 확인)</small>', repT)}
     ${sec('방배동 후보 <small>(재료·시장·이벤트 매매, 1강 p34)</small>', bang)}
-    ${cs.length ? sec(`C 등급 ${cs.length}개 <small>(1개 충족 · 최신일만)</small>`, `<details><summary>펼치기</summary>${tbl(['종목', '근거'], cs.map(r => [stkLink(r) + (r.hold || r.small || L(r.dil).length ? '<br>' + riskHtml(r) : ''), ['최', '신', '일'].map(k => { const w = (r.why || {})[k]; const t = Array.isArray(w) ? w.join(', ') : w; return t ? `<b>${k}</b> ${esc(t)}` : ''; }).filter(Boolean).join('<br>')]))}</details>`) : ''}`;
+    ${cs.length ? sec(`C 등급 ${cs.length}개 <small>(1개 충족 · 최신일만)</small>`, `<details><summary>펼치기</summary>${tbl(['종목', '근거'], cs.map(r => [stkLink(r) + memoBtns(r, 'C등급') + (r.hold || r.small || L(r.dil).length ? '<br>' + riskHtml(r) : ''), ['최', '신', '일'].map(k => { const w = (r.why || {})[k]; const t = Array.isArray(w) ? w.join(', ') : w; return t ? `<b>${k}</b> ${esc(t)}` : ''; }).filter(Boolean).join('<br>')]))}</details>`) : ''}`;
 }
 function watchDay(d) {
   const D = WATCH.data; if (L(D.days).some(x => x.date === d)) { WATCH.day = d; watchPage(); window.scrollTo({ top: 0, behavior: 'smooth' }); return; }
