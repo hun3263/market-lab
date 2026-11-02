@@ -279,12 +279,6 @@ def run(data, d=None, events=None, out=None):
                     all_theme_of[x["code"]].add(t["name"])
     sectors = strong_sectors(heat)
     ev, macro = load_events(events, d)
-    cal = load(data / "calendar" / "calendar.json")        # 증시 일정 탭 자료가 있으면 시장 일정은 거기서 가져옴
-    if cal:
-        macro = [{"date": x["date"], "event": x["title"] + {"confirmed": "", "rule": " (규칙 계산)"}.get(x["status"], " (추정)"),
-                  "dday": trading_days_between(d, x["date"]), "source": x.get("src", "")}
-                 for x in cal["events"] if x["cat"] in ("매크로·금리", "지수·수급", "정책·외교", "실적·공시")
-                 and x["date"] >= d and trading_days_between(d, x["date"]) <= EVENT_WINDOW[1]]
 
     # 후보 모집단 = 신고가 ∪ 반복 등장 ∪ 강한 테마 구성 ∪ 종목 상세 파일 보유 종목
     stock_dir = data / "stocks"
