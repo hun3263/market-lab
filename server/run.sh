@@ -56,7 +56,11 @@ PY
 
   if [ "$SESSION" = nxt ] && [ "$ok" = 1 ]; then
     ./.venv/bin/python calendar_build.py --data data || echo "[경고] 일정 탭 자료 생성 실패"
-    ./.venv/bin/python filter_choisinil.py --data data --events events.csv --out data/choisinil --limit 10 || echo "[경고] 최신일 필터 실패"
+    # 필터 결과 원본은 공개 저장소 밖(~/market-lab-private)에만 두고, 사이트에는 암호화본만 올림
+    ./.venv/bin/python filter_choisinil.py --data data --events events.csv --out "$HOME/market-lab-private/choisinil" --limit 10 || echo "[경고] 최신일 필터 실패"
+    ./.venv/bin/python bangbae_filter.py --data data --events events.csv --out "$HOME/market-lab-private/bangbae" || echo "[경고] 방배동 필터 실패"
+    ./.venv/bin/python secure_publish.py || echo "[경고] 관심종목 암호화 실패"
+    [ -d data/choisinil ] && git rm -rq data/choisinil   # 예전에 공개로 올라간 결과 폴더 정리(한 번만 동작)
   fi
   
   if [ "$SESSION" = news-am ] && [ "$ok" = 1 ]; then
