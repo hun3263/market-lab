@@ -19,6 +19,8 @@ import re
 from collections import Counter, defaultdict
 from pathlib import Path
 
+import riskinfo
+
 # ── 기준값 (강의 원문 = [팩트], 나머지 = [추정] 초기값. 백테스트로 조정) ───────────────
 BASE_BARS = [(17.0, 1000e8), (23.0, 700e8), (29.5, 300e8)]   # [팩트] DR1강 p2: +17%&1,000억 / +23%&700억 / 상한가(필터 p29의 300억↑ 함께 적용)
 LOOKBACK_BASE = 20      # [추정] 기준봉 유효 기간(거래일)
@@ -234,6 +236,7 @@ def run(data, d=None, events=None, out=None):
     if d:
         day_files = [p for p in day_files if p.stem <= d]
     d = day_files[-1].stem
+    RISK, capout = riskinfo.Risk(d), []
     series = load(data / "market" / "series.json", {})
     heat = load(data / "heat" / f"{d}.json") or (load(sorted((data / "heat").glob("20*.json"))[-1]) if (data / "heat").exists() else None)
     regime = index_regime(series, d)
@@ -279,6 +282,12 @@ def run(data, d=None, events=None, out=None):
                     all_theme_of[x["code"]].add(t["name"])
     sectors = strong_sectors(heat)
     ev, macro = load_events(events, d)
+    cal = load(data / "calendar" / "calendar.json")        # 증시 일정 탭 자료가 있으면 시장 일정은 거기서 가져옴
+    if cal:
+        macro = [{"date": x["date"], "event": x["title"] + {"confirmed": "", "rule": " (규칙 계산)"}.get(x["status"], " (추정)"),
+                  "dday": trading_days_between(d, x["date"]), "source": x.get("src", "")}
+                 for x in cal["events"] if x["cat"] in ("매크로·금리", "지수·수급", "정책·외교", "실적·공시")
+                 and x["date"] >= d and trading_days_between(d, x["date"]) <= EVENT_WINDOW[1]]
 
     # 후보 모집단 = 신고가 ∪ 반복 등장 ∪ 강한 테마 구성 ∪ 종목 상세 파일 보유 종목
     stock_dir = data / "stocks"
@@ -341,8 +350,13 @@ def run(data, d=None, events=None, out=None):
         score = int(choi) + int(shin) + int(il)
         if score == 0:
             continue
+        risk = RISK.assess(c, close, prices[-1][2] if prices else None, info)   # 시총·희석 공시(riskinfo.py)
+        if risk is None:
+            capout.append(name)
+            continue
+        flags += riskinfo.flags_of(risk)
         grade = {3: "A 최신일", 2: "B", 1: "C"}[score]
-        rows.append({"code": c, "name": name, "grade": grade, "score": score, "close": close,
+        rows.append({"cap": risk["cap억"], "small": risk["small"], "hold": risk["hold"], "dil": risk["dil"],"code": c, "name": name, "grade": grade, "score": score, "close": close,
                      "choi": choi, "shin": shin, "il": il, "ilHint": bool(hints) and not il,
                      "why": {"최": choi_why, "신": shin_why, "일": il_why}, "flags": flags,
                      "themes": sorted(all_theme_of.get(c, ())), "zone": zone})
@@ -350,7 +364,8 @@ def run(data, d=None, events=None, out=None):
     rows.sort(key=lambda r: (-r["score"], -int(r["ilHint"]), r["flags"] != [], r["name"]))
     result = {"date": d, "regime": regime, "strongThemes": themes, "strongSectors": sectors,
               "events": ev, "macro": macro, "params": {"RS_MIN": RS_MIN, "LOOKBACK_NH": LOOKBACK_NH, "EVENT_WINDOW": EVENT_WINDOW},
-              "nhDays": len(nh_days), "rows": rows}
+              "nhDays": len(nh_days), "rows": rows,
+              "capOut": {"min억": int(riskinfo.CAP_MIN / 1e8), "n": len(capout), "names": capout[:30]}}
     if out:
         Path(out).mkdir(parents=True, exist_ok=True)
         (Path(out) / f"{d}.json").write_text(json.dumps(result, ensure_ascii=False, indent=1), encoding="utf-8")
