@@ -927,14 +927,29 @@ async function watchDecrypt(pw) {
   const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, key, b64u8(E.ct));
   return JSON.parse(new TextDecoder().decode(pt));
 }
+/* 자동 잠금: 마지막 조작(클릭·키·스크롤·터치) 후 LOCK_MIN 분이 지나면 관심종목·메모·일정(희석)을 다시 잠금.
+   휴대폰에서 다른 앱을 쓰다 돌아온 경우도 시간 기준으로 판정(타이머가 멈춰 있어도 돌아오는 순간 확인). */
+const LOCK_MIN = 30;
+let LAST_ACT = Date.now();
+['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll'].forEach(t => addEventListener(t, () => { LAST_ACT = Date.now(); }, { passive: true, capture: true }));
+function lockCheck() {
+  if (!WATCH.data && !MEMO.data) return;
+  if (Date.now() - LAST_ACT < LOCK_MIN * 60e3) return;
+  WATCH.data = null; WATCH.day = null; Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null, msg: `${LOCK_MIN}분 동안 조작이 없어 자동으로 잠겼습니다` });
+  calMergePrivate();
+  const h = location.hash.slice(1);
+  if (h.startsWith('watch') || h.startsWith('memo') || h.startsWith('cal')) render();
+}
+setInterval(lockCheck, 30e3);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) lockCheck(); });
 function lockForm(msg, dest) {   // 관심종목·메모·일정 공통 잠금 화면(비밀번호 하나로 셋 다 열림)
   return `<p><b>🔒 ${msg}</b></p>
       <form onsubmit="watchUnlock(event, '${dest}')" autocomplete="on"><input type="text" name="username" value="market-lab-watch" autocomplete="username" style="display:none">
       <input id="wpw" type="password" autocomplete="current-password" placeholder="비밀번호" style="padding:8px;border:1px solid #cbd5e1;border-radius:8px;width:260px;max-width:100%">
-      <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut">한 번 열면 관심종목 · 메모 · 일정(CB·BW·유증)이 함께 열립니다. 비밀번호는 이 브라우저 안에서만 쓰이고 저장·전송되지 않습니다.</p>`;
+      <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut">${MEMO.msg && MEMO.msg.includes('자동으로 잠겼') ? '⏱ ' + esc(MEMO.msg) + '<br>' : ''}한 번 열면 관심종목 · 메모 · 일정(CB·BW·유증)이 함께 열립니다. ${LOCK_MIN}분 동안 조작이 없으면 자동으로 잠깁니다. 비밀번호는 이 브라우저 안에서만 쓰이고 저장·전송되지 않습니다.</p>`;
 }
 async function watchUnlock(ev, dest) {
-  ev.preventDefault();
+  ev.preventDefault(); LAST_ACT = Date.now(); MEMO.msg = '';
   const pw = $('wpw').value; $('wmsg').textContent = '여는 중… (몇 초 걸립니다)';
   try { WATCH.data = await watchDecrypt(pw); await memoOpen(pw).catch(() => { MEMO.data = null; MEMO.msg = '메모를 열 수 없습니다(예전 비밀번호로 저장된 메모?)'; }); $('wpw').value = ''; WATCH.day = null; dest === 'memo' ? memoPage() : dest === 'cal' ? calendarPage() : watchPage(); }
   catch (e) { $('wmsg').textContent = e.message === 'nofile' ? '아직 암호화 파일이 없습니다(서버 20:10 회차 이후 생성).' : '비밀번호가 맞지 않습니다.'; }
@@ -1042,7 +1057,7 @@ async function memoGhSave(ev) {
 async function memoPage() {
   $('nav').innerHTML = `<div class="topnav"><a href="#">📊 시황</a><a href="#news">📰 뉴스</a><a href="#cal">🗓 일정</a><a href="#watch">🔒 관심종목</a><a href="#memo" class="on">📝 메모</a></div>`;
   if (!MEMO.data) {
-    $('view').innerHTML = `<h1>📝 종목 메모</h1><section>${lockForm('메모는 비밀번호로 잠겨 있습니다', 'memo')}${MEMO.msg ? `<p class="mut">${esc(MEMO.msg)}</p>` : ''}</section>`;
+    $('view').innerHTML = `<h1>📝 종목 메모</h1><section>${lockForm('메모는 비밀번호로 잠겨 있습니다', 'memo')}${MEMO.msg && !MEMO.msg.includes('자동으로 잠겼') ? `<p class="mut">${esc(MEMO.msg)}</p>` : ''}</section>`;
     return;
   }
   const codes = Object.keys(MEMO.data.stocks);
