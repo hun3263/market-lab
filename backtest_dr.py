@@ -69,13 +69,13 @@ def find_setups(b):
     for i in range(1, len(b)):
         if i <= skip_to:          # [추정] 진행 중인 셋업 안의 새 기준봉은 같은 거래로 취급(차선 갱신은 simulate 의 고점 갱신으로 반영)
             continue
-        r = (b[i]["close"] / b[i - 1]["close"] - 1) * 100
+        r = round((b[i]["close"] / b[i - 1]["close"] - 1) * 100, 2)   # 반올림: 경계값(17.0%)이 소수 오차로 빠지지 않게
         if not any(r >= th and b[i]["amount"] >= amt for th, amt in P["base"]):
             continue
         low0 = b[i]["low"]
         prior_hi = max([x["high"] for x in b[max(0, i - P["prior_high_n"]):i]] or [0])
         for s in range(i, min(i + P["sel_days"] + 1, len(b))):
-            cr = (b[s]["close"] / b[s - 1]["close"] - 1) * 100
+            cr = round((b[s]["close"] / b[s - 1]["close"] - 1) * 100, 2)
             if (b[s]["close"] / low0 - 1 >= P["sel_gain"] and cr >= P["sel_candle"] and b[s]["close"] > b[s]["open"]
                     and b[s]["close"] > prior_hi and b[s]["close"] >= P["min_price"]):
                 out.append({"base": i, "sel": s, "low0": low0})

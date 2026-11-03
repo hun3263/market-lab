@@ -135,7 +135,7 @@ def main():
         nh_pre[c] = pre
         ba = []
         for i in range(len(b)):
-            r = (b[i]["close"] / b[i - 1]["close"] - 1) * 100 if i and b[i - 1]["close"] else 0
+            r = round((b[i]["close"] / b[i - 1]["close"] - 1) * 100, 2) if i and b[i - 1]["close"] else 0
             ba.append(r if any(r >= th and b[i]["amount"] >= amt for th, amt in BASE) else None)
         base_at[c] = ba
     regime_at = {}
@@ -189,7 +189,7 @@ def main():
             outcome[c][d] = o
             mk = names.get(c, ("", "KOSPI"))[1]
             reg = regime_at.get((mk, d), "NA")
-            rows_eval.append({"grade": g, "regime": reg, **o})
+            rows_eval.append({"grade": g, "regime": reg, "date": d, **o})
         out_days.append({"date": d, "rows": rows})
 
     def summ(rs):
@@ -206,12 +206,19 @@ def main():
         for c, b in bars.items():
             i = pos[c].get(d)
             if i is not None and i + 20 < len(b) and b[i]["close"] >= 2000:
-                base_rows.append({"r5": (b[i + 5]["close"] / b[i]["close"] - 1) * 100, "r10": (b[i + 10]["close"] / b[i]["close"] - 1) * 100,
+                base_rows.append({"date": d, "r5": (b[i + 5]["close"] / b[i]["close"] - 1) * 100, "r10": (b[i + 10]["close"] / b[i]["close"] - 1) * 100,
                                   "r20": (b[i + 20]["close"] / b[i]["close"] - 1) * 100})
     report = {"period": [test_days[0], test_days[-1]], "stocks": len(bars), "dart": bool(key),
               "all_AB": summ(rows_eval), "A": summ([x for x in rows_eval if x["grade"] == "A"]),
               "B": summ([x for x in rows_eval if x["grade"] == "B"]), "baseline_all_stocks": summ(base_rows),
               "by_regime": {r: summ([x for x in rows_eval if x["regime"] == r]) for r in sorted({x["regime"] for x in rows_eval})},
+              # 최근 3개월·6개월·1년 구간별(마지막 날 기준 달력일). 기준선(전 종목 평균)도 같은 구간으로 비교
+              "by_period": {k: {"from": cut, "AB": summ([x for x in rows_eval if x["date"] >= cut]),
+                                "A": summ([x for x in rows_eval if x["date"] >= cut and x["grade"] == "A"]),
+                                "B": summ([x for x in rows_eval if x["date"] >= cut and x["grade"] == "B"]),
+                                "base": summ([x for x in base_rows if x["date"] >= cut])}
+                            for k, cut in [(k, (dt.date.fromisoformat(test_days[-1]) - dt.timedelta(days=n)).isoformat())
+                                           for k, n in (("3개월", 91), ("6개월", 182), ("1년", 365))]},
               "smallCap": small_n, "capRule": "시총 1,500억 미만 제외(현재 상장주식수 × 그날 종가로 추정)" if SHARES else "주식수 자료 없음 → 시총 제외 미적용",
               "note": "수익률=등장일 종가 기준, 비용 미반영. 같은 종목이 여러 날 연속 등장하면 각각 1건으로 셈(겹침 있음). 테마·실시간 목록 조건은 과거 재현 불가로 제외."}
     Path(a.out).mkdir(parents=True, exist_ok=True)

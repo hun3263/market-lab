@@ -96,7 +96,7 @@ def base_bars(prices):
         pc = prices[i - 1][1]
         if not pc:
             continue
-        r = (c / pc - 1) * 100
+        r = round((c / pc - 1) * 100, 2)
         if any(r >= th and a >= amt for th, amt in BASE_BARS):
             hits.append({"date": d, "ret": round(r, 1), "amount억": round(a / 1e8)})
     return hits
