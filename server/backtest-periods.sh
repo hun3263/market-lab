@@ -4,6 +4,7 @@
 #      5분봉은 재료 매매 후보의 필요한 날짜만 받아 ~/market-lab-private/minutes/5m 에 쌓음(처음 1회 20~40분 [추정], 이후 재사용)  ③ 최+신+일 A·B 과거 재현(1년)
 #   ④ 관심종목 탭 암호화본 갱신 → GitHub 반영   ⑤ 요약을 화면·~/market-lab-private/bt/summary.txt·휴대폰 알림으로
 # 사용:  nohup bash server/backtest-periods.sh > ~/backtest.log 2>&1 &      진행 확인: tail -f ~/backtest.log
+#        FROM=3 nohup bash server/backtest-periods.sh > ~/backtest.log 2>&1 &   ← ①② 를 건너뛰고 ③부터(중간에 멈췄을 때)
 # 주의:  12:05 · 17:30 · 20:10 자동 수집 시간과 겹치지 않게 실행(같은 저장소에 동시에 올리면 충돌)
 set -e
 cd "$(dirname "$0")/.."; R=$PWD
@@ -11,8 +12,10 @@ set -a; . "$HOME/.market-lab.env"; set +a
 P="$HOME/market-lab-private/bt"; mkdir -p "$P"
 PY="$R/.venv/bin/python"
 
-echo "■ ① 일봉 받기 $(date '+%H:%M')"
+FROM=${FROM:-1}
 cd "$P"
+if [ "$FROM" -le 2 ]; then
+echo "■ ① 일봉 받기 $(date '+%H:%M')"
 if [ -f prices/_KOSPI.csv ] && [ -n "$(find prices/_KOSPI.csv -mtime -1)" ]; then
   echo "  오늘 받은 자료가 있어 건너뜀"
 else
@@ -26,6 +29,7 @@ for t in 1Y:12 6M:6 3M:3; do                        # 1년을 먼저: 5분봉을
   (cd "$R" && "$PY" backtest_bangbae.py --prices "$P/prices" --listing "$P/listing.csv" --from "$(date -d "$m months ago" +%F)" --to "$(date +%F)" --tag "$tag" --out "$P" --minutes "$([ "$tag" = 1Y ] && echo fetch || echo cache)" > "$P/run_bb_$tag.txt")   # 방배동 재료 매매 (+5분봉 V1·V2)
 done
 
+fi
 echo "■ ③ 최+신+일 A·B 과거 재현(1년) $(date '+%H:%M')"
 cd "$R"
 "$PY" backfill_choisinil.py --prices "$P/prices" --listing "$P/listing.csv" --years 1 > "$P/backfill.txt"
