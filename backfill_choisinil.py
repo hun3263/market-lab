@@ -83,61 +83,101 @@ def main():
     names = {}
     if Path(a.listing).exists():
         names = {r["code"]: (r["name"], r.get("market", "KOSPI")) for r in csv.DictReader(open(a.listing, encoding="utf-8"))}
-    bars = {f.stem: read(f) for f in sorted(pr.glob("[0-9]*.csv"))}
-    bars = {c: b for c, b in bars.items() if len(b) >= 60}
+    # ── 메모리 절약형 적재 (11/04: 0.5GB 서버에서 전 종목 2년치를 dict 로 올리다 멈춤 → 열 단위 float32 배열로)
+    #    모든 종목을 '전체 거래일 달력'에 맞춘 배열로 두고, 거래 없는 날은 NaN. 종목·일당 약 20바이트
+    from array import array
+    NAN = float("nan")
+    files = sorted(pr.glob("[0-9]*.csv"))
+    cal = set()
+    for f in files:
+        with open(f, encoding="utf-8") as fh:
+            next(fh, None)
+            for line in fh:
+                cal.add(line[:10])
+    dates = sorted(cal)
+    D = {d: k for k, d in enumerate(dates)}
+    N = len(dates)
+    codes, C, H, Lo, A = [], [], [], [], []
+    for f in files:
+        cl, hi, lo, am = (array("f", [NAN]) * N for _ in range(4))
+        n = 0
+        with open(f, encoding="utf-8") as fh:
+            for r in csv.DictReader(fh):
+                k = D[r["date"]]
+                cl[k], hi[k], lo[k], am[k] = float(r["close"]), float(r["high"]), float(r["low"]), float(r["amount"])
+                n += 1
+        if n >= 60:
+            codes.append(f.stem); C.append(cl); H.append(hi); Lo.append(lo); A.append(am)
+    S = len(codes)
+    ok = lambda v: v == v                                  # NaN 이 아니면 True
+    VAL, RK = [], []                                       # 종목별 거래한 날의 달력 번호 목록 · 달력 번호 → 거래 순번(-1 = 없음)
+    for s_ in range(S):
+        v, rk = array("i"), array("i", [-1]) * N
+        for g in range(N):
+            if ok(C[s_][g]):
+                rk[g] = len(v); v.append(g)
+        VAL.append(v); RK.append(rk)
     idx = {k: read(pr / f"_{k}.csv") for k in ("KOSPI", "KOSDAQ") if (pr / f"_{k}.csv").exists()}
-    dates = sorted({r["date"] for b in bars.values() for r in b})
     start = (dt.date.fromisoformat(dates[-1]) - dt.timedelta(days=int(365 * a.years))).isoformat()
     test_days = [d for d in dates if d >= start]
-    pos = {c: {r["date"]: i for i, r in enumerate(b)} for c, b in bars.items()}
-    print(f"종목 {len(bars)} · 기간 {test_days[0]} ~ {test_days[-1]} ({len(test_days)}거래일)")
+    print(f"종목 {S} · 기간 {test_days[0]} ~ {test_days[-1]} ({len(test_days)}거래일)", flush=True)
 
     ev = defaultdict(list)
     key = os.environ.get("DART_API_KEY", "").strip()
     if key:
         for d, c, k in dart_events(key, (dt.date.fromisoformat(start) - dt.timedelta(days=15)).isoformat(), dates[-1]):
             ev[c].append((d, k))
-        print(f"DART 일정형 공시 {sum(len(v) for v in ev.values())}건")
+        print(f"DART 일정형 공시 {sum(len(v) for v in ev.values())}건", flush=True)
 
-    # 날짜별 RS 백분위와 거래대금 순위 미리 계산
-    def ret(b, i, n):
-        return b[i]["close"] / b[i - n]["close"] - 1 if i >= n and b[i - n]["close"] else None
-    rs_pct, amt_top = {}, {}
+    def back(s_, g, n):                                    # g 에서 n 거래일 전(그 종목이 거래한 날 기준) 종가
+        r = RK[s_][g] - n
+        return C[s_][VAL[s_][r]] if r >= 0 and RK[s_][g] >= 0 else None
+    # 날짜별 RS 80↑ 종목 집합 · 거래대금 상위 30 (종목 번호로 저장)
+    rs80, rsval, amt_top = {}, {}, {}
     for d in test_days:
-        sc, am = {}, []
-        for c, b in bars.items():
-            i = pos[c].get(d)
-            if i is None:
+        g = D[d]
+        sc, am = [], []
+        for s_ in range(S):
+            c0 = C[s_][g]
+            if not ok(c0):
                 continue
-            rr = [ret(b, i, n) for n in (63, 126, 189, 252)]
-            if all(x is not None for x in rr):
-                sc[c] = 2 * rr[0] + rr[1] + rr[2] + rr[3]
-            am.append((b[i]["amount"], c))
-        order = sorted(sc, key=sc.get)
-        rs_pct[d] = {c: round((k + 1) / len(order) * 99) for k, c in enumerate(order)} if order else {}
-        amt_top[d] = {c for _, c in sorted(am, reverse=True)[:30]}
+            rr = [back(s_, g, n) for n in (63, 126, 189, 252)]
+            if all(rr):
+                sc.append((2 * (c0 / rr[0] - 1) + (c0 / rr[1] - 1) + (c0 / rr[2] - 1) + (c0 / rr[3] - 1), s_))
+            am.append((A[s_][g], s_))
+        sc.sort()
+        m = len(sc)
+        rs80[d] = {s_: round((k + 1) / m * 99) for k, (_, s_) in enumerate(sc) if (k + 1) / m * 99 >= 79.5} if m else {}
+        amt_top[d] = {s_ for _, s_ in sorted(am, reverse=True)[:30]}
+    print("RS·거래대금 순위 계산 끝", flush=True)
 
-    # 종목별 미리 계산: 250일 신고가 여부(prefix 합), 기준봉 여부
+    # 종목별: 250거래일 신고가 플래그(bytearray) · 기준봉(드문 날만 dict)
     from collections import deque
-    nh_pre, base_at = {}, {}
-    for c, b in bars.items():
-        dq, flags = deque(), []
-        for i, r in enumerate(b):                         # 단조 큐로 직전 250일 고가 최댓값
-            while dq and dq[0] < i - 250:
+    nh, base_at = [], []
+    for s_ in range(S):
+        cl, hi = C[s_], H[s_]
+        flag = bytearray(N)
+        dq, seen = deque(), 0                               # (거래순번, 고가) 단조 큐
+        prev = None
+        ba = {}
+        for g in range(N):
+            if not ok(hi[g]):
+                continue
+            while dq and dq[0][0] < seen - 250:
                 dq.popleft()
-            flags.append(1 if i >= 250 and dq and r["high"] >= b[dq[0]]["high"] else 0)
-            while dq and b[dq[-1]]["high"] <= r["high"]:
+            if seen >= 250 and dq and hi[g] >= dq[0][1]:
+                flag[g] = 1
+            while dq and dq[-1][1] <= hi[g]:
                 dq.pop()
-            dq.append(i)
-        pre = [0]
-        for f in flags:
-            pre.append(pre[-1] + f)
-        nh_pre[c] = pre
-        ba = []
-        for i in range(len(b)):
-            r = round((b[i]["close"] / b[i - 1]["close"] - 1) * 100, 2) if i and b[i - 1]["close"] else 0
-            ba.append(r if any(r >= th and b[i]["amount"] >= amt for th, amt in BASE) else None)
-        base_at[c] = ba
+            dq.append((seen, hi[g]))
+            seen += 1
+            if prev:
+                r = round((cl[g] / prev - 1) * 100, 2)
+                if any(r >= th and A[s_][g] >= amt for th, amt in BASE):
+                    ba[g] = r
+            prev = cl[g]
+        nh.append(flag)
+        base_at.append(ba)
     regime_at = {}
     for mk, rows_ in idx.items():
         closes = [x["close"] for x in rows_]
@@ -146,51 +186,62 @@ def main():
             dd = (x["close"] / max(win) - 1) * 100
             regime_at[(mk, x["date"])] = "U" if dd > -2 else next((lab for th, lab in REGIME[mk] if dd >= th), "D3")
 
+    def fwd(s_, g, n):                                     # g 이후 n번째 거래일 종가
+        r = RK[s_][g] + n
+        return C[s_][VAL[s_][r]] if RK[s_][g] >= 0 and r < len(VAL[s_]) else None
+
     out_days, outcome = [], defaultdict(dict)
     rows_eval = []
     for di, d in enumerate(test_days):
+        g = D[d]
         recent10 = test_days[max(0, di - 9):di + 1]
+        lo20 = max(0, g - 19)                              # 최근 20거래일(달력 기준)
         rows = []
-        for c, b in bars.items():
-            i = pos[c].get(d)
-            if i is None or i < 21 or b[i]["close"] < 2000:
+        for s_ in range(S):
+            c0 = C[s_][g]
+            if not ok(c0) or c0 < 2000:
                 continue
+            c = codes[s_]
             why = []
-            for j in range(i, max(0, i - 20), -1):         # ① 최근 20거래일 기준봉(가장 최근 것)
-                if base_at[c][j] is not None:
-                    why.append(f"기준봉 {b[j]['date'][5:]} {base_at[c][j]:+.0f}%")
-                    break
-            rs = rs_pct[d].get(c)
-            if rs is not None and rs >= 80:
+            bj = [j for j in base_at[s_] if lo20 <= j <= g]          # ① 최근 20거래일 기준봉
+            if bj:
+                j = max(bj)
+                why.append(f"기준봉 {dates[j][5:]} {base_at[s_][j]:+.0f}%")
+            rs = rs80[d].get(s_)
+            if rs is not None:
                 why.append(f"RS {rs}")
-            nt = sum(1 for x in recent10 if c in amt_top.get(x, ()))
+            nt = sum(1 for x in recent10 if s_ in amt_top.get(x, ()))
             if nt >= 3:
                 why.append(f"대금상위 {nt}회")
             choi = bool(why)
-            shin = nh_pre[c][i + 1] - nh_pre[c][max(0, i - 19)] > 0
+            shin = any(nh[s_][lo20:g + 1])
             il = [k for (ed, k) in ev.get(c, []) if (dt.date.fromisoformat(d) - dt.date.fromisoformat(ed)).days in range(0, 11)]
             score = int(choi) + int(shin) + int(bool(il))
             if score < 2:
                 continue
             sh = SHARES.get(c)
-            if sh and b[i]["close"] * sh < riskinfo.CAP_MIN:     # 시총 1,500억 미만 제외 [추정: 현재 주식수 × 그날 종가]
+            if sh and c0 * sh < riskinfo.CAP_MIN:     # 시총 1,500억 미만 제외 [추정: 현재 주식수 × 그날 종가]
                 continue
-            g = "A" if score == 3 else "B"
-            if sh and b[i]["close"] * sh < riskinfo.CAP_SMALL:
+            gr = "A" if score == 3 else "B"
+            if sh and c0 * sh < riskinfo.CAP_SMALL:
                 small_n += 1
             w = {"최": why, "신": "250일 신고가(20일 내)" if shin else "", "일": ",".join(sorted(set(il)))}
-            rows.append({"code": c, "name": names.get(c, (c,))[0], "grade": g, "score": score, "close": b[i]["close"], "why": w})
+            rows.append({"code": c, "name": names.get(c, (c,))[0], "grade": gr, "score": score, "close": round(c0), "why": w})
             o = {}
             for k in (5, 10, 20):
-                if i + k < len(b):
-                    o[f"r{k}"] = round((b[i + k]["close"] / b[i]["close"] - 1) * 100, 1)
-            if i + 10 < len(b):
-                o["mdd10"] = round((min(x["low"] for x in b[i + 1:i + 11]) / b[i]["close"] - 1) * 100, 1)
+                v = fwd(s_, g, k)
+                if v:
+                    o[f"r{k}"] = round((v / c0 - 1) * 100, 1)
+            r0 = RK[s_][g]
+            lows = [Lo[s_][VAL[s_][r]] for r in range(r0 + 1, min(r0 + 11, len(VAL[s_])))]
+            if len(lows) == 10:
+                o["mdd10"] = round((min(lows) / c0 - 1) * 100, 1)
             outcome[c][d] = o
             mk = names.get(c, ("", "KOSPI"))[1]
-            reg = regime_at.get((mk, d), "NA")
-            rows_eval.append({"grade": g, "regime": reg, "date": d, **o})
+            rows_eval.append({"grade": gr, "regime": regime_at.get((mk, d), "NA"), "date": d, **o})
         out_days.append({"date": d, "rows": rows})
+        if di % 50 == 0:
+            print(f"  {d} 처리 ({di + 1}/{len(test_days)})", flush=True)
 
     def summ(rs):
         res = {"n": len(rs)}
@@ -203,11 +254,15 @@ def main():
         return res
     base_rows = []
     for d in test_days[::5]:                               # 기준선: 같은 날 전 종목 평균(5일 간격 표본)
-        for c, b in bars.items():
-            i = pos[c].get(d)
-            if i is not None and i + 20 < len(b) and b[i]["close"] >= 2000:
-                base_rows.append({"date": d, "r5": (b[i + 5]["close"] / b[i]["close"] - 1) * 100, "r10": (b[i + 10]["close"] / b[i]["close"] - 1) * 100,
-                                  "r20": (b[i + 20]["close"] / b[i]["close"] - 1) * 100})
+        g = D[d]
+        for s_ in range(S):
+            c0 = C[s_][g]
+            if not ok(c0) or c0 < 2000:
+                continue
+            v5, v10, v20 = fwd(s_, g, 5), fwd(s_, g, 10), fwd(s_, g, 20)
+            if v20:
+                base_rows.append({"date": d, "r5": (v5 / c0 - 1) * 100, "r10": (v10 / c0 - 1) * 100, "r20": (v20 / c0 - 1) * 100})
+    bars = codes
     report = {"period": [test_days[0], test_days[-1]], "stocks": len(bars), "dart": bool(key),
               "all_AB": summ(rows_eval), "A": summ([x for x in rows_eval if x["grade"] == "A"]),
               "B": summ([x for x in rows_eval if x["grade"] == "B"]), "baseline_all_stocks": summ(base_rows),
