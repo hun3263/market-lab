@@ -133,7 +133,7 @@ def build_payload():
             "score": score, "outcome": outcome, "mat": mat,
             "drbt": {k: {x: v for x, v in (load(PRIV / "bt" / f"report_{t}.json", {}) or {}).items() if x in ("period", "all", "by_regime", "by_buys")}
                      for k, t in (("최근 3개월", "3M"), ("최근 6개월", "6M"), ("최근 1년", "1Y")) if (PRIV / "bt" / f"report_{t}.json").exists()},
-            "bbbt": {k: {x: v for x, v in (load(PRIV / "bt" / f"report_bb_{t}.json", {}) or {}).items() if x in ("period", "all", "by_plan", "by_tier", "by_regime", "by_small", "skipped")}
+            "bbbt": {k: {x: v for x, v in (load(PRIV / "bt" / f"report_bb_{t}.json", {}) or {}).items() if x in ("period", "all", "by_plan", "by_tier", "by_regime", "by_small", "skipped", "all_V1", "all_V2", "by_plan_V1", "by_plan_V2", "minutes")}
                      for k, t in (("최근 3개월", "3M"), ("최근 6개월", "6M"), ("최근 1년", "1Y")) if (PRIV / "bt" / f"report_bb_{t}.json").exists()},
             "bangbae": bb, "cal": riskinfo.calendar_events(dil, nm, days[-1]["date"])}
 

@@ -12,14 +12,15 @@
                               조정 3~5% → 진입 O
   분할        [팩트 方4강 p7] 첫 매수 20~30%, 평균 5구간
               [추정] 1차 = 기준가 -3%, 2차 = 기준가 -5% (1:1). 기준가 = 직전 종가
-              [추정] D1 장중 -8%↑ 급락 = 재료 훼손 의심 → 진입 보류
+              [추정] 다음날 시가가 -8%↓ 갭하락이면 재료 훼손 의심 → 진입 보류 (11/04 정정: 장중 저가로 판단하면 미래 정보 사용)
   익절·손절   [팩트 方3강 p7·方2강 p40] 목표 수익 5% 전후 / [팩트 方3강 p37] 분할 후에도 -5%↑ 손실이면 판단 틀림 → 손절
               [추정] 첫 매수 후 5거래일 지나면 종가 정리(기간 손절), 체결한 날은 매도 판정 안 함(보수적)
               [추정] 같은 날 익절·손절이 겹치면 손절 우선, 갭이면 시가 체결
   비용        [추정] 왕복 0.25% (backtest_dr.py 와 같음)
 
 입력  backtest_dr.py fetch-kiwoom 이 만든 prices/종목코드.csv (date,open,high,low,close,amount) · listing.csv · _KOSPI/_KOSDAQ.csv
-사용  python backtest_bangbae.py --prices prices --listing listing.csv --from 2026-08-04 --to 2026-11-04 --tag 3M --out bt
+사용  python backtest_bangbae.py --prices prices --listing listing.csv --from 2026-08-04 --to 2026-11-04 --tag 3M --out bt [--minutes fetch]
+5분봉  --minutes fetch 면 minutes.py 로 필요한 날짜만 받아 ~/market-lab-private/minutes/5m 에 쌓고 V1·V2 결과를 함께 냄
 """
 import argparse
 import csv
@@ -59,63 +60,150 @@ def setup(b, i, shares):
     return {"d0": x["date"], "pct0": round(pct, 1), "tier": tier, "small": small}
 
 
-def simulate(b, i):
-    """D0 다음날부터 방배동 4강 p8 흐름대로 진입 → 익절·손절·기간"""
+def plan_of(b, i):
+    """D0 다음날부터의 진입 계획. 미래 정보를 쓰지 않도록 '그 시점에 알 수 있는 것'만으로 정함
+       D1: 직전 종가 -3%·-5% 지정가 → 체결되면 'D1 조정' / 안 되고 종가 +5%↑면 '5일선 대기' / 아니면 'D2 조정 매수'"""
     if i + 1 >= len(b):
         return None
-    c0 = b[i]["close"]
-    d1 = b[i + 1]
-    dip = 1 - d1["low"] / c0
-    r1 = d1["close"] / c0 - 1
-    if dip >= P["crash"]:
-        return {"plan": "D1 급락 보류"}
-    # 진입 계획: (진입 시작 인덱스, 기준가 또는 이평, 계획 이름)
-    if dip >= P["dip1"]:
-        plan, start, ref = "D1 조정 3~5%", i + 1, c0
-    elif r1 >= P["up_skip"]:
-        plan, start, ref = "D1 +5%↑ → 5일선 대기", i + 2, None
-    else:
-        plan, start, ref = "D1 조정 없음 → D2 조정 매수", i + 2, d1["close"]
-    fills = []                                                 # [(인덱스, 가격)]
-    if ref is None:                                            # 5일선 닿는 날 1차, 거기서 -2% 2차 [추정]
-        for k in range(start, min(len(b), start + P["ma_wait_days"])):
+    c0, d1 = b[i]["close"], b[i + 1]
+    if d1["open"] <= c0 * (1 - P["crash"]):                    # 시가부터 -8% 갭 = 재료 훼손 의심(시가에 알 수 있음)
+        return {"plan": "D1 -8% 갭하락 보류"}
+    if d1["low"] <= c0 * (1 - P["dip1"]):
+        return {"plan": "D1 조정 3~5%", "days": [i + 1], "lv": lambda k: [c0 * (1 - P["dip1"]), c0 * (1 - P["dip2"])]}
+    if d1["close"] / c0 - 1 >= P["up_skip"]:
+        def lv(k):
             m = ma(b, k - 1, 5)
-            if m and b[k]["low"] <= m:
-                px = min(m, b[k]["open"])
-                fills.append((k, px))
-                if b[k]["low"] <= px * 0.98:
-                    fills.append((k, px * 0.98))
-                break
-    elif start < len(b):
-        k = start
-        if k == i + 2 and 1 - b[k]["low"] / ref >= P["crash"]:   # D2 도 급락이면 보류
-            return {"plan": "D2 급락 보류"}
-        for lv in (P["dip1"], P["dip2"]):                        # 1차 -3%, 2차 -5%
-            lp = ref * (1 - lv)
-            if b[k]["low"] <= lp:
-                fills.append((k, min(lp, b[k]["open"])))
-    if not fills:
-        return {"plan": plan, "nofill": True}
-    k0 = fills[0][0]
-    avg = sum(px for _, px in fills) / len(fills)
+            return [m, m * 0.98] if m else []
+        return {"plan": "D1 +5%↑ → 5일선 대기", "days": list(range(i + 2, min(len(b), i + 2 + P["ma_wait_days"]))), "lv": lv, "once": True}
+    if i + 2 >= len(b):
+        return None
+    ref = d1["close"]
+    if b[i + 2]["open"] <= ref * (1 - P["crash"]):
+        return {"plan": "D2 -8% 갭하락 보류"}
+    return {"plan": "D1 조정 없음 → D2 조정 매수", "days": [i + 2], "lv": lambda k: [ref * (1 - P["dip1"]), ref * (1 - P["dip2"])]}
+
+
+def _exit_daily(b, k0, avg):
     tp, sl = avg * (1 + P["tp"]), avg * (1 - P["sl"])
-    out_px, why, kk = None, None, None
     for kk in range(k0 + 1, len(b)):
         y = b[kk]
         if y["open"] <= sl:
-            out_px, why = y["open"], "손절 -5%(갭)"; break
+            return y["open"], "손절 -5%(갭)", kk
         if y["low"] <= sl:
-            out_px, why = sl, "손절 -5%"; break
+            return sl, "손절 -5%", kk
         if y["open"] >= tp:
-            out_px, why = y["open"], "익절 +5%(갭)"; break
+            return y["open"], "익절 +5%(갭)", kk
         if y["high"] >= tp:
-            out_px, why = tp, "익절 +5%"; break
+            return tp, "익절 +5%", kk
         if kk - k0 >= P["hold_max"]:
-            out_px, why = y["close"], "기간(5일)"; break
+            return y["close"], "기간(5일)", kk
+    return None, None, None
+
+
+def simulate(b, i):
+    """[일봉] 지정가 체결 = 저가 ≤ 가격, 체결한 날은 매도 판정 안 함(보수적 근사)"""
+    pl = plan_of(b, i)
+    if not pl or "days" not in pl:
+        return pl
+    fills = []
+    for k in pl["days"]:
+        for lp in pl["lv"](k):
+            if lp and b[k]["low"] <= lp:
+                fills.append((k, min(lp, b[k]["open"])))
+        if fills and pl.get("once"):
+            break
+        if fills:
+            break
+    if not fills:
+        return {"plan": pl["plan"], "nofill": True}
+    k0 = fills[0][0]
+    avg = sum(px for _, px in fills) / len(fills)
+    out_px, why, kk = _exit_daily(b, k0, avg)
     if out_px is None:
-        return None                                            # 데이터 끝 → 제외
-    return {"plan": plan, "entry": b[k0]["date"], "buys": len(fills), "avg": round(avg), "exit": why,
+        return None
+    return {"plan": pl["plan"], "entry": b[k0]["date"], "buys": len(fills), "avg": round(avg), "exit": why,
             "ret": round((out_px / avg - 1 - P["cost"]) * 100, 2), "hold": kk - k0}
+
+
+# ── 5분봉 버전 ────────────────────────────────────────────────────────────────
+# V1 분봉 정밀: 같은 지정가(-3·-5% / 5일선)를 5분봉 순서대로 체결하고, 체결한 날부터 익절·손절을 봉마다 판정
+# V2 분봉 신호: 方4강 p9 '공포 신호'가 나올 때만 매수
+#    [추정] 긴 음봉 = 몸통(시가-종가)이 직전 12봉 평균 몸통의 2배 이상인 음봉 / 장중 저점 이탈 = 10:00 이후 그날 최저가 경신
+#    지정가 구간(-3% 이하 또는 5일선 이하)에 들어온 뒤 신호 봉 종가에 1차, 1차보다 -2% 아래 다음 신호에 2차
+#    한 5분봉 안에서 익절가·손절가가 함께 닿으면 손절 우선(보수적)
+BODY_N, BODY_X, LOW_FROM = 12, 2.0, "1000"
+
+
+def _signal(bars, j):
+    x = bars[j]
+    if x["close"] >= x["open"]:
+        return False
+    prev = bars[max(0, j - BODY_N):j]
+    body = abs(x["open"] - x["close"])
+    avg = sum(abs(y["open"] - y["close"]) for y in prev) / len(prev) if prev else 0
+    big = avg > 0 and body >= BODY_X * avg
+    newlow = x["t"] >= LOW_FROM and prev and x["low"] < min(y["low"] for y in bars[:j])
+    return bool(big or newlow)
+
+
+def simulate_min(b, i, M, code, variant):
+    pl = plan_of(b, i)
+    if not pl or "days" not in pl:
+        return pl
+    need = [b[k]["date"] for k in range(pl["days"][0], min(len(b), pl["days"][-1] + P["hold_max"] + 2))]
+    have = M.ensure(code, need)
+    if b[pl["days"][0]]["date"] not in have:
+        return {"plan": pl["plan"], "nomin": True}
+    fills, k0 = [], None
+    for k in pl["days"]:
+        bars = M.load(code).get(b[k]["date"]) or []
+        lv = [x for x in pl["lv"](k) if x]
+        if not bars or not lv:
+            continue
+        for j, x in enumerate(bars):
+            if variant == "V1":
+                for lp in lv[len(fills):]:
+                    if x["low"] <= lp:
+                        fills.append((k, j, min(lp, x["open"])))
+            else:
+                ok = x["close"] <= lv[0] if not fills else x["close"] <= fills[0][2] * 0.98
+                if ok and len(fills) < 2 and _signal(bars, j):
+                    fills.append((k, j, x["close"]))
+            if len(fills) >= 2:
+                break
+        if fills:
+            k0 = k
+            break
+    if not fills:
+        return {"plan": pl["plan"], "nofill": True}
+    avg = sum(f[2] for f in fills) / len(fills)
+    tp, sl = avg * (1 + P["tp"]), avg * (1 - P["sl"])
+    j_last = fills[-1][1]
+    for kk in range(k0, len(b)):
+        bars = M.load(code).get(b[kk]["date"])
+        if not bars:                                              # 분봉이 빠진 날은 일봉으로 판정
+            y = b[kk]
+            if kk > k0:
+                if y["low"] <= sl:
+                    return _res(pl, b, k0, fills, avg, min(sl, y["open"]), "손절 -5%", kk)
+                if y["high"] >= tp:
+                    return _res(pl, b, k0, fills, avg, max(tp, y["open"]), "익절 +5%", kk)
+        else:
+            for j, x in enumerate(bars):
+                if kk == k0 and j <= j_last:
+                    continue
+                if x["low"] <= sl:
+                    return _res(pl, b, k0, fills, avg, min(sl, x["open"]), "손절 -5%", kk)
+                if x["high"] >= tp:
+                    return _res(pl, b, k0, fills, avg, max(tp, x["open"]), "익절 +5%", kk)
+        if kk - k0 >= P["hold_max"]:
+            return _res(pl, b, k0, fills, avg, b[kk]["close"], "기간(5일)", kk)
+    return None
+
+
+def _res(pl, b, k0, fills, avg, px, why, kk):
+    return {"plan": pl["plan"], "entry": b[k0]["date"], "buys": len(fills), "avg": round(avg), "exit": why,
+            "ret": round((px / avg - 1 - P["cost"]) * 100, 2), "hold": kk - k0}
 
 
 def run(a):
@@ -129,7 +217,16 @@ def run(a):
         with open(a.listing, encoding="utf-8") as f:
             mk = {r["code"]: r for r in csv.DictReader(f)}
     shares = riskinfo.Risk(dt.date.today(), use_dart=False).shares
+    M = None
+    if a.minutes:
+        import minutes
+        src = None
+        if a.minutes == "fetch":
+            import collect
+            src = collect.KiwoomSource("close")
+        M = minutes.Minutes(src)
     trades, skipped = [], defaultdict(int)
+    mtr = {"V1": [], "V2": []}
     for f in sorted(pr.glob("[0-9]*.csv")):
         b = dr.read_csv(f)
         for i in range(1, len(b) - 1):
@@ -139,6 +236,15 @@ def run(a):
             if not su:
                 continue
             t = simulate(b, i)
+            if M and t and "days" not in t:
+                for v in mtr:
+                    tm = simulate_min(b, i, M, f.stem, v)
+                    if tm and "ret" in tm:
+                        tm.update(su)
+                        tm["code"], tm["name"], tm["variant"] = f.stem, mk.get(f.stem, {}).get("name", ""), v
+                        mtr[v].append(tm)
+                    elif tm:
+                        skipped[f"[{v}] " + tm["plan"] + (" · 분봉 없음" if tm.get("nomin") else " · 미체결" if tm.get("nofill") else "")] += 1
             if not t:
                 continue
             if "ret" not in t:
@@ -160,8 +266,19 @@ def run(a):
         for t in trades:
             g[str(t[key])].append(t)
         rep["by_" + key] = {k: dr.stats(v) for k, v in sorted(g.items())}
+    if M:
+        rep["minutes"] = {"calls": M.calls, "sizeMB": M.size_mb(), "rule": "V1 = 같은 지정가를 5분봉 순서로 체결·청산 / V2 = 方4강 p9 공포 신호(긴 음봉·장중 저점 이탈) 진입"}
+        for v, tl in mtr.items():
+            rep["all_" + v] = dr.stats(tl)
+            g = defaultdict(list)
+            for t in tl:
+                g[t["plan"]].append(t)
+            rep["by_plan_" + v] = {k: dr.stats(x) for k, x in sorted(g.items())}
+            with open(out / f"trades_bb_{v}_{a.tag}.csv", "w", newline="", encoding="utf-8-sig") as f:
+                if tl:
+                    w = csv.DictWriter(f, fieldnames=list(tl[0].keys())); w.writeheader(); w.writerows(tl)
     (out / f"report_bb_{a.tag}.json").write_text(json.dumps(rep, ensure_ascii=False, indent=1), encoding="utf-8")
-    print(json.dumps({k: rep[k] for k in ("tag", "period", "all", "by_plan", "skipped")}, ensure_ascii=False, indent=1))
+    print(json.dumps({k: rep[k] for k in ("tag", "period", "all", "all_V1", "all_V2", "by_plan", "skipped", "minutes") if k in rep}, ensure_ascii=False, indent=1))
 
 
 if __name__ == "__main__":
@@ -172,4 +289,5 @@ if __name__ == "__main__":
     ap.add_argument("--to", default="2100-01-01")
     ap.add_argument("--tag", default="ALL")
     ap.add_argument("--out", default="bt")
+    ap.add_argument("--minutes", choices=["fetch", "cache"], help="5분봉 비교: fetch = 키움에서 받아 쌓기(서버), cache = 저장된 것만")
     run(ap.parse_args())
