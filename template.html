@@ -951,8 +951,17 @@ function lockForm(msg, dest) {   // 관심종목·메모·일정 공통 잠금 �
 async function watchUnlock(ev, dest) {
   ev.preventDefault(); LAST_ACT = Date.now(); MEMO.msg = '';
   const pw = $('wpw').value; $('wmsg').textContent = '여는 중… (몇 초 걸립니다)';
-  try { WATCH.data = await watchDecrypt(pw); await memoOpen(pw).catch(() => { MEMO.data = null; MEMO.msg = '메모를 열 수 없습니다(예전 비밀번호로 저장된 메모?)'; }); $('wpw').value = ''; WATCH.day = null; dest === 'memo' ? memoPage() : dest === 'cal' ? calendarPage() : watchPage(); }
-  catch (e) { $('wmsg').textContent = e.message === 'nofile' ? '아직 암호화 파일이 없습니다(서버 20:10 회차 이후 생성).' : '비밀번호가 맞지 않습니다.'; }
+  // 관심종목(watch.json)과 메모를 따로 열어 봄: 메모 비밀번호를 먼저 바꾸고 서버 watch.json 을 아직 다시 만들기 전에도 메모는 열리게
+  let werr = null;
+  try { WATCH.data = await watchDecrypt(pw); } catch (e) { WATCH.data = null; werr = e; }
+  const hadMemo = !!lsGet(MEMO_LS), memoClear = () => Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null });
+  let mok = false;
+  if (werr && !hadMemo) memoClear();   // 관심종목도 못 열고 저장된 메모도 없으면, 틀린 비밀번호로 빈 메모를 새로 만들지 않음
+  else { try { await memoOpen(pw); mok = hadMemo; } catch (e) { memoClear(); MEMO.msg = '메모를 열 수 없습니다(예전 비밀번호로 저장된 메모?)'; } }
+  if (werr && !mok) { $('wmsg').textContent = werr.message === 'nofile' ? '아직 암호화 파일이 없습니다(서버 20:10 회차 이후 생성).' : '비밀번호가 맞지 않습니다.'; return; }
+  $('wpw').value = ''; WATCH.day = null;
+  if (werr) { MEMO.msg = '메모는 열렸지만 관심종목은 이 비밀번호로 열리지 않았습니다. 서버의 watch.json 을 새 비밀번호로 다시 만들기 전이면 정상입니다.'; memoPage(); return; }
+  dest === 'memo' ? memoPage() : dest === 'cal' ? calendarPage() : watchPage();
 }
 function watchLock(dest) { WATCH.data = null; WATCH.day = null; Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null }); calMergePrivate(); dest === 'cal' ? calendarPage() : watchPage(); }
 
@@ -1096,15 +1105,97 @@ function memoDraw() {
       <input id="ghtok" type="password" autocomplete="new-password" placeholder="${MEMO.gh ? '저장됨 · 바꾸려면 새 토큰' : 'GitHub 토큰 (github_pat_…)'}" style="padding:6px;width:260px;border:1px solid #cbd5e1;border-radius:6px">
       <button type="submit">${MEMO.gh ? '토큰 바꾸기/끄기(빈칸)' : '동기화 켜기'}</button> ${MEMO.gh ? '<button type="button" onclick="memoSync(false)">지금 동기화</button>' : ''}</form>
       <p class="mut">${esc(MEMO.msg)}</p>
-      <button onclick="memoExport()">⬇ 암호화 백업 파일 받기</button> <label class="tab" style="cursor:pointer">⬆ 백업 파일 합치기<input type="file" accept=".json" style="display:none" onchange="memoImport(this)"></label></section>`;
+      <button onclick="memoExport()">⬇ 암호화 백업 파일 받기</button> <label class="tab" style="cursor:pointer">⬆ 백업 파일 합치기<input type="file" accept=".json" style="display:none" onchange="memoImport(this)"></label>
+      ${MEMO.rkPending ? ' <button onclick="memoRekeyPush()">GitHub 사본 다시 올리기</button>' : ''}</section>
+    <section><h2>🔑 비밀번호 변경</h2><p class="mut">옛 비밀번호로 푼 메모를 새 비밀번호로 다시 암호화합니다. 바꾸기 직전에 <b>옛 비밀번호로 잠긴 백업 파일</b>을 자동으로 내려받고, 이 브라우저 안에도 백업 1개를 남깁니다. 관심종목(watch.json)은 서버에서 같은 새 비밀번호로 다시 만들어야 함께 열립니다. 다른 기기는 그 기기에서 옛 비밀번호로 연 뒤 같은 방법으로 바꾸세요.</p>
+      <form onsubmit="memoRekey(event)" autocomplete="off"><input type="text" name="username" value="market-lab-watch" autocomplete="username" style="display:none">
+      <input id="rk_old" type="password" autocomplete="current-password" placeholder="현재(옛) 비밀번호" style="padding:6px;width:200px;border:1px solid #cbd5e1;border-radius:6px">
+      <input id="rk_new" type="password" autocomplete="new-password" placeholder="새 비밀번호 (12자 이상)" style="padding:6px;width:200px;border:1px solid #cbd5e1;border-radius:6px">
+      <input id="rk_new2" type="password" autocomplete="new-password" placeholder="새 비밀번호 확인" style="padding:6px;width:200px;border:1px solid #cbd5e1;border-radius:6px">
+      <button type="submit">비밀번호 바꾸기</button></form><p id="rkmsg" class="mut"></p>
+      ${lsGet(MEMO_BAK) ? '<button type="button" onclick="memoRestoreBak()">↩ 브라우저 안 백업(변경 직전)으로 되돌리기</button>' : ''}</section>`;
 }
 const codes_n = S => Object.keys(S).length;
 async function memoSet(c, k, v) { const s = MEMO.data.stocks[c]; if (k === 'tags') v = v.split(/\s+/).filter(Boolean).map(t => t.startsWith('#') ? t : '#' + t); if (k === 'status' && s.status !== v) s.notes.push({ id: Date.now().toString(36), t: nowKST(), kind: '표시', text: `${s.status} → ${v}` }); s[k] = v; s.updated = nowKST(); await memoSave(); memoDraw(); }
 async function memoAdd(ev, c) { ev.preventDefault(); const f = ev.target, t = f.t.value.trim(), p = f.p.value.replace(/[^\d.]/g, ''); if (!t && !p) return; const s = MEMO.data.stocks[c]; s.notes.push({ id: Date.now().toString(36), t: nowKST(), kind: f.k.value, text: t, price: p ? +p : null }); s.updated = nowKST(); await memoSave(); memoDraw(); }
 async function memoDel(c, id) { if (!confirm('이 메모를 지울까요?')) return; const s = MEMO.data.stocks[c]; s.notes = s.notes.filter(n => n.id !== id); s.del = [...(s.del || []), id]; s.updated = nowKST(); await memoSave(); memoDraw(); }
 async function memoNew(ev) { ev.preventDefault(); const c = $('mnew').value.trim(); if (!/^\w{6}$/.test(c)) return; const i = await getJ(`stocks/${c}.json`); const nm = (i && i.name) || (findName(c) || {}).name || c; await memoMark(c, nm, '관심', '직접 추가'); delete MEMO.px[c]; memoPage(); }
-async function memoExport() { const b = new Blob([JSON.stringify(await memoEnc({ data: MEMO.data }))], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `market-lab-memo-${nowKST().slice(0, 10)}.json`; a.click(); }
-async function memoImport(inp) { try { const E = JSON.parse(await inp.files[0].text()); const k = await memoKey(MEMO.pw || '', b64u8(E.salt)); const o = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, k, b64u8(E.ct)))); MEMO.data = memoMerge(MEMO.data, o.data || o); await memoSave(); MEMO.msg = '백업을 합쳤습니다'; } catch (e) { MEMO.msg = '백업 파일을 열 수 없습니다(비밀번호가 다른 파일?)'; } memoDraw(); }
+async function memoExport(tag = '') { const b = new Blob([JSON.stringify(await memoEnc({ data: MEMO.data }))], { type: 'application/json' }); const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = `market-lab-memo-${nowKST().slice(0, 10)}${tag}.json`; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 60e3); }
+async function memoImport(inp) {
+  try {
+    const E = JSON.parse(await inp.files[0].text());
+    const open = async pw => JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, await memoKey(pw, b64u8(E.salt)), b64u8(E.ct))));
+    let o;
+    try { o = await open(MEMO.pw || ''); }
+    catch (e) { const p = prompt('이 백업 파일은 지금과 다른 비밀번호로 잠겨 있습니다(예: 비밀번호 변경 전 백업).\n백업할 때 쓰던 비밀번호를 입력하세요.'); if (!p) throw e; o = await open(p); }
+    MEMO.data = memoMerge(MEMO.data, o.data || o); await memoSave(); MEMO.msg = '백업을 합쳤습니다(지금 비밀번호로 다시 암호화해 저장)';
+  } catch (e) { MEMO.msg = '백업 파일을 열 수 없습니다(비밀번호가 다른 파일?)'; }
+  inp.value = ''; memoDraw();
+}
+// ── 🔑 메모 비밀번호 변경: 옛 비밀번호로 풀고 새 비밀번호(새 salt)로 다시 암호화. 바꾸기 전에 자동 백업 ──
+const MEMO_BAK = 'mlab.memo.v1.bak';   // 변경 직전 암호문(옛 비밀번호로 잠긴 그대로) 1개를 이 브라우저에 보관
+async function memoPushOverwrite() {   // 새 비밀번호로 만든 사본으로 GitHub memo.json 을 덮어씀(옛 비밀번호 사본은 합칠 수 없으므로)
+  const g = MEMO.gh, f = await gh(`/contents/memo.json?ref=${g.branch}`);
+  const body = btoa(unescape(encodeURIComponent(JSON.stringify(await memoEnc({ data: MEMO.data })))));
+  await gh('/contents/memo.json', { method: 'PUT', body: JSON.stringify({ message: 'memo password change', content: body, branch: g.branch, ...(f ? { sha: f.sha } : {}) }) });
+}
+async function memoRekeyPush() {
+  const m = $('rkmsg'); if (m) m.textContent = 'GitHub 사본 올리는 중…';
+  try { await memoPushOverwrite(); MEMO.msg = `GitHub 사본도 새 비밀번호로 바꿨습니다 ${nowKST().slice(11)}`; } catch (e) { MEMO.msg = 'GitHub 사본 올리기 실패: ' + e.message + ' — 아래 [GitHub 사본 다시 올리기]를 누르세요'; MEMO.rkPending = true; }
+  if (!MEMO.msg.includes('실패')) MEMO.rkPending = false;
+  memoDraw();
+}
+async function memoRekey(ev) {
+  ev.preventDefault(); LAST_ACT = Date.now();
+  const o = $('rk_old').value, n = $('rk_new').value, n2 = $('rk_new2').value;
+  const say = t => { const m = $('rkmsg'); if (m) m.textContent = t; };
+  if (!MEMO.data || !MEMO.key) return say('먼저 잠금을 풀어 주세요.');
+  if (n.length < 12) return say('새 비밀번호는 12자 이상이어야 합니다(서버 WATCH_PASS 와 같은 기준).');
+  if (n !== n2) return say('새 비밀번호 두 칸이 서로 다릅니다.');
+  if (n === o) return say('새 비밀번호가 지금 비밀번호와 같습니다.');
+  say('확인 중… (몇 초 걸립니다)');
+  // 1) 옛 비밀번호 확인: 이 브라우저에 저장된 암호문을 그 비밀번호로 실제로 풀어 봄
+  try {
+    const raw0 = lsGet(MEMO_LS), E = raw0 ? JSON.parse(raw0) : await memoEnc({ data: MEMO.data, gh: MEMO.gh });
+    await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, await memoKey(o, b64u8(E.salt)), b64u8(E.ct));
+  } catch (e) { return say('현재(옛) 비밀번호가 맞지 않습니다. 아무것도 바뀌지 않았습니다.'); }
+  // 2) GitHub 사본을 먼저 합침(옛 비밀번호 사본). 실패하면 다른 기기에서 이미 바꿨을 수 있으므로 물어봄
+  let preSync = !(MEMO.gh && MEMO.gh.token);
+  if (!preSync) {
+    await memoSync(true); preSync = !MEMO.msg.startsWith('동기화 실패');
+    if (!preSync && !confirm('GitHub 사본과 합치지 못했습니다.\n' + MEMO.msg + '\n\n다른 기기에서 이미 비밀번호를 바꿨다면 계속해도 됩니다(바꾼 뒤 새 비밀번호로 다시 합칩니다). 계속할까요?')) return say('비밀번호를 바꾸지 않았습니다.');
+  }
+  // 3) 자동 백업: ① 이 브라우저 안 1개(옛 비밀번호로 잠긴 암호문 그대로) ② 백업 파일 내려받기(옛 비밀번호로 잠김, 토큰 제외)
+  const raw = lsGet(MEMO_LS) || JSON.stringify(await memoEnc({ data: MEMO.data, gh: MEMO.gh }));
+  const bakOk = lsSet(MEMO_BAK, JSON.stringify({ t: nowKST(), E: JSON.parse(raw) }));
+  await memoExport('-비밀번호변경전');
+  if (!bakOk && !confirm('브라우저 안 백업 저장에 실패했습니다. 방금 내려받은 백업 파일이 저장됐는지 확인했나요?\n[확인]을 누르면 계속합니다.')) return say('비밀번호를 바꾸지 않았습니다.');
+  // 4) 새 비밀번호·새 salt 로 다시 암호화 → 새 비밀번호로 처음부터 풀어 검증 → 저장. 하나라도 실패하면 되돌림
+  const old = { key: MEMO.key, salt: MEMO.salt, pw: MEMO.pw };
+  try {
+    MEMO.salt = crypto.getRandomValues(new Uint8Array(16)); MEMO.key = await memoKey(n, MEMO.salt); MEMO.pw = n;
+    const E2 = await memoEnc({ data: MEMO.data, gh: MEMO.gh });
+    const chk = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E2.iv) }, await memoKey(n, b64u8(E2.salt)), b64u8(E2.ct))));
+    if (JSON.stringify(chk.data) !== JSON.stringify(MEMO.data)) throw new Error('검증 불일치');
+    if (!lsSet(MEMO_LS, JSON.stringify(E2))) throw new Error('브라우저 저장 실패');
+  } catch (e) {
+    Object.assign(MEMO, old); lsSet(MEMO_LS, raw);
+    return say('비밀번호 변경 실패 — 예전 상태로 되돌렸습니다: ' + e.message);
+  }
+  ['rk_old', 'rk_new', 'rk_new2'].forEach(id => { $(id).value = ''; });
+  MEMO.msg = '🔑 메모 비밀번호를 바꿨습니다. 서버 watch.json 도 같은 새 비밀번호로 다시 만들어야 관심종목이 함께 열립니다.';
+  // 5) GitHub 사본: 미리 합쳤으면 새 비밀번호 사본으로 덮어씀, 못 합쳤으면(다른 기기에서 이미 바꿈) 새 비밀번호로 합치기
+  if (MEMO.gh && MEMO.gh.token) { if (preSync) return memoRekeyPush(); await memoSync(false); return; }
+  memoDraw();
+}
+async function memoRestoreBak() {   // 브라우저 안 백업(변경 직전 암호문)으로 되돌림 → 옛 비밀번호로 다시 열어야 함
+  let b = null; try { b = JSON.parse(lsGet(MEMO_BAK)); } catch (e) { }
+  if (!b || !b.E) return alert('브라우저 안 백업이 없습니다.');
+  if (!confirm(`${b.t} 비밀번호 변경 직전 상태로 되돌립니다. 그 뒤에 쓴 메모는 사라지고, 예전 비밀번호로 다시 열어야 합니다. 계속할까요?`)) return;
+  if (!lsSet(MEMO_LS, JSON.stringify(b.E))) return alert('되돌리기 실패(브라우저 저장 실패)');
+  Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null, msg: '변경 전 백업으로 되돌렸습니다. 예전 비밀번호로 여세요. (GitHub 동기화를 쓰면 GitHub 사본은 새 비밀번호로 남아 있어 동기화가 실패할 수 있습니다)' });
+  memoPage();
+}
 const WATCH_HELP = `<details open><summary><b>최+신+일 등급</b> — 3개 중 몇 개를 충족하느냐 (드림로드 5강 p38)</summary>
 <table class="t"><tr><th>등급</th><th>뜻</th></tr>
 <tr><td><b>A</b> (3점)</td><td>최·신·일 3개 모두 충족 — 강의의 '최신일' 정식 후보</td></tr>
