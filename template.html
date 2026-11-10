@@ -967,7 +967,8 @@ function watchLock(dest) { WATCH.data = null; WATCH.day = null; Object.assign(ME
 
 /* ───────── 📝 종목 메모장 ─────────
    저장: 이 브라우저(localStorage)에 '관심종목 비밀번호'로 암호화해 저장(AES-GCM).
-   동기화(선택): GitHub 'memo' 브랜치의 memo.json 에 같은 방식으로 암호화해 올림 → 다른 기기에서도 같은 비밀번호로 열림.
+   동기화(선택): Private 저장소(기본 hun3263/market-lab-memo) main 브랜치의 memo.json 에 같은 방식으로 암호화해 올림 → 다른 기기에서도 같은 비밀번호로 열림.
+   저장소가 없거나 Public 이면 올리지 않고 안내만 함(저장소를 자동으로 만들지 않음).
    토큰은 이 브라우저에만(암호화) 저장되고 GitHub 에는 올라가지 않습니다. 사이트(main 브랜치)·자동 배포와는 무관합니다. */
 const MEMO = { key: null, salt: null, data: null, gh: null, msg: '', filter: '전체', q: '', open: {}, px: {} };
 const MEMO_ST = ['관심', '매매중', '청산', '제외'];
@@ -1023,6 +1024,11 @@ async function gh(path, opt = {}) {
   if (!r.ok) throw new Error(`GitHub ${r.status}`);
   return r.json();
 }
+async function memoRepoCheck() {   // 올리기 전 확인: 저장소가 있고 Private 인지. 없으면 만들지 않고 안내만
+  const R = await gh('');
+  if (!R) throw new Error(`저장소 ${MEMO.gh.repo} 를 찾을 수 없거나 이 토큰으로 접근할 수 없습니다 — GitHub에서 Private 저장소를 먼저 만드세요`);
+  if (!R.private) throw new Error(`${MEMO.gh.repo} 는 Public 저장소라 올리지 않습니다 — Private 저장소를 쓰세요`);
+}
 function memoMerge(a, b) {   // 메모는 합치고(같은 id 는 하나), 상태·태그는 더 최근 수정본을 따름
   const out = { v: 1, updated: a.updated > b.updated ? a.updated : b.updated, stocks: {} };
   new Set([...Object.keys(a.stocks), ...Object.keys(b.stocks)]).forEach(c => {
@@ -1038,6 +1044,7 @@ async function memoSync(quiet) {
   const g = MEMO.gh; if (!g || !g.token) return;
   try {
     MEMO.msg = '동기화 중…'; if (!quiet) memoDraw();
+    await memoRepoCheck();
     let f = await gh(`/contents/memo.json?ref=${g.branch}`);
     if (f) {
       const E = JSON.parse(decodeURIComponent(escape(atob(f.content.replace(/\n/g, '')))));
@@ -1045,13 +1052,11 @@ async function memoSync(quiet) {
       if (E.salt === u8b64(MEMO.salt)) remote = await memoDec(E);
       else { const k = await memoKey(MEMO.pw || '', b64u8(E.salt)); remote = JSON.parse(new TextDecoder().decode(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, k, b64u8(E.ct)))); }
       MEMO.data = memoMerge(MEMO.data, remote.data || remote);
-    } else if (!(await gh(`/branches/${g.branch}`))) {   // memo 브랜치 처음 만들기
-      const base = await gh('/git/ref/heads/main');
-      await gh('/git/refs', { method: 'POST', body: JSON.stringify({ ref: `refs/heads/${g.branch}`, sha: base.object.sha }) });
     }
+    const br = (f || (await gh(`/branches/${g.branch}`))) ? { branch: g.branch } : {};   // 빈 저장소면 브랜치 지정 없이 올려 기본 브랜치에 첫 커밋
     lsSet(MEMO_LS, JSON.stringify(await memoEnc({ data: MEMO.data, gh: MEMO.gh })));
     const body = btoa(unescape(encodeURIComponent(JSON.stringify(await memoEnc({ data: MEMO.data })))));
-    await gh('/contents/memo.json', { method: 'PUT', body: JSON.stringify({ message: 'memo sync', content: body, branch: g.branch, ...(f ? { sha: f.sha } : {}) }) });
+    await gh('/contents/memo.json', { method: 'PUT', body: JSON.stringify({ message: 'memo sync', content: body, ...br, ...(f ? { sha: f.sha } : {}) }) });
     MEMO.msg = `동기화 완료 ${nowKST().slice(11)}`;
   } catch (e) { MEMO.msg = '동기화 실패: ' + e.message + ' (토큰 권한·저장소 이름 확인)'; }
   if (location.hash.startsWith('#memo')) memoDraw();
@@ -1059,7 +1064,7 @@ async function memoSync(quiet) {
 async function memoGhSave(ev) {
   ev.preventDefault();
   const repo = $('ghrepo').value.trim(), tok = $('ghtok').value.trim();
-  MEMO.gh = tok ? { repo: repo || 'hun3263/market-lab', branch: 'memo', token: tok } : null;
+  MEMO.gh = tok ? { repo: repo || 'hun3263/market-lab-memo', branch: 'main', token: tok } : null;
   $('ghtok').value = ''; await memoSave(false); if (MEMO.gh) memoSync(false); else { MEMO.msg = '동기화 끔'; memoDraw(); }
 }
 // ── 화면 ──
@@ -1100,8 +1105,8 @@ function memoDraw() {
       <input placeholder="종목·태그 검색" value="${esc(MEMO.q)}" oninput="MEMO.q=this.value;clearTimeout(MEMO.qt);MEMO.qt=setTimeout(memoDraw,300)" style="padding:6px;border:1px solid #cbd5e1;border-radius:8px"></div>
     <section><h2>종목 ${list.length}개</h2>${list.length ? list.map(card).join('') : '<p class="mut">아직 없습니다. 🔒 관심종목 탭의 ⭐(관심) · 💰(매매) 버튼을 누르거나 아래에서 직접 추가하세요.</p>'}
       <form onsubmit="memoNew(event)" style="margin-top:8px"><input id="mnew" placeholder="종목코드 6자리 직접 추가 (예: 053800)" style="padding:6px;border:1px solid #cbd5e1;border-radius:8px;width:260px"> <button type="submit">추가</button></form></section>
-    <section><h2>보관 · 동기화</h2><p class="mut">기본은 이 브라우저에만 저장됩니다(브라우저 자료를 지우면 사라짐). 다른 기기와 함께 쓰려면 GitHub 토큰을 넣으세요 — 저장소 <b>Contents 읽기·쓰기</b> 권한만 준 fine-grained 토큰 권장. 메모는 'memo' 브랜치의 memo.json 에 암호문으로만 올라갑니다.</p>
-      <form onsubmit="memoGhSave(event)" autocomplete="off"><input id="ghrepo" value="${esc((MEMO.gh || {}).repo || 'hun3263/market-lab')}" style="padding:6px;width:200px;border:1px solid #cbd5e1;border-radius:6px">
+    <section><h2>보관 · 동기화</h2><p class="mut">기본은 이 브라우저에만 저장됩니다(브라우저 자료를 지우면 사라짐). 다른 기기와 함께 쓰려면 GitHub 토큰을 넣으세요 — 저장소 <b>Contents 읽기·쓰기</b> 권한만 준 fine-grained 토큰 권장. 메모는 <b>Private 저장소</b>(기본 hun3263/market-lab-memo) main 브랜치의 memo.json 에 암호문으로만 올라갑니다. 저장소는 GitHub에서 먼저 만들어 두세요(자동으로 만들지 않음, Public 저장소에는 올리지 않음).</p>
+      <form onsubmit="memoGhSave(event)" autocomplete="off"><input id="ghrepo" value="${esc((MEMO.gh || {}).repo || 'hun3263/market-lab-memo')}" placeholder="hun3263/market-lab-memo" style="padding:6px;width:200px;border:1px solid #cbd5e1;border-radius:6px">
       <input id="ghtok" type="password" autocomplete="new-password" placeholder="${MEMO.gh ? '저장됨 · 바꾸려면 새 토큰' : 'GitHub 토큰 (github_pat_…)'}" style="padding:6px;width:260px;border:1px solid #cbd5e1;border-radius:6px">
       <button type="submit">${MEMO.gh ? '토큰 바꾸기/끄기(빈칸)' : '동기화 켜기'}</button> ${MEMO.gh ? '<button type="button" onclick="memoSync(false)">지금 동기화</button>' : ''}</form>
       <p class="mut">${esc(MEMO.msg)}</p>
@@ -1135,6 +1140,7 @@ async function memoImport(inp) {
 // ── 🔑 메모 비밀번호 변경: 옛 비밀번호로 풀고 새 비밀번호(새 salt)로 다시 암호화. 바꾸기 전에 자동 백업 ──
 const MEMO_BAK = 'mlab.memo.v1.bak';   // 변경 직전 암호문(옛 비밀번호로 잠긴 그대로) 1개를 이 브라우저에 보관
 async function memoPushOverwrite() {   // 새 비밀번호로 만든 사본으로 GitHub memo.json 을 덮어씀(옛 비밀번호 사본은 합칠 수 없으므로)
+  await memoRepoCheck();
   const g = MEMO.gh, f = await gh(`/contents/memo.json?ref=${g.branch}`);
   const body = btoa(unescape(encodeURIComponent(JSON.stringify(await memoEnc({ data: MEMO.data })))));
   await gh('/contents/memo.json', { method: 'PUT', body: JSON.stringify({ message: 'memo password change', content: body, branch: g.branch, ...(f ? { sha: f.sha } : {}) }) });
