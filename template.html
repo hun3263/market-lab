@@ -956,7 +956,15 @@ function lockForm(msg, dest) {   // 관심종목·메모·일정 공통 잠금 �
       <button type="submit" style="margin-left:6px">열기</button></form><p id="wmsg" class="mut">${MEMO.msg && MEMO.msg.includes('자동으로 잠겼') ? '⏱ ' + esc(MEMO.msg) + '<br>' : ''}한 번 열면 관심종목 · 메모 · 일정(CB·BW·유증)이 함께 열립니다. ${LOCK_MIN}분 동안 조작이 없으면 자동으로 잠깁니다. 비밀번호는 이 브라우저 안에서만 쓰이고 저장·전송되지 않습니다.</p>`;
 }
 async function watchUnlock(ev, dest) {
-  ev.preventDefault(); LAST_ACT = Date.now(); MEMO.msg = '';
+  ev.preventDefault(); LAST_ACT = Date.now();
+  if (MEMO.data) {   // 메모가 이미 열려 있으면 관심종목만 열어 봄(메모는 건드리지 않음)
+    const pw0 = $('wpw').value; $('wmsg').textContent = '여는 중… (몇 초 걸립니다)';
+    try { WATCH.data = await watchDecrypt(pw0); }
+    catch (e) { WATCH.data = null; $('wmsg').textContent = e.message === 'badpw' ? '비밀번호가 틀렸습니다.' : (WATCH_ERR[e.message] || '비밀번호가 틀렸습니다.'); return; }
+    $('wpw').value = ''; WATCH.day = null;
+    return dest === 'cal' ? calendarPage() : watchPage();
+  }
+  MEMO.msg = '';
   const pw = $('wpw').value; $('wmsg').textContent = '여는 중… (몇 초 걸립니다)';
   // 관심종목(watch.json)과 메모를 따로 열어 봄: 메모 비밀번호를 먼저 바꾸고 서버 watch.json 을 아직 다시 만들기 전에도 메모는 열리게
   let werr = null;
@@ -964,14 +972,14 @@ async function watchUnlock(ev, dest) {
   const hadMemo = !!lsGet(MEMO_LS), memoClear = () => Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null });
   let mok = false;
   if (werr && !hadMemo) memoClear();   // 관심종목도 못 열고 저장된 메모도 없으면, 틀린 비밀번호로 빈 메모를 새로 만들지 않음
-  else { try { await memoOpen(pw); mok = hadMemo; } catch (e) { memoClear(); MEMO.msg = '비밀번호가 맞지 않습니다.'; } }
+  else { try { await memoOpen(pw); mok = hadMemo; } catch (e) { memoClear(); MEMO.msg = '비밀번호가 틀렸습니다.'; } }
   if (werr && !mok) {   // 관심종목·메모 둘 다 못 염 → 이전 시도의 메모 문구를 지우고 한 줄만 표시
     MEMO.msg = ''; const mm = $('memomsg'); if (mm) mm.remove();
-    $('wmsg').textContent = werr.message === 'badpw' ? '비밀번호가 맞지 않습니다.' : (WATCH_ERR[werr.message] || '비밀번호가 맞지 않습니다.');
+    $('wmsg').textContent = werr.message === 'badpw' ? '비밀번호가 틀렸습니다.' : (WATCH_ERR[werr.message] || '비밀번호가 틀렸습니다.');
     return;
   }
   $('wpw').value = ''; WATCH.day = null;
-  if (werr) { MEMO.msg = '메모는 열렸지만 관심종목은 이 비밀번호로 열리지 않았습니다. 서버의 watch.json 을 새 비밀번호로 다시 만들기 전이면 정상입니다.'; memoPage(); return; }
+  if (werr) { MEMO.msg = '메모는 열렸지만 관심종목은 이 비밀번호로 열리지 않았습니다. 서버의 watch.json 을 새 비밀번호로 다시 만들기 전이면 정상입니다.'; history.replaceState(null, '', '#memo'); memoPage(); return; }   // 주소도 #memo 로 맞춰야 메뉴의 #watch 를 눌렀을 때 화면이 바뀜
   dest === 'memo' ? memoPage() : dest === 'cal' ? calendarPage() : watchPage();
 }
 function watchLock(dest) { WATCH.data = null; WATCH.day = null; Object.assign(MEMO, { key: null, salt: null, data: null, gh: null, pw: null }); calMergePrivate(); dest === 'cal' ? calendarPage() : watchPage(); }
@@ -1218,7 +1226,7 @@ async function memoRekey(ev) {
   try {
     const raw0 = lsGet(MEMO_LS), E = raw0 ? JSON.parse(raw0) : await memoEnc({ data: MEMO.data, gh: MEMO.gh });
     await crypto.subtle.decrypt({ name: 'AES-GCM', iv: b64u8(E.iv) }, await memoKey(o, b64u8(E.salt)), b64u8(E.ct));
-  } catch (e) { return say('현재(옛) 비밀번호가 맞지 않습니다. 아무것도 바뀌지 않았습니다.'); }
+  } catch (e) { return say('현재(옛) 비밀번호가 틀렸습니다. 아무것도 바뀌지 않았습니다.'); }
   // 2) GitHub 사본을 먼저 합침(옛 비밀번호 사본). 실패하면 다른 기기에서 이미 바꿨을 수 있으므로 물어봄
   let preSync = !(MEMO.gh && MEMO.gh.token);
   if (!preSync) {
